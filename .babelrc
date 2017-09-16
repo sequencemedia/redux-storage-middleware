@@ -5,5 +5,14 @@
     "env",
     "stage-0",
     "stage-1"
+  ],
+  "plugins": [
+    [
+      "module-resolver", {
+        "alias": {
+          "redux-storage-middleware": "./src"
+        }
+      }
+    ]
   ]
 }
