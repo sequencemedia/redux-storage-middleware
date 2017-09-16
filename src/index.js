@@ -2,8 +2,6 @@
 import hardStorage from './hard-storage'
 import softStorage from './soft-storage'
 
-const REDUX_STORAGE = 'reduxStorage'
-
 const fromObjectToString = (object) => JSON.stringify(object)
 const fromStringToObject = (string) => JSON.parse(string)
 
@@ -34,7 +32,7 @@ export const fetch = (store) => (next) => ({ type, ...action }) => {
         store.dispatch(data)
       } else {
         const {
-          [REDUX_STORAGE]: {
+          reduxStorage: {
             [t]: {
               data
             }
