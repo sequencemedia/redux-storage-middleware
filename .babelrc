@@ -1,0 +1,9 @@
+{
+  "compact": true,
+  "comments": false,
+  "presets": [
+    "env",
+    "stage-0",
+    "stage-1"
+  ]
+}
