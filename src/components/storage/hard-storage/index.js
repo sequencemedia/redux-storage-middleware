@@ -1,5 +1,4 @@
-
-import Storage from 'redux-storage-middleware/storage'
+import Storage from 'redux-storage-middleware/components/storage'
 
 const storage = ('localStorage' in global)
   ? global.localStorage

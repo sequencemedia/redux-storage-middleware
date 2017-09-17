@@ -1,3 +1,8 @@
+import {
+  REDUX_STORAGE_STATE,
+  REDUX_STORAGE_CLEAR
+} from 'redux-storage-middleware/actions'
+
 /**
  *  Storage Reducer
  *
@@ -6,19 +11,20 @@
  */
 export default function storageReducer (state = {}, { type, ...action } = {}) {
   switch (type) {
-    case 'REDUX_STORAGE_STATE':
-      {
-        const {
-          meta,
-          meta: {
-            type: t
-          },
-          data
-        } = action
-        return { ...state, [t]: { meta, data } }
-      }
+    case REDUX_STORAGE_STATE:
+    {
+      const {
+        meta,
+        meta: {
+          type: t
+        },
+        data
+      } = action
 
-    case 'REDUX_STORAGE_CLEAR':
+      return { ...state, [t]: { meta, data } }
+    }
+
+    case REDUX_STORAGE_CLEAR:
       return { }
 
     default:
