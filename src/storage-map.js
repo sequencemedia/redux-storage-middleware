@@ -3,9 +3,9 @@ import {
   storageStoreAction
 } from 'redux-storage-middleware/actions'
 
-const isStale = ({ cachedAt = 0 }) => true
-const isHardStorage = ({ cachedAt = 0 }) => cachedAt <= 100
-const isSoftStorage = ({ cachedAt = 0 }) => cachedAt <= 50 && cachedAt >= 10
+const isStale = ({ cachedAt = 0, cacheFor = 0 }) => (cachedAt + cacheFor) < Date.now()
+const isHardStorage = ({ cacheFor = 0 }) => cacheFor >= (1000 * 60 * 60 * 24)
+const isSoftStorage = ({ cacheFor = 0 }) => cacheFor >= (1000 * 60 * 60) && cacheFor < (1000 * 60 * 60 * 24)
 
 const filterFor = (t) => ({ type }) => type === t
 const filterMetaFor = (t) => ({ meta: { type } }) => type === t
