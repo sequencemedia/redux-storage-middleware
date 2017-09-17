@@ -6,7 +6,7 @@
  */
 export default function storageReducer (state = {}, { type, ...action } = {}) {
   switch (type) {
-    case 'REDUX_STORAGE':
+    case 'REDUX_STORAGE_STATE':
       {
         const {
           meta,
@@ -17,6 +17,9 @@ export default function storageReducer (state = {}, { type, ...action } = {}) {
         } = action
         return { ...state, [t]: { meta, data } }
       }
+
+    case 'REDUX_STORAGE_CLEAR':
+      return { }
 
     default:
       return state

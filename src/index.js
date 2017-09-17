@@ -1,5 +1,5 @@
-import hardStorage from './hard-storage'
-import softStorage from './soft-storage'
+import hardStorage from './storage/hard-storage'
+import softStorage from './storage/soft-storage'
 
 const fromObjectToString = (object) => JSON.stringify(object)
 const fromStringToObject = (string) => JSON.parse(string)
@@ -42,9 +42,14 @@ const store = ({ meta, meta: { isHardStorage = false, isSoftStorage = false, typ
       softStorage.setItem(t, item)
     } else {
       softStorage.removeItem(t)
-      store.dispatch({ type: 'REDUX_STORAGE', meta, data })
+      store.dispatch({ type: 'REDUX_STORAGE_STATE', meta, data })
     }
   }
+}
+
+const clear = () => {
+  hardStorage.clear()
+  softStorage.clear()
 }
 
 export default (store) => (next) => ({ type, ...action }) => {
@@ -54,6 +59,9 @@ export default (store) => (next) => ({ type, ...action }) => {
 
     case 'REDUX_STORAGE_STORE':
       return store(action)
+
+    case 'REDUX_STORAGE_CLEAR':
+      return clear()
 
     default:
       return next({ ...action, type })
