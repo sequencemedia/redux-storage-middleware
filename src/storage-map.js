@@ -9,9 +9,9 @@ const isSoftStorage = ({ cacheFor = 0 }) => cacheFor >= (1000 * 60 * 60) && cach
 
 const filterFor = (t) => ({ type }) => type === t
 const filterMetaFor = (t) => ({ meta: { type } }) => type === t
-const map = ({ meta: { type: t } }) => t
-const reduce = (a, { type, meta, meta: { t } }, index, array) => (
-  Math.min.apply(array, array.filter(filterFor(type)).map(map)) === t ? a.concat({ type, meta }) : a
+const map = ({ meta: { cacheFor = 0 } }) => cacheFor
+const reduce = (a, { type, meta, meta: { cacheFor = 0 } }, index, array) => (
+  Math.min.apply(array, array.filter(filterFor(type)).map(map)) === cacheFor ? a.concat({ type, meta }) : a
 )
 const dedupe = (a, { type, meta, meta: { type: t } }) => a.map(map).includes(t) ? a : a.concat({ type, meta })
 
@@ -21,25 +21,29 @@ const createMeta = (meta, isHardStorage = false, isSoftStorage = false) => ({
   isSoftStorage
 })
 
-export default (array) => {
-  const fetchMap = new Map()
-  const storeMap = new Map()
+const fetchMap = new Map()
+const storeMap = new Map()
 
+export default (array) => {
   if (Array.isArray(array)) {
     array
       .reduce(reduce, [])
-      .forEach(({ type, meta }) => {
-        fetchMap.set(type, meta)
+      .forEach(({ type, meta = {} } = {}) => {
+        if (type) {
+          fetchMap.set(type, meta)
+        }
       })
 
     array
       .reduce(dedupe, [])
-      .forEach(({ meta: { type }, meta }) => {
-        storeMap.set(type, meta)
+      .forEach(({ meta: { type } = {}, meta } = {}) => {
+        if (type) {
+          storeMap.set(type, meta)
+        }
       })
   }
 
-  return (store) => (next) => ({ type, ...action }) => {
+  return (store) => (next) => ({ type, ...action } = {}) => {
     if (fetchMap.has(type)) {
       const meta = fetchMap.get(type)
 
@@ -57,21 +61,33 @@ export default (array) => {
     } else {
       if (storeMap.has(type)) {
         const meta = storeMap.get(type)
-        const META = createMeta(meta, isHardStorage(meta), isSoftStorage(meta))
 
-        store.dispatch(storageStoreAction(META, { type, ...action }))
+        if (isStale(meta)) {
+          const META = createMeta(meta, isHardStorage(meta), isSoftStorage(meta))
 
-        const filter = filterMetaFor(type)
+          store.dispatch(storageStoreAction(META, { type, ...action }))
 
-        array.filter(filter).reduce(dedupe, []).forEach(({ type }) => {
-          if (fetchMap.has(type)) {
-            const meta = { ...fetchMap.get(type), cachedAt: Date.now() }
+          const cachedAt = Date.now()
 
-            fetchMap.set(type, meta)
-          }
-        })
+          storeMap.set(type, { ...meta, cachedAt })
+
+          const filter = filterMetaFor(type)
+
+          array.filter(filter).forEach(({ type }) => {
+            if (fetchMap.has(type)) {
+              const meta = fetchMap.get(type)
+
+              fetchMap.set(type, { ...meta, cachedAt })
+            }
+          })
+
+          return next({ ...action, type })
+        } else {
+          return next({ ...action, type })
+        }
+      } else {
+        return next({ ...action, type })
       }
-      return next({ ...action, type })
     }
   }
 }

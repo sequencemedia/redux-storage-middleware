@@ -3,13 +3,15 @@ import {
   REDUX_STORAGE_CLEAR
 } from 'redux-storage-middleware/actions'
 
+const initialState = () => ({})
+
 /**
  *  Storage Reducer
  *
  *  @param {Object} state Initial state
  *  @param {Object} action
  */
-export default function storageReducer (state = {}, { type, ...action } = {}) {
+export default function storageReducer (state = initialState(), { type, ...action } = {}) {
   switch (type) {
     case REDUX_STORAGE_STATE:
     {
@@ -25,7 +27,7 @@ export default function storageReducer (state = {}, { type, ...action } = {}) {
     }
 
     case REDUX_STORAGE_CLEAR:
-      return { }
+      return {}
 
     default:
       return state
