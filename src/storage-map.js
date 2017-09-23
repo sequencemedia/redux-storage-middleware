@@ -8,7 +8,7 @@ const isStale = ({ cachedAt = 0, cacheFor = 0 } = {}) => (cachedAt + cacheFor) <
 const isHardStorage = ({ cacheFor = 0 } = {}) => cacheFor >= (1000 * 60 * 60 * 24)
 const isSoftStorage = ({ cacheFor = 0 } = {}) => cacheFor >= (1000 * 60 * 60) && cacheFor < (1000 * 60 * 60 * 24)
 
-const filter = ({ meta: { cacheFor = 0 } = {} }) => !!cacheFor
+const filter = ({ meta: { cacheFor = 0 } = {} } = {}) => !!cacheFor
 const filterFor = (t) => ({ type } = {}) => type === t
 const filterMetaFor = (t) => ({ meta: { type } = {} } = {}) => type === t
 const map = ({ meta: { cacheFor = 0 } } = {}) => cacheFor

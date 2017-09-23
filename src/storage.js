@@ -13,31 +13,30 @@ const softStorage = SoftStorage()
 const fromObjectToString = (object) => JSON.stringify(object)
 const fromStringToObject = (string) => JSON.parse(string)
 
-const createIsHardStorage = ({ isHardStorage = false, isSoftStorage = false, ...meta }) => ({
-  ...meta,
-  ...(isHardStorage && !isSoftStorage ? { isHardStorage } : {})
-})
-
-const createIsSoftStorage = ({ isSoftStorage = false, isHardStorage = false, ...meta }) => ({
-  ...meta,
-  ...(isSoftStorage && !isHardStorage ? { isSoftStorage } : {})
-})
-
 const createType = ({ type, ...meta }) => ({
   ...meta,
   ...(type ? { type } : {})
 })
 
-const createMeta = (meta = {}, META = {}) => ({
+const createIsHardStorage = ({ isHardStorage = false, isSoftStorage = false, ...meta }) => ({
   ...meta,
-  ...(
-    createType(
-      createIsHardStorage(
-        createIsSoftStorage(META)
+  ...(isHardStorage && !isSoftStorage ? { isHardStorage: true } : {})
+})
+
+const createIsSoftStorage = ({ isSoftStorage = false, isHardStorage = false, ...meta }) => ({
+  ...meta,
+  ...(isSoftStorage && !isHardStorage ? { isSoftStorage: true } : {})
+})
+
+const createMeta = (meta = {}) => (
+  createType(
+    createIsHardStorage(
+      createIsSoftStorage(
+        meta
       )
     )
   )
-})
+)
 
 const storageFetch = (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...META } = {}, ...action }) => {
   if (isHardStorage) {
@@ -68,7 +67,7 @@ const storageFetch = (store, { meta: { isHardStorage = false, isSoftStorage = fa
     }
   }
 
-  return { ...action, meta: createMeta(META, { type, isHardStorage, isSoftStorage }) }
+  return { ...action, meta: createMeta({ ...META, type, isHardStorage, isSoftStorage }) }
 }
 
 const storageStore = (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...META } = {}, data, ...action }) => {
@@ -83,14 +82,14 @@ const storageStore = (store, { meta: { isHardStorage = false, isSoftStorage = fa
     /*
      *  Save a few bytes by dropping "type" from the meta
      */
-    const ITEM = fromObjectToString({ meta: createMeta(meta, META), ...(data ? { data } : {}) })
+    const ITEM = fromObjectToString({ meta: createMeta({ ...meta, ...META }), ...(data ? { data } : {}) })
 
     hardStorage.setItem(type, ITEM)
 
     /*
      *  Restore "type" to the meta on the action
      */
-    return { ...action, meta: createMeta(meta, createMeta(META, { type, isHardStorage, isSoftStorage })), ...(data ? { data } : {}) }
+    return { ...action, meta: createMeta({ ...meta, ...META, type, isHardStorage, isSoftStorage }), ...(data ? { data } : {}) }
   } else {
     if (isSoftStorage) {
       hardStorage.removeItem(type)
@@ -103,14 +102,14 @@ const storageStore = (store, { meta: { isHardStorage = false, isSoftStorage = fa
       /*
        *  Save a few bytes by dropping "type" from the meta
        */
-      const ITEM = fromObjectToString({ meta: createMeta(meta, META), ...(data ? { data } : {}) })
+      const ITEM = fromObjectToString({ meta: createMeta({ ...meta, ...META }), ...(data ? { data } : {}) })
 
       softStorage.setItem(type, ITEM)
 
       /*
        *  Restore "type" to the meta on the action
        */
-      return { ...action, meta: createMeta(meta, createMeta(META, { type, isHardStorage, isSoftStorage })), ...(data ? { data } : {}) }
+      return { ...action, meta: createMeta({ ...meta, ...META, type, isHardStorage, isSoftStorage }), ...(data ? { data } : {}) }
     } else {
       hardStorage.removeItem(type)
       softStorage.removeItem(type)
@@ -123,7 +122,7 @@ const storageStore = (store, { meta: { isHardStorage = false, isSoftStorage = fa
         } = {}
       } = store.getState()
 
-      return { ...action, meta: createMeta(meta, createMeta(META, { type, isHardStorage, isSoftStorage })), ...(data ? { data } : {}) }
+      return { ...action, meta: createMeta({ ...meta, ...META, type, isHardStorage, isSoftStorage }), ...(data ? { data } : {}) }
     }
   }
 }
