@@ -92,10 +92,21 @@ export default (array) => {
       if (isStale(META)) {
         return next({ ...action, type })
       } else {
+        const accessedAt = Date.now()
+        /*
+         *  Fetch Map
+         */
+        const META = createMeta({ ...meta, accessedAt })
+
+        store.dispatch(storageFetchAction(META, { type, ...action }))
+
         array
           .filter(filterFor(type)).filter(filter)
           .forEach(({ meta }) => {
-            const META = createMeta({ ...meta, accessedAt: Date.now() })
+            /*
+             *  Store Map
+             */
+            const META = createMeta({ ...meta, accessedAt })
 
             store.dispatch(storageFetchAction(META))
           })

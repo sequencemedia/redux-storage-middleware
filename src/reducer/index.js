@@ -22,17 +22,18 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
         meta: META = {},
         meta: {
           type
-        }
+        },
+        data: DATA = {}
       } = action
 
       const {
-        [type]: TYPE = {},
         [type]: {
-          meta = {}
+          meta = {},
+          data = {}
         } = {}
       } = state
 
-      return { ...state, [type]: { ...(TYPE || {}), meta: { ...meta, ...META } } }
+      return { ...state, [type]: { meta: { ...meta, ...META }, data: { ...data, ...DATA } } }
     }
 
     case REDUX_STORAGE_STORE:
@@ -42,16 +43,17 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
         meta: {
           type
         },
-        data
+        data: DATA = {}
       } = action
 
       const {
         [type]: {
-          meta = {}
+          meta = {},
+          data = {}
         } = {}
       } = state
 
-      return { ...state, [type]: { meta: { ...meta, ...META }, ...(data ? { data } : {}) } }
+      return { ...state, [type]: { meta: { ...meta, ...META }, data: { ...data, ...DATA } } }
     }
 
     case REDUX_STORAGE_CLEAR:
