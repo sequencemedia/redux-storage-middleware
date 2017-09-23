@@ -120,11 +120,7 @@ export default (array) => {
           /*
            *  Store Map
            */
-          /*
-           *  TODO
-           *  Ensure "type" during hydration
-           */
-          const META = createMeta({ ...meta, type, cachedAt, cacheFor })
+          const META = createMeta({ ...meta, cachedAt, cacheFor })
 
           store.dispatch(storageStoreAction(META, { type, ...action }))
 
@@ -153,11 +149,7 @@ export default (array) => {
               /*
                *  Fetch Map
                */
-              /*
-               *  TODO
-               *  Ensure "type" during hydration
-               */
-              const META = createMeta({ ...meta, type, cachedAt, cacheFor })
+              const META = createMeta({ ...meta, cachedAt, cacheFor })
 
               store.dispatch(storageStoreAction(META))
             })

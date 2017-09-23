@@ -15,7 +15,7 @@ function initialHardStorageState (state = {}) {
       } = JSON.parse(item)
 
       if ((meta || false) instanceof Object) {
-        state = { ...state, [type]: { meta } }
+        state = { ...state, [type]: { meta: { ...meta, type } } }
       }
     } catch (e) {
       void e
@@ -39,7 +39,7 @@ function initialSoftStorageState (state = {}) {
       } = JSON.parse(item)
 
       if ((meta || false) instanceof Object) {
-        state = { ...state, [type]: { meta } }
+        state = { ...state, [type]: { meta: { ...meta, type } } }
       }
     } catch (e) {
       void e
