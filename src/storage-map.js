@@ -17,32 +17,44 @@ const reduce = (a, { type, meta, meta: { cacheFor = 0 } = {} } = {}, index, arra
 )
 const dedupe = (a, { meta: { type: t } = {}, type, meta } = {}) => a.map(map).includes(t) ? a : a.concat({ type, ...(meta ? { meta } : {}) })
 
-const createAccessedAt = (meta = {}, accessedAt) => ({ ...meta, ...(accessedAt ? { accessedAt } : {}) })
-const createCachedAt = (meta = {}, cachedAt) => ({ ...meta, ...(cachedAt ? { cachedAt } : {}) })
-const createCacheFor = (meta = {}, cacheFor) => ({ ...meta, ...(cacheFor ? { cacheFor } : {}) })
+const createIsHardStorage = (meta) => (
+  isHardStorage(meta)
+    ? ({ ...meta, isHardStorage: true })
+    : ({ ...meta })
+)
 
-/*
-const createIsHardStorage = ({ isHardStorage = false, isSoftStorage = false, ...meta }) => ({
-  ...meta,
-  ...(isHardStorage && !isSoftStorage ? { isHardStorage } : {})
-})
+const createIsSoftStorage = (meta) => (
+  isSoftStorage(meta)
+    ? ({ ...meta, isSoftStorage: true })
+    : ({ ...meta })
+)
 
-const createIsSoftStorage = ({ isSoftStorage = false, isHardStorage = false, ...meta }) => ({
-  ...meta,
-  ...(isSoftStorage && !isHardStorage ? { isSoftStorage } : {})
-})
-*/
+const createAccessedAt = ({ accessedAt = 0, ...meta }) => ({ ...meta, ...(accessedAt ? { accessedAt } : {}) })
+const createCachedAt = ({ cachedAt = 0, ...meta }) => ({ ...meta, ...(cachedAt ? { cachedAt } : {}) })
+const createCacheFor = ({ cacheFor = 0, ...meta }) => ({ ...meta, ...(cacheFor ? { cacheFor } : {}) })
 
-const createMeta = (meta, isHardStorage = false, isSoftStorage = false) => ({
-  ...meta,
-  ...(isHardStorage ? { isHardStorage } : {}),
-  ...(isSoftStorage ? { isSoftStorage } : {})
-})
+const createMeta = (meta = {}) => (
+  createIsHardStorage(
+    createIsSoftStorage(
+      createCacheFor(
+        createCachedAt(
+          createAccessedAt(
+            meta
+          )
+        )
+      )
+    )
+  )
+)
 
 const fetchMap = new Map()
 const storeMap = new Map()
 
 export default (array) => {
+  /*
+   *  TODO
+   *  Fetch owns store
+   */
   if (Array.isArray(array)) {
     array
       .filter(filter).reduce(reduce, [])
@@ -75,7 +87,7 @@ export default (array) => {
         cacheFor
       } = fetchMap.get(type)
 
-      const META = createMeta(createCacheFor(meta, cacheFor))
+      const META = createMeta({ ...meta, cacheFor })
 
       if (isStale(META)) {
         return next({ ...action, type })
@@ -83,7 +95,7 @@ export default (array) => {
         array
           .filter(filterFor(type)).filter(filter)
           .forEach(({ meta }) => {
-            const META = createMeta(createAccessedAt(meta, Date.now()), isHardStorage(meta), isSoftStorage(meta))
+            const META = createMeta({ ...meta, accessedAt: Date.now() })
 
             store.dispatch(storageFetchAction(META))
           })
@@ -108,7 +120,11 @@ export default (array) => {
           /*
            *  Store Map
            */
-          const META = createMeta(createCacheFor(createCachedAt({ ...meta, type }, cachedAt), cacheFor), isHardStorage(meta), isSoftStorage(meta))
+          /*
+           *  TODO
+           *  Ensure "type" during hydration
+           */
+          const META = createMeta({ ...meta, type, cachedAt, cacheFor })
 
           store.dispatch(storageStoreAction(META, { type, ...action }))
 
@@ -137,7 +153,11 @@ export default (array) => {
               /*
                *  Fetch Map
                */
-              const META = createMeta(createCacheFor(createCachedAt({ ...meta, type }, cachedAt), cacheFor), isHardStorage(meta), isSoftStorage(meta))
+              /*
+               *  TODO
+               *  Ensure "type" during hydration
+               */
+              const META = createMeta({ ...meta, type, cachedAt, cacheFor })
 
               store.dispatch(storageStoreAction(META))
             })
@@ -161,7 +181,7 @@ export default (array) => {
                   /*
                    *  Fetch Map
                    */
-                  const META = createMeta({ type }, isHardStorage(meta), isSoftStorage(meta))
+                  const META = createMeta({ ...meta, type })
 
                   store.dispatch(storageClearAction(META))
 
@@ -170,7 +190,7 @@ export default (array) => {
                       /*
                        *  Store Map
                        */
-                      const META = createMeta({ type }, isHardStorage(meta), isSoftStorage(meta))
+                      const META = createMeta({ ...meta, type })
 
                       store.dispatch(storageClearAction(META))
                     })

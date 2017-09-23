@@ -15,8 +15,6 @@ const STATE = initialState()
  *  @param {Object} action
  */
 export default function storageReducer (state = STATE, { type, ...action } = {}) {
-  console.log('storageReducer()', { type })
-
   switch (type) {
     case REDUX_STORAGE_FETCH:
     {
@@ -53,7 +51,6 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
         } = {}
       } = state
 
-      console.log(REDUX_STORAGE_STORE, type)
       return { ...state, [type]: { meta: { ...meta, ...META }, ...(data ? { data } : {}) } }
     }
 
@@ -65,7 +62,6 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
         }
       } = action
 
-      console.log(REDUX_STORAGE_CLEAR, type)
       if (type) delete state[type]
       return { ...state }
     }
