@@ -1,7 +1,7 @@
+/* global localStorage */
+
 import Storage from 'redux-storage-middleware/components/storage'
 
-const storage = ('localStorage' in global)
-  ? global.localStorage
+export default () => ('localStorage' in global)
+  ? localStorage
   : new Storage()
-
-export default storage

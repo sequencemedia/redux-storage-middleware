@@ -20,4 +20,12 @@ export default class Storage {
   clear () {
     this[storage].clear()
   }
+
+  key (index) {
+    return this[storage].keys[index]
+  }
+
+  get length () {
+    return this[storage].size
+  }
 }
