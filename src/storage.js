@@ -18,14 +18,14 @@ const createType = ({ type, ...meta }) => ({
   ...(type ? { type } : {})
 })
 
-const createIsHardStorage = ({ isHardStorage = false, isSoftStorage = false, ...meta }) => ({
+const createIsHardStorage = ({ isHardStorage = false, ...meta }) => ({
   ...meta,
-  ...(isHardStorage && !isSoftStorage ? { isHardStorage: true } : {})
+  ...(isHardStorage ? { isHardStorage } : {})
 })
 
-const createIsSoftStorage = ({ isSoftStorage = false, isHardStorage = false, ...meta }) => ({
+const createIsSoftStorage = ({ isSoftStorage = false, ...meta }) => ({
   ...meta,
-  ...(isSoftStorage && !isHardStorage ? { isSoftStorage: true } : {})
+  ...(isSoftStorage ? { isSoftStorage } : {})
 })
 
 const createMeta = (meta = {}) => (
@@ -45,6 +45,8 @@ const storageFetch = (store, { meta: { isHardStorage = false, isSoftStorage = fa
       data
     } = fromStringToObject(item) || {}
 
+    // console.log('hardStorage', type, data)
+
     if (data) store.dispatch(data)
   } else {
     if (isSoftStorage) {
@@ -52,6 +54,8 @@ const storageFetch = (store, { meta: { isHardStorage = false, isSoftStorage = fa
       const {
         data
       } = fromStringToObject(item) || {}
+
+      // console.log('softStorage', type, data)
 
       if (data) store.dispatch(data)
     } else {
@@ -63,6 +67,8 @@ const storageFetch = (store, { meta: { isHardStorage = false, isSoftStorage = fa
         } = {}
       } = store.getState()
 
+      // console.log('[redux]', type, data)
+
       if (data) store.dispatch(data)
     }
   }
@@ -72,8 +78,6 @@ const storageFetch = (store, { meta: { isHardStorage = false, isSoftStorage = fa
 
 const storageStore = (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...META } = {}, data, ...action }) => {
   if (isHardStorage) {
-    softStorage.removeItem(type)
-
     const item = hardStorage.getItem(type)
     const {
       meta = {}
@@ -92,8 +96,6 @@ const storageStore = (store, { meta: { isHardStorage = false, isSoftStorage = fa
     return { ...action, meta: createMeta({ ...meta, ...META, type, isHardStorage, isSoftStorage }), ...(data ? { data } : {}) }
   } else {
     if (isSoftStorage) {
-      hardStorage.removeItem(type)
-
       const item = softStorage.getItem(type)
       const {
         meta = {}
@@ -111,9 +113,6 @@ const storageStore = (store, { meta: { isHardStorage = false, isSoftStorage = fa
        */
       return { ...action, meta: createMeta({ ...meta, ...META, type, isHardStorage, isSoftStorage }), ...(data ? { data } : {}) }
     } else {
-      hardStorage.removeItem(type)
-      softStorage.removeItem(type)
-
       const {
         reduxStorage: {
           [type]: {
