@@ -45,8 +45,6 @@ const storageFetch = (store, { meta: { isHardStorage = false, isSoftStorage = fa
       data
     } = fromStringToObject(item) || {}
 
-    // console.log('hardStorage', type, data)
-
     if (data) store.dispatch(data)
   } else {
     if (isSoftStorage) {
@@ -54,8 +52,6 @@ const storageFetch = (store, { meta: { isHardStorage = false, isSoftStorage = fa
       const {
         data
       } = fromStringToObject(item) || {}
-
-      // console.log('softStorage', type, data)
 
       if (data) store.dispatch(data)
     } else {
@@ -66,8 +62,6 @@ const storageFetch = (store, { meta: { isHardStorage = false, isSoftStorage = fa
           } = {}
         } = {}
       } = store.getState()
-
-      // console.log('[redux]', type, data)
 
       if (data) store.dispatch(data)
     }
