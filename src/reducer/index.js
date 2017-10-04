@@ -1,4 +1,5 @@
 import {
+  REDUX_STORAGE_COMPARISON,
   REDUX_STORAGE_FETCH,
   REDUX_STORAGE_STORE,
   REDUX_STORAGE_CLEAR
@@ -16,6 +17,37 @@ const STATE = initialState()
  */
 export default function storageReducer (state = STATE, { type, ...action } = {}) {
   switch (type) {
+    case REDUX_STORAGE_COMPARISON:
+    {
+      const {
+        meta: {
+          isSoftStorage = false,
+          isHardStorage = false
+        }
+      } = action
+
+      if (isSoftStorage || isHardStorage) {
+        return state
+      } else {
+        const {
+          meta: META = {},
+          meta: {
+            type
+          },
+          data: DATA = {}
+        } = action
+
+        const {
+          [type]: {
+            meta = {},
+            data = {}
+          } = {}
+        } = state
+
+        return { ...state, [type]: { meta: { ...meta, ...META, type }, data: { ...data, ...DATA, type } } }
+      }
+    }
+
     case REDUX_STORAGE_FETCH:
     {
       const {

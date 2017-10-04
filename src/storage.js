@@ -1,4 +1,5 @@
 import {
+  REDUX_STORAGE_COMPARISON,
   REDUX_STORAGE_FETCH,
   REDUX_STORAGE_STORE,
   REDUX_STORAGE_CLEAR
@@ -38,95 +39,161 @@ const createMeta = (meta = {}) => (
   )
 )
 
-const storageFetch = (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...META } = {}, ...action }) => {
+function get (store, { meta: { isHardStorage = false, isSoftStorage = false, type } = {} }) {
   if (isHardStorage) {
     const item = hardStorage.getItem(type)
     const {
-      data
+      data = {}
     } = fromStringToObject(item) || {}
 
-    if (data) store.dispatch(data)
+    return data
   } else {
     if (isSoftStorage) {
       const item = softStorage.getItem(type)
       const {
-        data
+        data = {}
       } = fromStringToObject(item) || {}
 
-      if (data) store.dispatch(data)
+      return data
     } else {
       const {
         reduxStorage: {
           [type]: {
-            data
+            data = {}
           } = {}
         } = {}
       } = store.getState()
 
-      if (data) store.dispatch(data)
+      return data
     }
   }
-
-  return { ...action, meta: createMeta({ ...META, type, isHardStorage, isSoftStorage }) }
 }
 
-const storageStore = (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...META } = {}, data, ...action }) => {
+function put (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, data }) {
   if (isHardStorage) {
     const item = hardStorage.getItem(type)
     const {
-      meta = {}
+      meta: storageMeta = {},
+      data: storageData = {}
     } = fromStringToObject(item) || {}
 
-    /*
-     *  Save a few bytes by dropping "type" from the meta
-     */
-    const ITEM = fromObjectToString({ meta: createMeta({ ...meta, ...META }), ...(data ? { data } : {}) })
+    const ITEM = fromObjectToString({ meta: createMeta({ ...storageMeta, ...meta }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) })
+
+    hardStorage.setItem(type, ITEM)
+  } else {
+    if (isSoftStorage) {
+      const item = softStorage.getItem(type)
+      const {
+        meta: storageMeta = {},
+        data: storageData = {}
+      } = fromStringToObject(item) || {}
+
+      const ITEM = fromObjectToString({ meta: createMeta({ ...storageMeta, ...meta }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) })
+
+      softStorage.setItem(type, ITEM)
+    }
+  }
+
+  return data
+}
+
+function storageFetch (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, data, ...action }) {
+  if (isHardStorage) {
+    const item = hardStorage.getItem(type)
+    const {
+      meta: storageMeta = {},
+      data: storageData
+    } = fromStringToObject(item) || {}
+
+    const ITEM = fromObjectToString({ meta: createMeta({ ...storageMeta, ...meta }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) })
 
     hardStorage.setItem(type, ITEM)
 
-    /*
-     *  Restore "type" to the meta on the action
-     */
-    return { ...action, meta: createMeta({ ...meta, ...META, type, isHardStorage, isSoftStorage }), ...(data ? { data } : {}) }
+    if (storageData) store.dispatch(storageData)
   } else {
     if (isSoftStorage) {
       const item = softStorage.getItem(type)
       const {
-        meta = {}
+        meta: storageMeta = {},
+        data: storageData
       } = fromStringToObject(item) || {}
 
-      /*
-       *  Save a few bytes by dropping "type" from the meta
-       */
-      const ITEM = fromObjectToString({ meta: createMeta({ ...meta, ...META }), ...(data ? { data } : {}) })
+      const ITEM = fromObjectToString({ meta: createMeta({ ...storageMeta, ...meta }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) })
 
       softStorage.setItem(type, ITEM)
 
-      /*
-       *  Restore "type" to the meta on the action
-       */
-      return { ...action, meta: createMeta({ ...meta, ...META, type, isHardStorage, isSoftStorage }), ...(data ? { data } : {}) }
+      if (storageData) store.dispatch(storageData)
     } else {
       const {
         reduxStorage: {
           [type]: {
-            meta
+            data: storageData
           } = {}
         } = {}
       } = store.getState()
 
-      return { ...action, meta: createMeta({ ...meta, ...META, type, isHardStorage, isSoftStorage }), ...(data ? { data } : {}) }
+      if (storageData) store.dispatch(storageData)
+    }
+  }
+
+  return { ...action, meta: createMeta({ ...meta, type, isHardStorage, isSoftStorage }) }
+}
+
+function storageStore (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, data, ...action }) {
+  if (isHardStorage) {
+    const item = hardStorage.getItem(type)
+    const {
+      meta: storageMeta = {},
+      data: storageData
+    } = fromStringToObject(item) || {}
+
+    const ITEM = fromObjectToString({ meta: createMeta({ ...storageMeta, ...meta }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) })
+
+    hardStorage.setItem(type, ITEM)
+
+    return { ...action, meta: createMeta({ ...storageMeta, ...meta, type, isHardStorage, isSoftStorage }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) }
+  } else {
+    if (isSoftStorage) {
+      const item = softStorage.getItem(type)
+      const {
+        meta: storageMeta = {},
+        data: storageData
+      } = fromStringToObject(item) || {}
+
+      const ITEM = fromObjectToString({ meta: createMeta({ ...storageMeta, ...meta }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) })
+
+      softStorage.setItem(type, ITEM)
+
+      return { ...action, meta: createMeta({ ...storageMeta, ...meta, type, isHardStorage, isSoftStorage }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) }
+    } else {
+      const {
+        reduxStorage: {
+          [type]: {
+            meta: storageMeta = {},
+            data: storageData
+          } = {}
+        } = {}
+      } = store.getState()
+
+      return { ...action, meta: createMeta({ ...storageMeta, ...meta, type, isHardStorage, isSoftStorage }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) }
     }
   }
 }
 
-const storageClear = (store, { meta: { type, ...META } = {}, ...action }) => {
-  if (type) {
+function storageClear (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, ...action }) {
+  if (isHardStorage) {
     hardStorage.removeItem(type)
-    softStorage.removeItem(type)
-    return { ...action, meta: { type, ...META } }
+
+    return { ...action, meta: { type, ...meta } }
+  } else {
+    if (isSoftStorage) {
+      softStorage.removeItem(type)
+
+      return { ...action, meta: { type, ...meta } }
+    }
   }
-  return { ...action, meta: META }
+
+  return { ...action, meta: { type, ...meta } }
 }
 
 export const storageFetchMiddleware = (store) => (next) => ({ type, ...action }) => (
@@ -147,18 +214,37 @@ export const storageClearMiddleware = (store) => (next) => ({ type, ...action })
     : next({ ...action, type })
 )
 
-export default (store) => (next) => ({ type, ...action }) => {
+export default (store) => (next) => (action) => {
+  const { type } = action
+
   switch (type) {
+    case REDUX_STORAGE_COMPARISON:
+    {
+      const {
+        meta: {
+          cacheFor,
+          cachedAt,
+          comparator,
+          then
+        },
+        data: ACTION
+      } = action
+
+      return comparator(get(store, action), ACTION, { cacheFor, ...(cachedAt ? { cachedAt: new Date(cachedAt) } : {}) })
+        ? next(put(store, action))
+        : then(ACTION)
+    }
+
     case REDUX_STORAGE_FETCH:
-      return next(storageFetch(store, { ...action, type }))
+      return next(storageFetch(store, action))
 
     case REDUX_STORAGE_STORE:
-      return next(storageStore(store, { ...action, type }))
+      return next(storageStore(store, action))
 
     case REDUX_STORAGE_CLEAR:
-      return next(storageClear(store, { ...action, type }))
+      return next(storageClear(store, action))
 
     default:
-      return next({ ...action, type })
+      return next(action)
   }
 }

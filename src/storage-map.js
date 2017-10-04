@@ -1,4 +1,5 @@
 import {
+  storageComparisonAction,
   storageFetchAction,
   storageStoreAction,
   storageClearAction
@@ -7,6 +8,7 @@ import {
 const isStale = ({ cachedAt = 0, cacheFor = 0 } = {}) => (cachedAt + cacheFor) < Date.now()
 const isHardStorage = ({ cacheFor = 0 } = {}) => cacheFor >= (1000 * 60 * 60 * 24)
 const isSoftStorage = ({ cacheFor = 0 } = {}) => cacheFor >= (1000 * 60 * 60) && cacheFor < (1000 * 60 * 60 * 24)
+const hasComparator = ({ comparator }) => !!comparator // instanceof Function
 
 const filterFor = (t) => ({ type } = {}) => type === t
 const filterMetaFor = (t) => ({ meta: { type } = {} } = {}) => type === t // eslint-disable-line no-unused-vars
@@ -28,9 +30,10 @@ const createIsSoftStorage = (meta) => (
     : ({ ...meta })
 )
 
-const createAccessedAt = ({ accessedAt = 0, ...meta }) => ({ ...meta, ...(accessedAt ? { accessedAt } : {}) })
-const createCachedAt = ({ cachedAt = 0, ...meta }) => ({ ...meta, ...(cachedAt ? { cachedAt } : {}) })
-const createCacheFor = ({ cacheFor = 0, ...meta }) => ({ ...meta, ...(cacheFor ? { cacheFor } : {}) })
+const createComparator = ({ comparator = null, ...meta }) => ({ ...meta, ...(comparator ? { comparator } : {}) })
+const createAccessedAt = ({ accessedAt = null, ...meta }) => ({ ...meta, ...(accessedAt ? { accessedAt } : {}) })
+const createCachedAt = ({ cachedAt = null, ...meta }) => ({ ...meta, ...(cachedAt ? { cachedAt } : {}) })
+const createCacheFor = ({ cacheFor = null, ...meta }) => ({ ...meta, ...(cacheFor ? { cacheFor } : {}) })
 
 const createMeta = (meta = {}) => (
   createIsHardStorage(
@@ -38,7 +41,9 @@ const createMeta = (meta = {}) => (
       createCacheFor(
         createCachedAt(
           createAccessedAt(
-            meta
+            createComparator(
+              meta
+            )
           )
         )
       )
@@ -112,8 +117,8 @@ const hardStorageFilter = ({ meta }) => isHardStorage(meta)
 const softStorageFilter = ({ meta }) => isSoftStorage(meta)
 const storageFilter = ({ meta }) => !(isHardStorage(meta) || isSoftStorage(meta))
 
-const putIntoFetchMap = ({ type, meta: { cacheFor } = {} } = {}) => {
-  fetchMap.set(type, { type, cacheFor })
+const putIntoFetchMap = ({ type, meta: { cacheFor, comparator } = {} } = {}) => {
+  fetchMap.set(type, { type, cacheFor, ...(comparator instanceof Function ? { comparator } : {}) })
 }
 
 const putIntoStoreMap = ({ type, meta: { type: TYPE, ...meta } = {} } = {}) => {
@@ -240,8 +245,6 @@ export default (array) => {
 
   return (store) => (next) => ({ type, ...action } = {}) => {
     if (fetchMap.has(type)) {
-      // console.log(`${type}:`)
-
       const defaultMeta = fetchMap.get(type)
       /*
        *  'cachedAt' is kept in state
@@ -254,59 +257,89 @@ export default (array) => {
         } = {}
       } = store.getState()
 
-      const {
-        cacheFor
-      } = defaultMeta
+      if (hasComparator(defaultMeta)) {
+        const {
+          cacheFor,
+          comparator
+        } = defaultMeta
 
-      const META = createMeta({ ...meta, cacheFor })
+        const META = createMeta({
+          ...meta,
+          cacheFor,
+          comparator,
+          then: ({ type, ...action }) => {
+            const accessedAt = Date.now()
 
-      // console.log('[1 - 1] TYPE', type)
+            if (fetchMetaMap.has(type)) {
+              const fetchMetaSet = fetchMetaMap.get(type)
 
-      if (isStale(META)) {
-        // console.log(`HALT: ${type}`)
+              fetchMetaSet.forEach(({ type, cacheFor }) => {
+                /*
+                 *  Store meta
+                 */
+                const META = createMeta({ type, cacheFor, accessedAt })
 
-        return next({ ...action, type })
-      } else {
-        const accessedAt = Date.now()
+                store.dispatch(storageFetchAction(META))
+              })
+            }
 
-        if (fetchMetaMap.has(type)) {
-          const fetchMetaSet = fetchMetaMap.get(type)
-
-          fetchMetaSet.forEach(({ type, cacheFor }) => {
-            // console.log('[1 - 2] META TYPE', type)
             /*
-             *  Store meta
+             *  Fetch meta
              */
             const META = createMeta({ type, cacheFor, accessedAt })
 
-            store.dispatch(storageFetchAction(META))
-          })
+            store.dispatch(storageFetchAction(META, { ...action, type }))
+
+            return { ...action, type }
+          }
+        })
+
+        store.dispatch(storageComparisonAction(META, { ...action, type }))
+
+        return { ...action, type }
+      } else {
+        const {
+          cacheFor
+        } = defaultMeta
+
+        const META = createMeta({ ...meta, cacheFor })
+
+        if (isStale(META)) {
+          return next({ ...action, type })
+        } else {
+          const accessedAt = Date.now()
+
+          if (fetchMetaMap.has(type)) {
+            const fetchMetaSet = fetchMetaMap.get(type)
+
+            fetchMetaSet.forEach(({ type, cacheFor }) => {
+              /*
+               *  Store meta
+               */
+              const META = createMeta({ type, cacheFor, accessedAt })
+
+              store.dispatch(storageFetchAction(META))
+            })
+          }
+
+          /*
+           *  Fetch meta
+           */
+          const META = createMeta({ type, cacheFor, accessedAt })
+
+          store.dispatch(storageFetchAction(META, { ...action, type }))
+
+          return { ...action, type }
         }
-
-        /*
-         *  Fetch meta
-         */
-        const META = createMeta({ type, cacheFor, accessedAt })
-
-        store.dispatch(storageFetchAction(META, { ...action, type }))
-
-        // console.log(`HALT: ${type}`)
-
-        return next({ ...action, type })
       }
     } else {
       if (storeMap.has(type)) {
-        // console.log(`${type}:`)
-
         const cachedAt = Date.now()
-
-        // console.log('[2 - 1] TYPE', type)
 
         if (storeMetaMap.has(type)) {
           const storeMetaSet = storeMetaMap.get(type)
 
           storeMetaSet.forEach(({ type, cacheFor }) => {
-            // console.log('[2 - 2] META TYPE', type, cacheFor)
             /*
              *  Store meta
              */
@@ -319,7 +352,6 @@ export default (array) => {
         const storeSet = storeMap.get(type)
 
         storeSet.forEach(({ type, cacheFor }) => {
-          // console.log('[2 - 3] TYPE', type, cacheFor)
           /*
            *  Fetch meta
            */
@@ -328,32 +360,21 @@ export default (array) => {
           store.dispatch(storageStoreAction(META))
         })
 
-        // console.log(`HALT: ${type}`)
-
         return next({ ...action, type })
       } else {
         if (clearMap.has(type)) {
-          // console.log(`${type}:`)
-
           const clearSet = clearMap.get(type)
 
           clearSet.forEach(({ type }) => {
-            // console.log('[3 - 1] TYPE', type)
-
             if (fetchMetaMap.has(type)) {
               const fetchMetaSet = fetchMetaMap.get(type)
 
               fetchMetaSet.forEach(({ type }) => {
-                // console.log('[3 - 2] META TYPE', type)
-
                 if (storeMap.has(type)) {
-                  // console.log('[4 - 1] TYPE', type)
-
                   if (storeMetaMap.has(type)) {
                     const storeMetaSet = storeMetaMap.get(type)
 
                     storeMetaSet.forEach(({ type, cacheFor }) => {
-                      // console.log('[4 - 2] META TYPE', type, cacheFor)
                       /*
                        *  Store meta
                        */
@@ -366,7 +387,6 @@ export default (array) => {
                   const storeSet = storeMap.get(type)
 
                   storeSet.forEach(({ type, cacheFor }) => {
-                    // console.log('[4 - 3] TYPE', type, cacheFor)
                     /*
                      *  Fetch meta
                      */
@@ -378,8 +398,6 @@ export default (array) => {
               })
             }
           })
-
-          // console.log(`HALT: ${type}`)
 
           return next({ ...action, type })
         }

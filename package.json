@@ -1,12 +1,13 @@
 {
   "name": "redux-storage-middleware",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Redux Storage middleware",
   "main": "./index.js",
   "scripts": {
-    "prepublishOnly": "npm run build",
-    "build": "babel src -d lib",
-    "build:watch": "npm run build -- -w",
+    "prepublishOnly": "npm run babel",
+    "build": "npm run babel",
+    "babel": "babel src -d lib",
+    "babel:watch": "npm run babel -- -w",
     "lint": "eslint src",
     "lint:fix": "npm run lint -- --fix"
   },
@@ -22,17 +23,17 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^8.0.1",
     "babel-loader": "^7.1.1",
     "babel-plugin-module-resolver": "^2.7.1",
     "babel-preset-env": "^1.6.0",
     "babel-preset-stage-0": "^6.5.0",
     "babel-preset-stage-1": "^6.24.1",
-    "eslint": "^4.4.1",
+    "eslint": "^4.7.2",
     "eslint-config-standard": "^10.2.1",
     "eslint-import-resolver-babel-module": "^3.0.0",
     "eslint-plugin-import": "^2.3.0",
-    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-node": "^5.2.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1"
   }
