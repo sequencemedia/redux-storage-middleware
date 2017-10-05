@@ -11,11 +11,12 @@ function initialHardStorageState (state = {}) {
     const item = hardStorage.getItem(type)
     try {
       const {
-        meta
+        meta,
+        data
       } = JSON.parse(item)
 
       if ((meta || false) instanceof Object) {
-        state = { ...state, [type]: { meta: { ...meta, type } } }
+        state = { ...state, [type]: { meta: { ...meta, type }, ...(data ? { data } : {}) } }
       }
     } catch (e) {
       void e
@@ -35,11 +36,12 @@ function initialSoftStorageState (state = {}) {
     const item = softStorage.getItem(type)
     try {
       const {
-        meta
+        meta,
+        data
       } = JSON.parse(item)
 
       if ((meta || false) instanceof Object) {
-        state = { ...state, [type]: { meta: { ...meta, type } } }
+        state = { ...state, [type]: { meta: { ...meta, type }, ...(data ? { data } : {}) } }
       }
     } catch (e) {
       void e

@@ -69,7 +69,7 @@ function get (store, { meta: { isHardStorage = false, isSoftStorage = false, typ
   }
 }
 
-function put (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, data }) {
+function put (store, { meta: META, meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, data }) {
   if (isHardStorage) {
     const item = hardStorage.getItem(type)
     const {

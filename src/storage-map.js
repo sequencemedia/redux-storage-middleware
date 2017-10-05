@@ -293,6 +293,7 @@ export default (array) => {
 
         const META = createMeta({
           ...meta,
+          type,
           cacheFor,
           comparator,
           then: ({ type, ...action }) => {
@@ -330,7 +331,7 @@ export default (array) => {
           cacheFor
         } = defaultMeta
 
-        const META = createMeta({ ...meta, cacheFor })
+        const META = createMeta({ ...meta, type, cacheFor })
 
         if (isStale(META)) {
           return next({ ...action, type })
