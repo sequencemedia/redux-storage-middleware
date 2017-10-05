@@ -8,7 +8,7 @@ import {
 const isStale = ({ cachedAt = 0, cacheFor = 0 } = {}) => (cachedAt + cacheFor) < Date.now()
 const isHardStorage = ({ cacheFor = 0 } = {}) => cacheFor >= (1000 * 60 * 60 * 24)
 const isSoftStorage = ({ cacheFor = 0 } = {}) => cacheFor >= (1000 * 60 * 60) && cacheFor < (1000 * 60 * 60 * 24)
-const hasComparator = ({ comparator }) => !!comparator // instanceof Function
+const hasComparator = ({ comparator }) => comparator instanceof Function
 
 const filterFor = (t) => ({ type } = {}) => type === t
 const filterMetaFor = (t) => ({ meta: { type } = {} } = {}) => type === t // eslint-disable-line no-unused-vars
@@ -50,12 +50,6 @@ const createMeta = (meta = {}) => (
     )
   )
 )
-
-const fetchMap = new Map()
-const storeMap = new Map()
-const fetchMetaMap = new Map()
-const storeMetaMap = new Map()
-const clearMap = new Map()
 
 const hasCacheFor = (value) => (!isNaN(value)) && !!value
 const notCacheFor = (value) => isNaN(value) || !value
@@ -157,91 +151,125 @@ const putIntoStoreMetaMap = ({ meta: { type, cacheFor } }) => {
   )
 }
 
+const fetchMap = new Map()
+const storeMap = new Map()
+const fetchMetaMap = new Map()
+const storeMetaMap = new Map()
+const clearMap = new Map()
+
 export default (array) => {
   if (Array.isArray(array)) {
-    const fetchArray = array
-      .filter(fetchFilter)
+    {
+      const fetchArray = array
+        .filter(fetchFilter)
 
-    const storeArray = array
-      .filter(storeFilter)
+      fetchArray
+        .filter(hardStorageFilter)
+        .reduce(fetchReduce, [])
+        .forEach(putIntoFetchMap)
 
-    const clearArray = array
-      .filter(clearFilter)
+      fetchArray
+        .filter(softStorageFilter)
+        .reduce(fetchReduce, [])
+        .forEach(putIntoFetchMap)
 
-    const storeHardStorage = storeArray
-      .filter(hardStorageFilter)
+      fetchArray
+        .filter(storageFilter)
+        .reduce(fetchReduce, [])
+        .forEach(putIntoFetchMap)
+    }
 
-    const storeSoftStorage = storeArray
-      .filter(softStorageFilter)
+    {
+      const storeArray = array
+        .filter(storeFilter)
 
-    const storeStorage = storeArray
-      .filter(storageFilter)
+      {
+        const hardStorageArray = storeArray
+          .filter(hardStorageFilter)
 
-    fetchArray
-      .filter(hardStorageFilter)
-      .reduce(fetchReduce, [])
-      .forEach(putIntoFetchMap)
+        hardStorageArray
+          .filter(notFetchMapFilter)
+          .reduce(storeReduce, [])
+          .forEach(putIntoStoreMap)
 
-    fetchArray
-      .filter(softStorageFilter)
-      .reduce(fetchReduce, [])
-      .forEach(putIntoFetchMap)
+        {
+          const array = hardStorageArray
+            .reduce(storeReduce, [])
+            .reduce(storeDedupe, [])
 
-    fetchArray
-      .filter(storageFilter)
-      .reduce(fetchReduce, [])
-      .forEach(putIntoFetchMap)
+          array
+            .forEach(putIntoFetchMetaMap)
 
-    storeHardStorage
-      .filter(notFetchMapFilter)
-      .reduce(storeReduce, [])
-      .forEach(putIntoStoreMap)
+          array
+            .forEach(putIntoStoreMetaMap)
+        }
+      }
 
-    storeSoftStorage
-      .filter(notFetchMapFilter)
-      .reduce(storeReduce, [])
-      .forEach(putIntoStoreMap)
+      {
+        const softStorageArray = storeArray
+          .filter(softStorageFilter)
 
-    storeStorage
-      .filter(notFetchMapFilter)
-      .reduce(storeReduce, [])
-      .forEach(putIntoStoreMap)
+        softStorageArray
+          .filter(notFetchMapFilter)
+          .reduce(storeReduce, [])
+          .forEach(putIntoStoreMap)
 
-    storeHardStorage
-      .reduce(storeReduce, [])
-      .reduce(storeDedupe, [])
-      .forEach(putIntoFetchMetaMap)
+        {
+          const array = softStorageArray
+            .reduce(storeReduce, [])
+            .reduce(storeDedupe, [])
 
-    storeSoftStorage
-      .reduce(storeReduce, [])
-      .reduce(storeDedupe, [])
-      .forEach(putIntoFetchMetaMap)
+          array
+            .forEach(putIntoFetchMetaMap)
 
-    storeStorage
-      .reduce(storeReduce, [])
-      .reduce(storeDedupe, [])
-      .forEach(putIntoFetchMetaMap)
+          array
+            .forEach(putIntoStoreMetaMap)
+        }
+      }
 
-    storeHardStorage
-      .reduce(storeReduce, [])
-      .reduce(storeDedupe, [])
-      .forEach(putIntoStoreMetaMap)
+      {
+        const storageArray = storeArray
+          .filter(storageFilter)
 
-    storeSoftStorage
-      .reduce(storeReduce, [])
-      .reduce(storeDedupe, [])
-      .forEach(putIntoStoreMetaMap)
+        storageArray
+          .filter(notFetchMapFilter)
+          .reduce(storeReduce, [])
+          .forEach(putIntoStoreMap)
 
-    storeStorage
-      .reduce(storeReduce, [])
-      .reduce(storeDedupe, [])
-      .forEach(putIntoStoreMetaMap)
+        {
+          const array = storageArray
+            .reduce(storeReduce, [])
+            .reduce(storeDedupe, [])
 
-    clearArray
-      .filter(isUniqueMapFilter)
-      .reduce(clearReduce, [])
-      .forEach(putIntoClearMap)
+          array
+            .forEach(putIntoFetchMetaMap)
+
+          array
+            .forEach(putIntoStoreMetaMap)
+        }
+      }
+    }
+
+    {
+      const clearArray = array
+        .filter(clearFilter)
+
+      clearArray
+        .filter(isUniqueMapFilter)
+        .reduce(clearReduce, [])
+        .forEach(putIntoClearMap)
+    }
   }
+
+  /*
+  function fetchNext (action, { cacheFor }) { }
+
+  function storeNext () { }
+
+  function clearNext () { }
+
+  const fetchNextFactory = (cacheFor) => (action) => fetchNext(action, { cacheFor })
+  */
 
   return (store) => (next) => ({ type, ...action } = {}) => {
     if (fetchMap.has(type)) {

@@ -27,7 +27,21 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
       } = action
 
       if (isSoftStorage || isHardStorage) {
-        return state
+        const {
+          meta: {
+            type,
+            accessedAt = null,
+            comparedAt = null
+          }
+        } = action
+
+        const {
+          [type]: {
+            meta = {}
+          } = {}
+        } = state
+
+        return { ...state, [type]: { meta: { ...meta, ...(accessedAt ? { accessedAt } : {}), ...(comparedAt ? { comparedAt } : {}) } } }
       } else {
         const {
           meta: META = {},
@@ -58,7 +72,21 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
       } = action
 
       if (isSoftStorage || isHardStorage) {
-        return state
+        const {
+          meta: {
+            type,
+            accessedAt = null,
+            comparedAt = null
+          }
+        } = action
+
+        const {
+          [type]: {
+            meta = {}
+          } = {}
+        } = state
+
+        return { ...state, [type]: { meta: { ...meta, ...(accessedAt ? { accessedAt } : {}), ...(comparedAt ? { comparedAt } : {}) } } }
       } else {
         const {
           meta: META = {},
@@ -89,7 +117,20 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
       } = action
 
       if (isSoftStorage || isHardStorage) {
-        return state
+        const {
+          meta: {
+            type,
+            cachedAt = null
+          }
+        } = action
+
+        const {
+          [type]: {
+            meta = {}
+          } = {}
+        } = state
+
+        return { ...state, [type]: { meta: { ...meta, ...(cachedAt ? { cachedAt } : {}) } } }
       } else {
         const {
           meta: META = {},
