@@ -193,14 +193,14 @@ export default (array) => {
           .forEach(putIntoStoreMap)
 
         {
-          const array = hardStorageArray
+          const hardStorageMetaArray = hardStorageArray
             .reduce(storeReduce, [])
             .reduce(storeDedupe, [])
 
-          array
+          hardStorageMetaArray
             .forEach(putIntoFetchMetaMap)
 
-          array
+          hardStorageMetaArray
             .forEach(putIntoStoreMetaMap)
         }
       }

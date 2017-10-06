@@ -30,7 +30,6 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
         const {
           meta: {
             type,
-            accessedAt = null,
             comparedAt = null
           }
         } = action
@@ -41,7 +40,7 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
           } = {}
         } = state
 
-        return { ...state, [type]: { meta: { ...meta, ...(accessedAt ? { accessedAt } : {}), ...(comparedAt ? { comparedAt } : {}) } } }
+        return { ...state, [type]: { meta: { ...meta, ...(comparedAt ? { comparedAt } : {}) } } }
       } else {
         const {
           meta: META = {},
@@ -75,8 +74,7 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
         const {
           meta: {
             type,
-            accessedAt = null,
-            comparedAt = null
+            accessedAt = null
           }
         } = action
 
@@ -86,7 +84,7 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
           } = {}
         } = state
 
-        return { ...state, [type]: { meta: { ...meta, ...(accessedAt ? { accessedAt } : {}), ...(comparedAt ? { comparedAt } : {}) } } }
+        return { ...state, [type]: { meta: { ...meta, ...(accessedAt ? { accessedAt } : {}) } } }
       } else {
         const {
           meta: META = {},
@@ -155,24 +153,13 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
     {
       const {
         meta: {
-          isSoftStorage = false,
-          isHardStorage = false
+          type
         }
       } = action
 
-      if (isSoftStorage || isHardStorage) {
-        return state
-      } else {
-        const {
-          meta: {
-            type
-          }
-        } = action
+      if (type) delete state[type]
 
-        if (type) delete state[type]
-
-        return { ...state }
-      }
+      return { ...state }
     }
 
     default:
