@@ -215,14 +215,14 @@ export default (array) => {
           .forEach(putIntoStoreMap)
 
         {
-          const array = softStorageArray
+          const softStorageMetaArray = softStorageArray
             .reduce(storeReduce, [])
             .reduce(storeDedupe, [])
 
-          array
+          softStorageMetaArray
             .forEach(putIntoFetchMetaMap)
 
-          array
+          softStorageMetaArray
             .forEach(putIntoStoreMetaMap)
         }
       }
@@ -237,14 +237,14 @@ export default (array) => {
           .forEach(putIntoStoreMap)
 
         {
-          const array = storageArray
+          const storageMetaArray = storageArray
             .reduce(storeReduce, [])
             .reduce(storeDedupe, [])
 
-          array
+          storageMetaArray
             .forEach(putIntoFetchMetaMap)
 
-          array
+          storageMetaArray
             .forEach(putIntoStoreMetaMap)
         }
       }
@@ -260,16 +260,6 @@ export default (array) => {
         .forEach(putIntoClearMap)
     }
   }
-
-  /*
-  function fetchNext (action, { cacheFor }) { }
-
-  function storeNext () { }
-
-  function clearNext () { }
-
-  const fetchNextFactory = (cacheFor) => (action) => fetchNext(action, { cacheFor })
-  */
 
   return (store) => (next) => ({ type, ...action } = {}) => {
     if (fetchMap.has(type)) {
