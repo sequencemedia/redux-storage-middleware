@@ -8,7 +8,7 @@ import {
 const isStale = ({ cachedAt = 0, cacheFor = 0 } = {}) => (cachedAt + cacheFor) < Date.now()
 const isHardStorage = ({ cacheFor = 0 } = {}) => cacheFor >= (1000 * 60 * 60 * 24)
 const isSoftStorage = ({ cacheFor = 0 } = {}) => cacheFor >= (1000 * 60 * 60) && cacheFor < (1000 * 60 * 60 * 24)
-const hasComparator = ({ comparator }) => comparator instanceof Function
+const hasComparator = ({ comparator = null }) => comparator instanceof Function
 
 const filterFor = (t) => ({ type } = {}) => type === t
 const filterMetaFor = (t) => ({ meta: { type } = {} } = {}) => type === t // eslint-disable-line no-unused-vars
@@ -103,61 +103,61 @@ const clearDedupe = (a = [], { type, meta, meta: { type: t } = {} } = {}) => ( /
     : a.concat({ type, ...(meta ? { meta } : {}) })
 )
 
-const notFetchMapFilter = ({ meta: { type } }) => !fetchMap.has(type)
-const notStoreMapFilter = ({ meta: { type } }) => !storeMap.has(type) // eslint-disable-line no-unused-vars
-const isUniqueMapFilter = ({ meta: { type } }) => !(fetchMap.has(type) || storeMap.has(type))
-
 const hardStorageFilter = ({ meta }) => isHardStorage(meta)
 const softStorageFilter = ({ meta }) => isSoftStorage(meta)
 const storageFilter = ({ meta }) => !(isHardStorage(meta) || isSoftStorage(meta))
 
-const putIntoFetchMap = ({ type, meta: { cacheFor, comparator } = {} } = {}) => {
-  fetchMap.set(type, { type, cacheFor, ...(comparator instanceof Function ? { comparator } : {}) })
-}
-
-const putIntoStoreMap = ({ type, meta: { type: TYPE, ...meta } = {} } = {}) => {
-  const storeSet = storeMap.get(TYPE) || new Set()
-
-  storeMap.set(
-    TYPE,
-    storeSet.add({ ...meta, type })
-  )
-}
-
-const putIntoClearMap = ({ type, meta: { type: TYPE, cacheFor, ...meta } = {} } = {}) => {
-  const clearSet = clearMap.get(TYPE) || new Set()
-
-  clearMap.set(
-    TYPE,
-    clearSet.add({ ...meta, type, ...(cacheFor ? { cacheFor } : {}), isNaN: isNaN(cacheFor) })
-  )
-}
-
-const putIntoFetchMetaMap = ({ type, meta: { cacheFor, ...meta } }) => {
-  const fetchMetaSet = fetchMetaMap.get(type) || new Set()
-
-  fetchMetaMap.set(
-    type,
-    fetchMetaSet.add({ ...meta, cacheFor })
-  )
-}
-
-const putIntoStoreMetaMap = ({ meta: { type, cacheFor } }) => {
-  const storeMetaSet = storeMetaMap.get(type) || new Set()
-
-  storeMetaMap.set(
-    type,
-    storeMetaSet.add({ type, cacheFor })
-  )
-}
-
-const fetchMap = new Map()
-const storeMap = new Map()
-const fetchMetaMap = new Map()
-const storeMetaMap = new Map()
-const clearMap = new Map()
-
 export default (array) => {
+  const notFetchMapFilter = ({ meta: { type } }) => !fetchMap.has(type)
+  const notStoreMapFilter = ({ meta: { type } }) => !storeMap.has(type) // eslint-disable-line no-unused-vars
+  const isUniqueMapFilter = ({ meta: { type } }) => !(fetchMap.has(type) || storeMap.has(type))
+
+  const putIntoFetchMap = ({ type, meta: { cacheFor, comparator } = {} } = {}) => {
+    fetchMap.set(type, { type, cacheFor, ...(comparator instanceof Function ? { comparator } : {}) })
+  }
+
+  const putIntoStoreMap = ({ type, meta: { type: TYPE, ...meta } = {} } = {}) => {
+    const storeSet = storeMap.get(TYPE) || new Set()
+
+    storeMap.set(
+      TYPE,
+      storeSet.add({ ...meta, type })
+    )
+  }
+
+  const putIntoClearMap = ({ type, meta: { type: TYPE, cacheFor, ...meta } = {} } = {}) => {
+    const clearSet = clearMap.get(TYPE) || new Set()
+
+    clearMap.set(
+      TYPE,
+      clearSet.add({ ...meta, type, ...(cacheFor ? { cacheFor } : {}), isNaN: isNaN(cacheFor) })
+    )
+  }
+
+  const putIntoFetchMetaMap = ({ type, meta: { cacheFor, ...meta } }) => {
+    const fetchMetaSet = fetchMetaMap.get(type) || new Set()
+
+    fetchMetaMap.set(
+      type,
+      fetchMetaSet.add({ ...meta, cacheFor })
+    )
+  }
+
+  const putIntoStoreMetaMap = ({ meta: { type, cacheFor } }) => {
+    const storeMetaSet = storeMetaMap.get(type) || new Set()
+
+    storeMetaMap.set(
+      type,
+      storeMetaSet.add({ type, cacheFor })
+    )
+  }
+
+  const fetchMap = new Map()
+  const storeMap = new Map()
+  const fetchMetaMap = new Map()
+  const storeMetaMap = new Map()
+  const clearMap = new Map()
+
   if (Array.isArray(array)) {
     {
       const fetchArray = array
