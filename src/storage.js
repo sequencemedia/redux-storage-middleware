@@ -151,7 +151,7 @@ function storageStore (store, { meta: { isHardStorage = false, isSoftStorage = f
 
     hardStorage.setItem(type, ITEM)
 
-    return { ...action, meta: createMeta({ ...storageMeta, ...meta, type, isHardStorage, isSoftStorage }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) }
+    return { ...action, meta: createMeta({ ...storageMeta, ...meta, type, isHardStorage }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) }
   } else {
     if (isSoftStorage) {
       const item = softStorage.getItem(type)
@@ -164,7 +164,7 @@ function storageStore (store, { meta: { isHardStorage = false, isSoftStorage = f
 
       softStorage.setItem(type, ITEM)
 
-      return { ...action, meta: createMeta({ ...storageMeta, ...meta, type, isHardStorage, isSoftStorage }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) }
+      return { ...action, meta: createMeta({ ...storageMeta, ...meta, type, isSoftStorage }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) }
     } else {
       const {
         reduxStorage: {
@@ -175,7 +175,7 @@ function storageStore (store, { meta: { isHardStorage = false, isSoftStorage = f
         } = {}
       } = store.getState()
 
-      return { ...action, meta: createMeta({ ...storageMeta, ...meta, type, isHardStorage, isSoftStorage }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) }
+      return { ...action, meta: createMeta({ ...storageMeta, ...meta, type }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) }
     }
   }
 }
@@ -184,12 +184,12 @@ function storageClear (store, { meta: { isHardStorage = false, isSoftStorage = f
   if (isHardStorage) {
     hardStorage.removeItem(type)
 
-    return { ...action, meta: { type, ...meta } }
+    return { ...action, meta: { ...meta, type, isHardStorage } }
   } else {
     if (isSoftStorage) {
       softStorage.removeItem(type)
 
-      return { ...action, meta: { type, ...meta } }
+      return { ...action, meta: { ...meta, type, isSoftStorage } }
     }
   }
 

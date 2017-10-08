@@ -152,7 +152,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 .to.deep.equal([{ type: HARD_FETCH }])
             })
 
-            it('does not dispatch hard storage fetch actions', () => {
+            it('does not dispatch the hard storage fetch actions', () => {
               expect(actions.length).not.to.eql(2)
 
               expect(actions)
@@ -221,7 +221,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 .not.to.deep.equal([{ type: HARD_FETCH }])
             })
 
-            it('dispatches hard storage fetch actions', () => {
+            it('dispatches the hard storage fetch actions', () => {
               expect(actions.length).to.eql(2)
 
               expect(actions)
@@ -291,7 +291,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               .to.deep.equal([{ type: HARD_FETCH }])
           })
 
-          it('does not dispatch hard storage fetch actions', () => {
+          it('does not dispatch the hard storage fetch actions', () => {
             expect(actions.length).not.to.eql(2)
 
             expect(actions)
@@ -360,7 +360,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({ type: HARD_STORE })
         })
 
-        it('dispatches hard storage store actions', () => {
+        it('dispatches the hard storage store actions', () => {
           expect(actions.length).to.eql(3)
 
           expect(actions)
@@ -419,7 +419,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({ type: HARD_CLEAR })
         })
 
-        it('dispatches hard storage clear actions', () => {
+        it('dispatches the hard storage clear actions', () => {
           expect(actions.length).to.eql(3)
 
           expect(actions)
@@ -551,7 +551,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 .to.deep.equal([{ type: SOFT_FETCH }])
             })
 
-            it('does not dispatch soft storage fetch actions', () => {
+            it('does not dispatch the soft storage fetch actions', () => {
               expect(actions.length).not.to.eql(2)
 
               expect(actions)
@@ -620,7 +620,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 .not.to.deep.equal([{ type: SOFT_FETCH }])
             })
 
-            it('dispatches soft storage fetch actions', () => {
+            it('dispatches the soft storage fetch actions', () => {
               expect(actions.length).to.eql(2)
 
               expect(actions)
@@ -690,7 +690,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               .to.deep.equal([{ type: SOFT_FETCH }])
           })
 
-          it('does not dispatch soft storage fetch actions', () => {
+          it('does not dispatch the soft storage fetch actions', () => {
             expect(actions.length).not.to.eql(2)
 
             expect(actions)
@@ -759,7 +759,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({ type: SOFT_STORE })
         })
 
-        it('dispatches soft storage store actions', () => {
+        it('dispatches the soft storage store actions', () => {
           expect(actions.length).to.eql(3)
 
           expect(actions)
@@ -818,7 +818,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({ type: SOFT_CLEAR })
         })
 
-        it('dispatches soft storage clear actions', () => {
+        it('dispatches the soft storage clear actions', () => {
           expect(actions.length).to.eql(3)
 
           expect(actions)
@@ -949,7 +949,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 .to.deep.equal([{ type: STATE_FETCH }])
             })
 
-            it('does not dispatch soft storage fetch actions', () => {
+            it('does not dispatch the soft storage fetch actions', () => {
               expect(actions.length).not.to.eql(2)
 
               expect(actions)
@@ -1015,7 +1015,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 .not.to.deep.equal([{ type: STATE_FETCH }])
             })
 
-            it('dispatches soft storage fetch actions', () => {
+            it('dispatches the soft storage fetch actions', () => {
               expect(actions.length).to.eql(2)
 
               expect(actions)
@@ -1082,7 +1082,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               .to.deep.equal([{ type: STATE_FETCH }])
           })
 
-          it('does not dispatch soft storage fetch actions', () => {
+          it('does not dispatch the soft storage fetch actions', () => {
             expect(actions.length).not.to.eql(2)
 
             expect(actions)
@@ -1148,7 +1148,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({ type: STATE_STORE })
         })
 
-        it('dispatches state storage store actions', () => {
+        it('dispatches the state storage store actions', () => {
           expect(actions.length).to.eql(3)
 
           expect(actions)
@@ -1203,7 +1203,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({ type: STATE_CLEAR })
         })
 
-        it('dispatches soft storage clear actions', () => {
+        it('dispatches the soft storage clear actions', () => {
           expect(actions.length).to.eql(3)
 
           expect(actions)

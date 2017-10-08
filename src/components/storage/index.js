@@ -6,7 +6,11 @@ export default class Storage {
   }
 
   getItem (key) {
-    return this[storage].get(key)
+    const map = this[storage]
+
+    return map.has(key)
+      ? `${map.get(key)}`
+      : null
   }
 
   setItem (key, value) {

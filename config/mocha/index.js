@@ -1,3 +1,3 @@
-import './reducer' /*
-import './storage' */
+import './reducer'
+import './storage'
 import './storage-map'
