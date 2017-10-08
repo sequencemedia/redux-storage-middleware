@@ -28,9 +28,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
   const STATE_STORE = 'STATE_STORE'
   const STATE_CLEAR = 'STATE_CLEAR'
 
-  const HARD_CACHE_FOR = (1000 * 60 * 60 * 24)
-  const SOFT_CACHE_FOR = (1000 * 60 * 60)
-  const STATE_CACHE_FOR = (1000 * 60)
+  const ONE_SECOND = 1000
+  const ONE_MINUTE = ONE_SECOND * 60
+  const ONE_HOUR = ONE_MINUTE * 60
+  const ONE_DAY = ONE_HOUR * 24
+
+  const HARD_CACHE_FOR = ONE_DAY // (1000 * 60 * 60 * 24)
+  const SOFT_CACHE_FOR = ONE_HOUR // (1000 * 60 * 60)
+  const STATE_CACHE_FOR = ONE_MINUTE // (1000 * 60)
 
   const COMPARATOR = () => {}
 
@@ -118,7 +123,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             const NOW = Date.now()
 
             const accessedAt = NOW
-            const cachedAt = NOW - (HARD_CACHE_FOR + 1000)
+            const cachedAt = NOW - (HARD_CACHE_FOR + ONE_SECOND)
             const isHardStorage = true
 
             const configuration = [
@@ -187,7 +192,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             const NOW = Date.now()
 
             const accessedAt = NOW
-            const cachedAt = NOW - (HARD_CACHE_FOR - 1000)
+            const cachedAt = NOW - (HARD_CACHE_FOR - ONE_SECOND)
             const isHardStorage = true
 
             const configuration = [
@@ -213,11 +218,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               expect(actions.length).not.to.eql(1)
 
               expect(actions)
-                .not.to.deep.equal([
-                  {
-                    type: HARD_FETCH
-                  }
-                ])
+                .not.to.deep.equal([{ type: HARD_FETCH }])
             })
 
             it('dispatches hard storage fetch actions', () => {
@@ -261,7 +262,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           const NOW = Date.now()
 
           const accessedAt = NOW
-          const cachedAt = NOW - (HARD_CACHE_FOR + 1000)
+          const cachedAt = NOW - (HARD_CACHE_FOR + ONE_SECOND)
           const isHardStorage = true
 
           const configuration = [
@@ -521,7 +522,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             const NOW = Date.now()
 
             const accessedAt = NOW
-            const cachedAt = NOW - (SOFT_CACHE_FOR + 1000)
+            const cachedAt = NOW - (SOFT_CACHE_FOR + ONE_SECOND)
             const isSoftStorage = true
 
             const configuration = [
@@ -590,7 +591,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             const NOW = Date.now()
 
             const accessedAt = NOW
-            const cachedAt = NOW - (SOFT_CACHE_FOR - 1000)
+            const cachedAt = NOW - (SOFT_CACHE_FOR - ONE_SECOND)
             const isSoftStorage = true
 
             const configuration = [
@@ -616,11 +617,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               expect(actions.length).not.to.eql(1)
 
               expect(actions)
-                .not.to.deep.equal([
-                  {
-                    type: SOFT_FETCH
-                  }
-                ])
+                .not.to.deep.equal([{ type: SOFT_FETCH }])
             })
 
             it('dispatches soft storage fetch actions', () => {
@@ -664,7 +661,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           const NOW = Date.now()
 
           const accessedAt = NOW
-          const cachedAt = NOW - (SOFT_CACHE_FOR + 1000)
+          const cachedAt = NOW - (SOFT_CACHE_FOR + ONE_SECOND)
           const isSoftStorage = true
 
           const configuration = [
@@ -924,7 +921,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             const NOW = Date.now()
 
             const accessedAt = NOW
-            const cachedAt = NOW - (STATE_CACHE_FOR + 1000)
+            const cachedAt = NOW - (STATE_CACHE_FOR + ONE_SECOND)
 
             const configuration = [
               { type: STATE_FETCH, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR } }
@@ -990,7 +987,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             const NOW = Date.now()
 
             const accessedAt = NOW
-            const cachedAt = NOW - (STATE_CACHE_FOR - 1000)
+            const cachedAt = NOW - (STATE_CACHE_FOR - ONE_SECOND)
 
             const configuration = [
               { type: STATE_FETCH, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR } }
@@ -1015,11 +1012,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               expect(actions.length).not.to.eql(1)
 
               expect(actions)
-                .not.to.deep.equal([
-                  {
-                    type: STATE_FETCH
-                  }
-                ])
+                .not.to.deep.equal([{ type: STATE_FETCH }])
             })
 
             it('dispatches soft storage fetch actions', () => {
@@ -1061,7 +1054,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           const NOW = Date.now()
 
           const accessedAt = NOW
-          const cachedAt = NOW - (STATE_CACHE_FOR + 1000)
+          const cachedAt = NOW - (STATE_CACHE_FOR + ONE_SECOND)
 
           const configuration = [
             { type: STATE_FETCH, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR } }
