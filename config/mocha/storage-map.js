@@ -28,9 +28,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
   const STATE_STORE = 'STATE_STORE'
   const STATE_CLEAR = 'STATE_CLEAR'
 
-  const HARD_CACHE_FOR = 1000 * 60 * 60 * 24
-  const SOFT_CACHE_FOR = 1000 * 60 * 60
-  const STATE_CACHE_FOR = 1000 * 60
+  const HARD_CACHE_FOR = (1000 * 60 * 60 * 24)
+  const SOFT_CACHE_FOR = (1000 * 60 * 60)
+  const STATE_CACHE_FOR = (1000 * 60)
 
   const COMPARATOR = () => {}
 
@@ -119,6 +119,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             const accessedAt = NOW
             const cachedAt = NOW - (HARD_CACHE_FOR + 1000)
+            const isHardStorage = true
 
             const configuration = [
               { type: HARD_FETCH, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR } }
@@ -154,10 +155,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   type: REDUX_STORAGE_FETCH,
                   meta: {
                     type: HARD_STORE,
-                    // cachedAt,
                     accessedAt,
                     cacheFor: HARD_CACHE_FOR,
-                    isHardStorage: true
+                    isHardStorage
                   }
                 })
 
@@ -167,10 +167,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   data: { type: HARD_FETCH },
                   meta: {
                     type: HARD_FETCH,
-                    // cachedAt,
                     accessedAt: NOW,
                     cacheFor: HARD_CACHE_FOR,
-                    isHardStorage: true
+                    isHardStorage
                   }
                 })
             })
@@ -189,6 +188,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             const accessedAt = NOW
             const cachedAt = NOW - (HARD_CACHE_FOR - 1000)
+            const isHardStorage = true
 
             const configuration = [
               { type: HARD_FETCH, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR } }
@@ -228,10 +228,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   type: REDUX_STORAGE_FETCH,
                   meta: {
                     type: HARD_STORE,
-                    // cachedAt,
                     accessedAt,
                     cacheFor: HARD_CACHE_FOR,
-                    isHardStorage: true
+                    isHardStorage
                   }
                 })
 
@@ -241,10 +240,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   data: { type: HARD_FETCH },
                   meta: {
                     type: HARD_FETCH,
-                    // cachedAt,
                     accessedAt: NOW,
                     cacheFor: HARD_CACHE_FOR,
-                    isHardStorage: true
+                    isHardStorage
                   }
                 })
             })
@@ -264,6 +262,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
           const accessedAt = NOW
           const cachedAt = NOW - (HARD_CACHE_FOR + 1000)
+          const isHardStorage = true
 
           const configuration = [
             { type: HARD_FETCH, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR } }
@@ -299,10 +298,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 type: REDUX_STORAGE_FETCH,
                 meta: {
                   type: HARD_STORE,
-                  // cachedAt,
                   accessedAt,
                   cacheFor: HARD_CACHE_FOR,
-                  isHardStorage: true
+                  isHardStorage
                 }
               })
 
@@ -312,10 +310,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 data: { type: HARD_FETCH },
                 meta: {
                   type: HARD_FETCH,
-                  // cachedAt,
                   accessedAt: NOW,
                   cacheFor: HARD_CACHE_FOR,
-                  isHardStorage: true
+                  isHardStorage
                 }
               })
           })
@@ -334,6 +331,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         const NOW = Date.now()
 
         const cachedAt = NOW
+        const isHardStorage = true
 
         const configuration = [
           { type: HARD_FETCH, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR } }
@@ -370,7 +368,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 type: HARD_STORE,
                 cachedAt,
                 cacheFor: HARD_CACHE_FOR,
-                isHardStorage: true
+                isHardStorage
               },
               data: { type: HARD_STORE },
               type: REDUX_STORAGE_STORE
@@ -382,7 +380,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 type: HARD_FETCH,
                 cachedAt,
                 cacheFor: HARD_CACHE_FOR,
-                isHardStorage: true },
+                isHardStorage
+              },
               type: REDUX_STORAGE_STORE
             })
         })
@@ -396,6 +395,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
         let store
         let action
         let actions
+
+        const isHardStorage = true
 
         const configuration = [
           { type: HARD_FETCH, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR } },
@@ -424,9 +425,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({
               meta: {
                 type: HARD_STORE,
-                // cachedAt,
                 cacheFor: HARD_CACHE_FOR,
-                isHardStorage: true
+                isHardStorage
               },
               type: REDUX_STORAGE_CLEAR
             })
@@ -435,9 +435,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({
               meta: {
                 type: HARD_FETCH,
-                // cachedAt,
                 cacheFor: HARD_CACHE_FOR,
-                isHardStorage: true
+                isHardStorage
               },
               type: REDUX_STORAGE_CLEAR
             })
@@ -523,6 +522,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             const accessedAt = NOW
             const cachedAt = NOW - (SOFT_CACHE_FOR + 1000)
+            const isSoftStorage = true
 
             const configuration = [
               { type: SOFT_FETCH, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR } }
@@ -558,10 +558,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   type: REDUX_STORAGE_FETCH,
                   meta: {
                     type: SOFT_STORE,
-                    // cachedAt,
                     accessedAt,
                     cacheFor: SOFT_CACHE_FOR,
-                    isSoftStorage: true
+                    isSoftStorage
                   }
                 })
 
@@ -571,10 +570,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   data: { type: SOFT_FETCH },
                   meta: {
                     type: SOFT_FETCH,
-                    // cachedAt,
                     accessedAt: NOW,
                     cacheFor: SOFT_CACHE_FOR,
-                    isSoftStorage: true
+                    isSoftStorage
                   }
                 })
             })
@@ -593,6 +591,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             const accessedAt = NOW
             const cachedAt = NOW - (SOFT_CACHE_FOR - 1000)
+            const isSoftStorage = true
 
             const configuration = [
               { type: SOFT_FETCH, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR } }
@@ -632,10 +631,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   type: REDUX_STORAGE_FETCH,
                   meta: {
                     type: SOFT_STORE,
-                    // cachedAt,
                     accessedAt,
                     cacheFor: SOFT_CACHE_FOR,
-                    isSoftStorage: true
+                    isSoftStorage
                   }
                 })
 
@@ -645,10 +643,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   data: { type: SOFT_FETCH },
                   meta: {
                     type: SOFT_FETCH,
-                    // cachedAt,
                     accessedAt: NOW,
                     cacheFor: SOFT_CACHE_FOR,
-                    isSoftStorage: true
+                    isSoftStorage
                   }
                 })
             })
@@ -668,6 +665,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
           const accessedAt = NOW
           const cachedAt = NOW - (SOFT_CACHE_FOR + 1000)
+          const isSoftStorage = true
 
           const configuration = [
             { type: SOFT_FETCH, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR } }
@@ -703,10 +701,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 type: REDUX_STORAGE_FETCH,
                 meta: {
                   type: SOFT_STORE,
-                  // cachedAt,
                   accessedAt,
                   cacheFor: SOFT_CACHE_FOR,
-                  isSoftStorage: true
+                  isSoftStorage
                 }
               })
 
@@ -716,10 +713,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 data: { type: SOFT_FETCH },
                 meta: {
                   type: SOFT_FETCH,
-                  // cachedAt,
                   accessedAt: NOW,
                   cacheFor: SOFT_CACHE_FOR,
-                  isSoftStorage: true
+                  isSoftStorage
                 }
               })
           })
@@ -738,6 +734,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         const NOW = Date.now()
 
         const cachedAt = NOW
+        const isSoftStorage = true
 
         const configuration = [
           { type: SOFT_FETCH, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR } }
@@ -774,7 +771,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 type: SOFT_STORE,
                 cachedAt,
                 cacheFor: SOFT_CACHE_FOR,
-                isSoftStorage: true
+                isSoftStorage
               },
               data: { type: SOFT_STORE },
               type: REDUX_STORAGE_STORE
@@ -786,7 +783,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 type: SOFT_FETCH,
                 cachedAt,
                 cacheFor: SOFT_CACHE_FOR,
-                isSoftStorage: true },
+                isSoftStorage
+              },
               type: REDUX_STORAGE_STORE
             })
         })
@@ -800,6 +798,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
         let store
         let action
         let actions
+
+        const isSoftStorage = true
 
         const configuration = [
           { type: SOFT_FETCH, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR } },
@@ -828,9 +828,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({
               meta: {
                 type: SOFT_STORE,
-                // cachedAt,
                 cacheFor: SOFT_CACHE_FOR,
-                isSoftStorage: true
+                isSoftStorage
               },
               type: REDUX_STORAGE_CLEAR
             })
@@ -839,9 +838,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({
               meta: {
                 type: SOFT_FETCH,
-                // cachedAt,
                 cacheFor: SOFT_CACHE_FOR,
-                isSoftStorage: true
+                isSoftStorage
               },
               type: REDUX_STORAGE_CLEAR
             })
@@ -962,7 +960,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   type: REDUX_STORAGE_FETCH,
                   meta: {
                     type: STATE_STORE,
-                    // cachedAt,
                     accessedAt,
                     cacheFor: STATE_CACHE_FOR
                   }
@@ -974,7 +971,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   data: { type: STATE_FETCH },
                   meta: {
                     type: STATE_FETCH,
-                    // cachedAt,
                     accessedAt: NOW,
                     cacheFor: STATE_CACHE_FOR
                   }
@@ -1034,7 +1030,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   type: REDUX_STORAGE_FETCH,
                   meta: {
                     type: STATE_STORE,
-                    // cachedAt,
                     accessedAt,
                     cacheFor: STATE_CACHE_FOR
                   }
@@ -1046,7 +1041,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   data: { type: STATE_FETCH },
                   meta: {
                     type: STATE_FETCH,
-                    // cachedAt,
                     accessedAt: NOW,
                     cacheFor: STATE_CACHE_FOR
                   }
@@ -1103,7 +1097,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 type: REDUX_STORAGE_FETCH,
                 meta: {
                   type: STATE_STORE,
-                  // cachedAt,
                   accessedAt,
                   cacheFor: STATE_CACHE_FOR
                 }
@@ -1115,7 +1108,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 data: { type: STATE_FETCH },
                 meta: {
                   type: STATE_FETCH,
-                  // cachedAt,
                   accessedAt: NOW,
                   cacheFor: STATE_CACHE_FOR
                 }
@@ -1225,7 +1217,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({
               meta: {
                 type: STATE_STORE,
-                // cachedAt,
                 cacheFor: STATE_CACHE_FOR
               },
               type: REDUX_STORAGE_CLEAR
@@ -1235,7 +1226,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({
               meta: {
                 type: STATE_FETCH,
-                // cachedAt,
                 cacheFor: STATE_CACHE_FOR
               },
               type: REDUX_STORAGE_CLEAR
