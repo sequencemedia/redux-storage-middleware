@@ -30,7 +30,7 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
         const {
           meta: {
             type,
-            comparedAt = null
+            comparedAt = Date.now()
           }
         } = action
 
@@ -40,12 +40,13 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
           } = {}
         } = state
 
-        return { ...state, [type]: { meta: { ...meta, ...(comparedAt ? { comparedAt } : {}) } } }
+        return { ...state, [type]: { meta: { ...meta, comparedAt } } }
       } else {
         const {
           meta: META = {},
           meta: {
-            type
+            type,
+            comparedAt = Date.now()
           },
           data: DATA = {}
         } = action
@@ -57,7 +58,7 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
           } = {}
         } = state
 
-        return { ...state, [type]: { meta: { ...meta, ...META, type }, data: { ...data, ...DATA, type } } }
+        return { ...state, [type]: { meta: { ...meta, ...META, type, comparedAt }, data: { ...data, ...DATA, type } } }
       }
     }
 
@@ -74,7 +75,7 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
         const {
           meta: {
             type,
-            accessedAt = null
+            accessedAt = Date.now()
           }
         } = action
 
@@ -84,12 +85,13 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
           } = {}
         } = state
 
-        return { ...state, [type]: { meta: { ...meta, ...(accessedAt ? { accessedAt } : {}) } } }
+        return { ...state, [type]: { meta: { ...meta, accessedAt } } }
       } else {
         const {
           meta: META = {},
           meta: {
-            type
+            type,
+            accessedAt = Date.now()
           },
           data: DATA = {}
         } = action
@@ -101,7 +103,7 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
           } = {}
         } = state
 
-        return { ...state, [type]: { meta: { ...meta, ...META, type }, data: { ...data, ...DATA, type } } }
+        return { ...state, [type]: { meta: { ...meta, ...META, type, accessedAt }, data: { ...data, ...DATA, type } } }
       }
     }
 
@@ -118,7 +120,7 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
         const {
           meta: {
             type,
-            cachedAt = null
+            cachedAt = Date.now()
           }
         } = action
 
@@ -128,12 +130,13 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
           } = {}
         } = state
 
-        return { ...state, [type]: { meta: { ...meta, ...(cachedAt ? { cachedAt } : {}) } } }
+        return { ...state, [type]: { meta: { ...meta, cachedAt } } }
       } else {
         const {
           meta: META = {},
           meta: {
-            type
+            type,
+            cachedAt = Date.now()
           },
           data: DATA = {}
         } = action
@@ -145,7 +148,7 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
           } = {}
         } = state
 
-        return { ...state, [type]: { meta: { ...meta, ...META }, data: { ...data, ...DATA } } }
+        return { ...state, [type]: { meta: { ...meta, ...META, type, cachedAt }, data: { ...data, ...DATA, type } } }
       }
     }
 
