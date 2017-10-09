@@ -105,6 +105,11 @@ describe('Redux Storage Middleware - Storage', () => {
             Date.now.restore()
           })
 
+          it('gets the meta property type from storage', () => {
+            expect(Storage.prototype.getItem)
+              .to.have.been.calledWith(HARD_COMPARISON)
+          })
+
           it('invokes the "comparator" function', () => {
             expect(COMPARATOR)
               .to.have.been.calledWith({ type: HARD_COMPARISON, data: {} }, { type: HARD_COMPARISON, data: {} }, { cacheFor: HARD_CACHE_FOR, cachedAt: new Date(NOW - ONE_DAY) })
@@ -127,6 +132,11 @@ describe('Redux Storage Middleware - Storage', () => {
             THEN.returns(action)
 
             store.dispatch(action)
+          })
+
+          it('sets the meta property type into storage', () => {
+            expect(Storage.prototype.setItem)
+              .to.have.been.calledWith(HARD_COMPARISON, `{"meta":{"cacheFor":${HARD_CACHE_FOR}},"data":{"type":"HARD_COMPARISON","data":{}}}`)
           })
 
           it('invokes the "next" middleware with the data action', () => {
@@ -160,6 +170,11 @@ describe('Redux Storage Middleware - Storage', () => {
             THEN.returns(action)
 
             store.dispatch(action)
+          })
+
+          it('does not set the meta property type into storage', () => {
+            expect(Storage.prototype.setItem)
+              .not.to.have.been.called
           })
 
           it('does not invoke the "next" middleware with the data action', () => {
@@ -201,6 +216,11 @@ describe('Redux Storage Middleware - Storage', () => {
             store.dispatch(action)
           })
 
+          it('gets the meta property type from storage', () => {
+            expect(Storage.prototype.getItem)
+              .to.have.been.calledWith(HARD_COMPARISON)
+          })
+
           it('invokes the "comparator" function', () => {
             expect(COMPARATOR)
               .to.have.been.calledWith({}, { type: HARD_COMPARISON, data: {} }, { cacheFor: HARD_CACHE_FOR })
@@ -223,6 +243,11 @@ describe('Redux Storage Middleware - Storage', () => {
             THEN.returns(action)
 
             store.dispatch(action)
+          })
+
+          it('sets the meta property type into storage', () => {
+            expect(Storage.prototype.setItem)
+              .to.have.been.calledWith(HARD_COMPARISON, `{"meta":{"cacheFor":${HARD_CACHE_FOR}},"data":{"type":"HARD_COMPARISON","data":{}}}`)
           })
 
           it('invokes the "next" middleware with the data action', () => {
@@ -256,6 +281,11 @@ describe('Redux Storage Middleware - Storage', () => {
             THEN.returns(action)
 
             store.dispatch(action)
+          })
+
+          it('does not set the meta property type into storage', () => {
+            expect(Storage.prototype.setItem)
+              .not.to.have.been.called
           })
 
           it('does not invoke the "next" middleware with the data action', () => {
@@ -524,6 +554,11 @@ describe('Redux Storage Middleware - Storage', () => {
             Date.now.restore()
           })
 
+          it('gets the meta property type from storage', () => {
+            expect(Storage.prototype.getItem)
+              .to.have.been.calledWith(SOFT_COMPARISON)
+          })
+
           it('invokes the "comparator" function', () => {
             expect(COMPARATOR)
               .to.have.been.calledWith({ type: SOFT_COMPARISON, data: {} }, { type: SOFT_COMPARISON, data: {} }, { cacheFor: SOFT_CACHE_FOR, cachedAt: new Date(NOW - ONE_DAY) })
@@ -546,6 +581,11 @@ describe('Redux Storage Middleware - Storage', () => {
             THEN.returns(action)
 
             store.dispatch(action)
+          })
+
+          it('sets the meta property type into storage', () => {
+            expect(Storage.prototype.setItem)
+              .to.have.been.calledWith(SOFT_COMPARISON, `{"meta":{"cacheFor":${SOFT_CACHE_FOR}},"data":{"type":"SOFT_COMPARISON","data":{}}}`)
           })
 
           it('invokes the "next" middleware with the data action', () => {
@@ -579,6 +619,11 @@ describe('Redux Storage Middleware - Storage', () => {
             THEN.returns(action)
 
             store.dispatch(action)
+          })
+
+          it('does not set the meta property type into storage', () => {
+            expect(Storage.prototype.setItem)
+              .not.to.have.been.called
           })
 
           it('does not invoke the "next" middleware with the data action', () => {
@@ -620,6 +665,11 @@ describe('Redux Storage Middleware - Storage', () => {
             store.dispatch(action)
           })
 
+          it('gets the meta property type from storage', () => {
+            expect(Storage.prototype.getItem)
+              .to.have.been.calledWith(SOFT_COMPARISON)
+          })
+
           it('invokes the "comparator" function', () => {
             expect(COMPARATOR)
               .to.have.been.calledWith({}, { type: SOFT_COMPARISON, data: {} }, { cacheFor: SOFT_CACHE_FOR })
@@ -642,6 +692,11 @@ describe('Redux Storage Middleware - Storage', () => {
             THEN.returns(action)
 
             store.dispatch(action)
+          })
+
+          it('sets the meta property type into storage', () => {
+            expect(Storage.prototype.setItem)
+              .to.have.been.calledWith(SOFT_COMPARISON, `{"meta":{"cacheFor":${SOFT_CACHE_FOR}},"data":{"type":"SOFT_COMPARISON","data":{}}}`)
           })
 
           it('invokes the "next" middleware with the data action', () => {
@@ -675,6 +730,11 @@ describe('Redux Storage Middleware - Storage', () => {
             THEN.returns(action)
 
             store.dispatch(action)
+          })
+
+          it('does not set the meta property type into storage', () => {
+            expect(Storage.prototype.setItem)
+              .not.to.have.been.called
           })
 
           it('does not invoke the "next" middleware with the data action', () => {
@@ -937,6 +997,11 @@ describe('Redux Storage Middleware - Storage', () => {
             Date.now.restore()
           })
 
+          it('does not get the meta property type from storage', () => {
+            expect(Storage.prototype.getItem)
+              .not.to.have.been.called
+          })
+
           it('invokes the "comparator" function', () => {
             expect(COMPARATOR)
               .to.have.been.calledWith({ type: STATE_COMPARISON }, { type: STATE_COMPARISON }, { cacheFor: STATE_CACHE_FOR, cachedAt: new Date(NOW - ONE_DAY) })
@@ -959,6 +1024,11 @@ describe('Redux Storage Middleware - Storage', () => {
             THEN.returns(action)
 
             store.dispatch(action)
+          })
+
+          it('does not set the meta property type into storage', () => {
+            expect(Storage.prototype.setItem)
+              .not.to.have.been.called
           })
 
           it('invokes the "next" middleware with the data action', () => {
@@ -992,6 +1062,11 @@ describe('Redux Storage Middleware - Storage', () => {
             THEN.returns(action)
 
             store.dispatch(action)
+          })
+
+          it('does not set the meta property type into storage', () => {
+            expect(Storage.prototype.setItem)
+              .not.to.have.been.called
           })
 
           it('does not invoke the "next" middleware with the data action', () => {
@@ -1033,6 +1108,11 @@ describe('Redux Storage Middleware - Storage', () => {
             store.dispatch(action)
           })
 
+          it('does not get the meta property type from storage', () => {
+            expect(Storage.prototype.getItem)
+              .not.to.have.been.called
+          })
+
           it('invokes the "comparator" function', () => {
             expect(COMPARATOR)
               .to.have.been.calledWith({}, { type: STATE_COMPARISON }, { cacheFor: STATE_CACHE_FOR })
@@ -1055,6 +1135,11 @@ describe('Redux Storage Middleware - Storage', () => {
             THEN.returns(action)
 
             store.dispatch(action)
+          })
+
+          it('does not set the meta property type into storage', () => {
+            expect(Storage.prototype.setItem)
+              .not.to.have.been.called
           })
 
           it('invokes the "next" middleware with the data action', () => {
@@ -1088,6 +1173,11 @@ describe('Redux Storage Middleware - Storage', () => {
             THEN.returns(action)
 
             store.dispatch(action)
+          })
+
+          it('does not set the meta property type into storage', () => {
+            expect(Storage.prototype.setItem)
+              .not.to.have.been.called
           })
 
           it('does not invoke the "next" middleware with the data action', () => {
