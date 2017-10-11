@@ -133,8 +133,6 @@ function storageFetch (store, { meta: { isHardStorage = false, isSoftStorage = f
       if (storageData) store.dispatch(storageData)
     }
   }
-
-  return { ...action, meta: createMeta({ ...meta, type, isHardStorage, isSoftStorage }), ...(data ? { data } : {}) }
 }
 
 function storageStore (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, data, ...action }) {
@@ -161,8 +159,6 @@ function storageStore (store, { meta: { isHardStorage = false, isSoftStorage = f
       softStorage.setItem(type, ITEM)
     }
   }
-
-  return { ...action, meta: createMeta({ ...meta, type, isSoftStorage, isHardStorage }), ...(data ? { data } : {}) }
 }
 
 function storageClear (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, ...action }) {
@@ -173,8 +169,6 @@ function storageClear (store, { meta: { isHardStorage = false, isSoftStorage = f
       softStorage.removeItem(type)
     }
   }
-
-  return { ...action, meta: createMeta({ ...meta, type, isSoftStorage, isHardStorage }) }
 }
 
 export default (store) => (next) => (action) => {
@@ -199,13 +193,16 @@ export default (store) => (next) => (action) => {
     }
 
     case REDUX_STORAGE_FETCH:
-      return next(storageFetch(store, action))
+      storageFetch(store, action)
+      return next(action)
 
     case REDUX_STORAGE_STORE:
-      return next(storageStore(store, action))
+      storageStore(store, action)
+      return next(action)
 
     case REDUX_STORAGE_CLEAR:
-      return next(storageClear(store, action))
+      storageClear(store, action)
+      return next(action)
 
     default:
       return next(action)
