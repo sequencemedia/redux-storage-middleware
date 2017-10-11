@@ -43,7 +43,7 @@ function get (store, { meta: { isHardStorage = false, isSoftStorage = false, typ
   if (isHardStorage) {
     const item = hardStorage.getItem(type)
     const {
-      data = {}
+      data
     } = fromStringToObject(item) || {}
 
     return data
@@ -51,7 +51,7 @@ function get (store, { meta: { isHardStorage = false, isSoftStorage = false, typ
     if (isSoftStorage) {
       const item = softStorage.getItem(type)
       const {
-        data = {}
+        data
       } = fromStringToObject(item) || {}
 
       return data
@@ -59,7 +59,7 @@ function get (store, { meta: { isHardStorage = false, isSoftStorage = false, typ
       const {
         reduxStorage: {
           [type]: {
-            data = {}
+            data
           } = {}
         } = {}
       } = store.getState()
@@ -74,7 +74,7 @@ function put (store, { meta: META, meta: { isHardStorage = false, isSoftStorage 
     const item = hardStorage.getItem(type)
     const {
       meta: storageMeta = {},
-      data: storageData = {}
+      data: storageData
     } = fromStringToObject(item) || {}
 
     const ITEM = fromObjectToString({ meta: createMeta({ ...storageMeta, ...meta }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) })
@@ -85,7 +85,7 @@ function put (store, { meta: META, meta: { isHardStorage = false, isSoftStorage 
       const item = softStorage.getItem(type)
       const {
         meta: storageMeta = {},
-        data: storageData = {}
+        data: storageData
       } = fromStringToObject(item) || {}
 
       const ITEM = fromObjectToString({ meta: createMeta({ ...storageMeta, ...meta }), ...(data ? { data } : { ...(storageData ? { data: storageData } : {}) }) })
@@ -93,8 +93,6 @@ function put (store, { meta: META, meta: { isHardStorage = false, isSoftStorage 
       softStorage.setItem(type, ITEM)
     }
   }
-
-  return data
 }
 
 function storageFetch (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, data, ...action }) {
@@ -230,8 +228,8 @@ export default (store) => (next) => (action) => {
         data: ACTION
       } = action
 
-      return comparator(get(store, action), ACTION, { cacheFor, ...(cachedAt ? { cachedAt: new Date(cachedAt) } : {}) })
-        ? next(put(store, action))
+      return comparator(get(store, action) || {}, ACTION, { cacheFor, ...(cachedAt ? { cachedAt: new Date(cachedAt) } : {}) })
+        ? next(put(store, action) || ACTION)
         : then(ACTION)
     }
 
