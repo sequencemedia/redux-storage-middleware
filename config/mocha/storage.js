@@ -340,7 +340,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(2)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage } })
+            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_FETCH, data: {} } })
         })
 
         it('dispatches the hard storage data action', () => {
@@ -382,7 +382,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(1)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage } })
+            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_FETCH, data: {} } })
         })
 
         it('does not dispatch the hard storage data action', () => {
@@ -789,7 +789,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(2)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage } })
+            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_FETCH, data: {} } })
         })
 
         it('dispatches the soft storage data action', () => {
@@ -831,7 +831,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(1)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage } })
+            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_FETCH, data: {} } })
         })
 
         it('does not dispatch the soft storage data action', () => {
@@ -1229,7 +1229,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(2)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt } })
+            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_FETCH, data: {} } })
         })
 
         it('dispatches the state storage data action', () => {
@@ -1269,7 +1269,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(1)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt } })
+            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_FETCH, data: {} } })
         })
 
         it('does not dispatch the state storage data action', () => {
