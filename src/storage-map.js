@@ -281,10 +281,14 @@ export default (array) => {
           comparator
         } = defaultMeta
 
+        const {
+          cachedAt
+        } = meta
+
         const META = createMeta({
-          ...meta,
           type,
           cacheFor,
+          cachedAt,
           comparator,
           then: ({ type, ...action }) => {
             const accessedAt = Date.now()
@@ -321,7 +325,11 @@ export default (array) => {
           cacheFor
         } = defaultMeta
 
-        const META = createMeta({ ...meta, type, cacheFor })
+        const {
+          cachedAt
+        } = meta
+
+        const META = createMeta({ type, cacheFor, cachedAt })
 
         if (isStale(META)) {
           return next({ ...action, type })
