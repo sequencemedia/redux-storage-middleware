@@ -1,8 +1,8 @@
 import {
-  REDUX_STORAGE_COMPARISON,
-  REDUX_STORAGE_FETCH,
-  REDUX_STORAGE_STORE,
-  REDUX_STORAGE_CLEAR
+  STORAGE_COMPARE,
+  STORAGE_FETCH,
+  STORAGE_STORE,
+  STORAGE_CLEAR
 } from 'redux-storage-middleware/actions'
 
 import initialState from './initial-state'
@@ -17,7 +17,7 @@ const STATE = initialState()
  */
 export default function storageReducer (state = STATE, { type, ...action } = {}) {
   switch (type) {
-    case REDUX_STORAGE_COMPARISON:
+    case STORAGE_COMPARE:
     {
       const {
         meta: {
@@ -62,7 +62,7 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
       }
     }
 
-    case REDUX_STORAGE_FETCH:
+    case STORAGE_FETCH:
     {
       const {
         meta: {
@@ -107,7 +107,7 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
       }
     }
 
-    case REDUX_STORAGE_STORE:
+    case STORAGE_STORE:
     {
       const {
         meta: {
@@ -152,7 +152,7 @@ export default function storageReducer (state = STATE, { type, ...action } = {})
       }
     }
 
-    case REDUX_STORAGE_CLEAR:
+    case STORAGE_CLEAR:
     {
       const {
         meta: {

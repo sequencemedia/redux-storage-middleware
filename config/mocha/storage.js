@@ -10,10 +10,10 @@ import configureStore from 'redux-mock-store'
 import Storage from 'redux-storage-middleware/components/storage'
 
 import {
-  REDUX_STORAGE_COMPARISON,
-  REDUX_STORAGE_FETCH,
-  REDUX_STORAGE_STORE,
-  REDUX_STORAGE_CLEAR
+  STORAGE_COMPARE,
+  STORAGE_FETCH,
+  STORAGE_STORE,
+  STORAGE_CLEAR
 } from 'redux-storage-middleware/actions'
 
 import storage from 'redux-storage-middleware/storage'
@@ -93,7 +93,7 @@ describe('Redux Storage Middleware - Storage', () => {
 
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: HARD_COMPARISON, cacheFor: HARD_CACHE_FOR, cachedAt: NOW - ONE_DAY, isHardStorage, comparator: COMPARATOR, then: THEN }, data: { type: HARD_COMPARISON, data: {} } }
+            action = { type: STORAGE_COMPARE, meta: { type: HARD_COMPARISON, cacheFor: HARD_CACHE_FOR, cachedAt: NOW - ONE_DAY, isHardStorage, comparator: COMPARATOR, then: THEN }, data: { type: HARD_COMPARISON, data: {} } }
 
             COMPARATOR.returns(true)
             THEN.returns(action)
@@ -126,7 +126,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: HARD_COMPARISON, cacheFor: HARD_CACHE_FOR, isHardStorage, comparator: COMPARATOR, then: THEN }, data: { type: HARD_COMPARISON, data: {} } }
+            action = { type: STORAGE_COMPARE, meta: { type: HARD_COMPARISON, cacheFor: HARD_CACHE_FOR, isHardStorage, comparator: COMPARATOR, then: THEN }, data: { type: HARD_COMPARISON, data: {} } }
 
             COMPARATOR.returns(true)
             THEN.returns(action)
@@ -164,7 +164,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: HARD_COMPARISON, cacheFor: HARD_CACHE_FOR, isHardStorage, comparator: COMPARATOR, then: THEN }, data: { type: HARD_COMPARISON, data: {} } }
+            action = { type: STORAGE_COMPARE, meta: { type: HARD_COMPARISON, cacheFor: HARD_CACHE_FOR, isHardStorage, comparator: COMPARATOR, then: THEN }, data: { type: HARD_COMPARISON, data: {} } }
 
             COMPARATOR.returns(false)
             THEN.returns(action)
@@ -208,7 +208,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: HARD_COMPARISON, cacheFor: HARD_CACHE_FOR, isHardStorage, comparator: COMPARATOR, then: THEN }, data: { type: HARD_COMPARISON, data: {} } }
+            action = { type: STORAGE_COMPARE, meta: { type: HARD_COMPARISON, cacheFor: HARD_CACHE_FOR, isHardStorage, comparator: COMPARATOR, then: THEN }, data: { type: HARD_COMPARISON, data: {} } }
 
             COMPARATOR.returns(true)
             THEN.returns(action)
@@ -237,7 +237,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: HARD_COMPARISON, cacheFor: HARD_CACHE_FOR, isHardStorage, comparator: COMPARATOR, then: THEN }, data: { type: HARD_COMPARISON, data: {} } }
+            action = { type: STORAGE_COMPARE, meta: { type: HARD_COMPARISON, cacheFor: HARD_CACHE_FOR, isHardStorage, comparator: COMPARATOR, then: THEN }, data: { type: HARD_COMPARISON, data: {} } }
 
             COMPARATOR.returns(true)
             THEN.returns(action)
@@ -275,7 +275,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: HARD_COMPARISON, cacheFor: HARD_CACHE_FOR, isHardStorage, comparator: COMPARATOR, then: THEN }, data: { type: HARD_COMPARISON, data: {} } }
+            action = { type: STORAGE_COMPARE, meta: { type: HARD_COMPARISON, cacheFor: HARD_CACHE_FOR, isHardStorage, comparator: COMPARATOR, then: THEN }, data: { type: HARD_COMPARISON, data: {} } }
 
             COMPARATOR.returns(false)
             THEN.returns(action)
@@ -319,7 +319,7 @@ describe('Redux Storage Middleware - Storage', () => {
 
           store = configureStore([ storage ])({})
 
-          action = { type: REDUX_STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_FETCH, data: {} } }
+          action = { type: STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_FETCH, data: {} } }
 
           store.dispatch(action)
 
@@ -340,7 +340,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(2)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_FETCH, data: {} } })
+            .to.deep.include({ type: STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_FETCH, data: {} } })
         })
 
         it('dispatches the hard storage data action', () => {
@@ -361,7 +361,7 @@ describe('Redux Storage Middleware - Storage', () => {
 
           store = configureStore([ storage ])({})
 
-          action = { type: REDUX_STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_FETCH, data: {} } }
+          action = { type: STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_FETCH, data: {} } }
 
           store.dispatch(action)
 
@@ -382,7 +382,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(1)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_FETCH, data: {} } })
+            .to.deep.include({ type: STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_FETCH, data: {} } })
         })
 
         it('does not dispatch the hard storage data action', () => {
@@ -408,7 +408,7 @@ describe('Redux Storage Middleware - Storage', () => {
 
           store = configureStore([ storage ])({})
 
-          action = { type: REDUX_STORAGE_STORE, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_STORE, data: {} } }
+          action = { type: STORAGE_STORE, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_STORE, data: {} } }
 
           store.dispatch(action)
 
@@ -429,7 +429,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(1)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_STORE, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_STORE, data: {} } })
+            .to.deep.include({ type: STORAGE_STORE, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_STORE, data: {} } })
         })
 
         it('does not dispatch the hard storage data action', () => {
@@ -450,7 +450,7 @@ describe('Redux Storage Middleware - Storage', () => {
 
           store = configureStore([ storage ])({})
 
-          action = { type: REDUX_STORAGE_STORE, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_STORE, data: {} } }
+          action = { type: STORAGE_STORE, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_STORE, data: {} } }
 
           store.dispatch(action)
 
@@ -471,7 +471,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(1)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_STORE, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_STORE, data: {} } })
+            .to.deep.include({ type: STORAGE_STORE, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_STORE, data: {} } })
         })
 
         it('does not dispatch the hard storage data action', () => {
@@ -493,7 +493,7 @@ describe('Redux Storage Middleware - Storage', () => {
       beforeEach(() => {
         store = configureStore([ storage ])({})
 
-        action = { type: REDUX_STORAGE_CLEAR, meta: { type: HARD_CLEAR, isHardStorage } }
+        action = { type: STORAGE_CLEAR, meta: { type: HARD_CLEAR, isHardStorage } }
 
         store.dispatch(action)
 
@@ -509,7 +509,7 @@ describe('Redux Storage Middleware - Storage', () => {
         expect(actions.length).to.eql(1)
 
         expect(actions)
-          .to.deep.include({ type: REDUX_STORAGE_CLEAR, meta: { type: HARD_CLEAR, isHardStorage } })
+          .to.deep.include({ type: STORAGE_CLEAR, meta: { type: HARD_CLEAR, isHardStorage } })
       })
     })
   })
@@ -542,7 +542,7 @@ describe('Redux Storage Middleware - Storage', () => {
 
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: SOFT_COMPARISON, cacheFor: SOFT_CACHE_FOR, cachedAt: NOW - ONE_DAY, isSoftStorage, comparator: COMPARATOR, then: THEN }, data: { type: SOFT_COMPARISON, data: {} } }
+            action = { type: STORAGE_COMPARE, meta: { type: SOFT_COMPARISON, cacheFor: SOFT_CACHE_FOR, cachedAt: NOW - ONE_DAY, isSoftStorage, comparator: COMPARATOR, then: THEN }, data: { type: SOFT_COMPARISON, data: {} } }
 
             COMPARATOR.returns(true)
             THEN.returns(action)
@@ -575,7 +575,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: SOFT_COMPARISON, cacheFor: SOFT_CACHE_FOR, isSoftStorage, comparator: COMPARATOR, then: THEN }, data: { type: SOFT_COMPARISON, data: {} } }
+            action = { type: STORAGE_COMPARE, meta: { type: SOFT_COMPARISON, cacheFor: SOFT_CACHE_FOR, isSoftStorage, comparator: COMPARATOR, then: THEN }, data: { type: SOFT_COMPARISON, data: {} } }
 
             COMPARATOR.returns(true)
             THEN.returns(action)
@@ -613,7 +613,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: SOFT_COMPARISON, cacheFor: SOFT_CACHE_FOR, isSoftStorage, comparator: COMPARATOR, then: THEN }, data: { type: SOFT_COMPARISON, data: {} } }
+            action = { type: STORAGE_COMPARE, meta: { type: SOFT_COMPARISON, cacheFor: SOFT_CACHE_FOR, isSoftStorage, comparator: COMPARATOR, then: THEN }, data: { type: SOFT_COMPARISON, data: {} } }
 
             COMPARATOR.returns(false)
             THEN.returns(action)
@@ -657,7 +657,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: SOFT_COMPARISON, cacheFor: SOFT_CACHE_FOR, isSoftStorage, comparator: COMPARATOR, then: THEN }, data: { type: SOFT_COMPARISON, data: {} } }
+            action = { type: STORAGE_COMPARE, meta: { type: SOFT_COMPARISON, cacheFor: SOFT_CACHE_FOR, isSoftStorage, comparator: COMPARATOR, then: THEN }, data: { type: SOFT_COMPARISON, data: {} } }
 
             COMPARATOR.returns(true)
             THEN.returns(action)
@@ -686,7 +686,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: SOFT_COMPARISON, cacheFor: SOFT_CACHE_FOR, isSoftStorage, comparator: COMPARATOR, then: THEN }, data: { type: SOFT_COMPARISON, data: {} } }
+            action = { type: STORAGE_COMPARE, meta: { type: SOFT_COMPARISON, cacheFor: SOFT_CACHE_FOR, isSoftStorage, comparator: COMPARATOR, then: THEN }, data: { type: SOFT_COMPARISON, data: {} } }
 
             COMPARATOR.returns(true)
             THEN.returns(action)
@@ -724,7 +724,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: SOFT_COMPARISON, cacheFor: SOFT_CACHE_FOR, isSoftStorage, comparator: COMPARATOR, then: THEN }, data: { type: SOFT_COMPARISON, data: {} } }
+            action = { type: STORAGE_COMPARE, meta: { type: SOFT_COMPARISON, cacheFor: SOFT_CACHE_FOR, isSoftStorage, comparator: COMPARATOR, then: THEN }, data: { type: SOFT_COMPARISON, data: {} } }
 
             COMPARATOR.returns(false)
             THEN.returns(action)
@@ -768,7 +768,7 @@ describe('Redux Storage Middleware - Storage', () => {
 
           store = configureStore([ storage ])({})
 
-          action = { type: REDUX_STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_FETCH, data: {} } }
+          action = { type: STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_FETCH, data: {} } }
 
           store.dispatch(action)
 
@@ -789,7 +789,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(2)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_FETCH, data: {} } })
+            .to.deep.include({ type: STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_FETCH, data: {} } })
         })
 
         it('dispatches the soft storage data action', () => {
@@ -810,7 +810,7 @@ describe('Redux Storage Middleware - Storage', () => {
 
           store = configureStore([ storage ])({})
 
-          action = { type: REDUX_STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_FETCH, data: {} } }
+          action = { type: STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_FETCH, data: {} } }
 
           store.dispatch(action)
 
@@ -831,7 +831,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(1)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_FETCH, data: {} } })
+            .to.deep.include({ type: STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_FETCH, data: {} } })
         })
 
         it('does not dispatch the soft storage data action', () => {
@@ -857,7 +857,7 @@ describe('Redux Storage Middleware - Storage', () => {
 
           store = configureStore([ storage ])({})
 
-          action = { type: REDUX_STORAGE_STORE, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_STORE, data: {} } }
+          action = { type: STORAGE_STORE, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_STORE, data: {} } }
 
           store.dispatch(action)
 
@@ -878,7 +878,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(1)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_STORE, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_STORE, data: {} } })
+            .to.deep.include({ type: STORAGE_STORE, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_STORE, data: {} } })
         })
 
         it('does not dispatch the soft storage data action', () => {
@@ -899,7 +899,7 @@ describe('Redux Storage Middleware - Storage', () => {
 
           store = configureStore([ storage ])({})
 
-          action = { type: REDUX_STORAGE_STORE, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_STORE, data: {} } }
+          action = { type: STORAGE_STORE, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_STORE, data: {} } }
 
           store.dispatch(action)
 
@@ -920,7 +920,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(1)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_STORE, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_STORE, data: {} } })
+            .to.deep.include({ type: STORAGE_STORE, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_STORE, data: {} } })
         })
 
         it('does not dispatch the soft storage data action', () => {
@@ -942,7 +942,7 @@ describe('Redux Storage Middleware - Storage', () => {
       beforeEach(() => {
         store = configureStore([ storage ])({})
 
-        action = { type: REDUX_STORAGE_CLEAR, meta: { type: SOFT_CLEAR, isSoftStorage } }
+        action = { type: STORAGE_CLEAR, meta: { type: SOFT_CLEAR, isSoftStorage } }
 
         store.dispatch(action)
 
@@ -958,7 +958,7 @@ describe('Redux Storage Middleware - Storage', () => {
         expect(actions.length).to.eql(1)
 
         expect(actions)
-          .to.deep.include({ type: REDUX_STORAGE_CLEAR, meta: { type: SOFT_CLEAR, isSoftStorage } })
+          .to.deep.include({ type: STORAGE_CLEAR, meta: { type: SOFT_CLEAR, isSoftStorage } })
       })
     })
   })
@@ -985,7 +985,7 @@ describe('Redux Storage Middleware - Storage', () => {
 
             store = configureStore([ storage ])({ reduxStorage: { STATE_COMPARISON: { meta: { type: STATE_COMPARISON }, data: { type: STATE_COMPARISON } } } })
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: STATE_COMPARISON, cacheFor: STATE_CACHE_FOR, cachedAt: NOW - ONE_DAY, comparator: COMPARATOR, then: THEN }, data: { type: STATE_COMPARISON } }
+            action = { type: STORAGE_COMPARE, meta: { type: STATE_COMPARISON, cacheFor: STATE_CACHE_FOR, cachedAt: NOW - ONE_DAY, comparator: COMPARATOR, then: THEN }, data: { type: STATE_COMPARISON } }
 
             COMPARATOR.returns(true)
             THEN.returns(action)
@@ -1018,7 +1018,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({ reduxStorage: { STATE_COMPARISON: { meta: { type: STATE_COMPARISON }, data: { type: STATE_COMPARISON } } } })
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: STATE_COMPARISON, cacheFor: STATE_CACHE_FOR, comparator: COMPARATOR, then: THEN }, data: { type: STATE_COMPARISON } }
+            action = { type: STORAGE_COMPARE, meta: { type: STATE_COMPARISON, cacheFor: STATE_CACHE_FOR, comparator: COMPARATOR, then: THEN }, data: { type: STATE_COMPARISON } }
 
             COMPARATOR.returns(true)
             THEN.returns(action)
@@ -1056,7 +1056,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({ reduxStorage: { STATE_COMPARISON: { meta: { type: STATE_COMPARISON }, data: { type: STATE_COMPARISON } } } })
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: STATE_COMPARISON, cacheFor: STATE_CACHE_FOR, comparator: COMPARATOR, then: THEN }, data: { type: STATE_COMPARISON } }
+            action = { type: STORAGE_COMPARE, meta: { type: STATE_COMPARISON, cacheFor: STATE_CACHE_FOR, comparator: COMPARATOR, then: THEN }, data: { type: STATE_COMPARISON } }
 
             COMPARATOR.returns(false)
             THEN.returns(action)
@@ -1100,7 +1100,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: STATE_COMPARISON, cacheFor: STATE_CACHE_FOR, comparator: COMPARATOR, then: THEN }, data: { type: STATE_COMPARISON } }
+            action = { type: STORAGE_COMPARE, meta: { type: STATE_COMPARISON, cacheFor: STATE_CACHE_FOR, comparator: COMPARATOR, then: THEN }, data: { type: STATE_COMPARISON } }
 
             COMPARATOR.returns(true)
             THEN.returns(action)
@@ -1129,7 +1129,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: STATE_COMPARISON, cacheFor: STATE_CACHE_FOR, comparator: COMPARATOR, then: THEN }, data: { type: STATE_COMPARISON } }
+            action = { type: STORAGE_COMPARE, meta: { type: STATE_COMPARISON, cacheFor: STATE_CACHE_FOR, comparator: COMPARATOR, then: THEN }, data: { type: STATE_COMPARISON } }
 
             COMPARATOR.returns(true)
             THEN.returns(action)
@@ -1167,7 +1167,7 @@ describe('Redux Storage Middleware - Storage', () => {
           beforeEach(() => {
             store = configureStore([ storage ])({})
 
-            action = { type: REDUX_STORAGE_COMPARISON, meta: { type: STATE_COMPARISON, cacheFor: STATE_CACHE_FOR, comparator: COMPARATOR, then: THEN }, data: { type: STATE_COMPARISON } }
+            action = { type: STORAGE_COMPARE, meta: { type: STATE_COMPARISON, cacheFor: STATE_CACHE_FOR, comparator: COMPARATOR, then: THEN }, data: { type: STATE_COMPARISON } }
 
             COMPARATOR.returns(false)
             THEN.returns(action)
@@ -1208,7 +1208,7 @@ describe('Redux Storage Middleware - Storage', () => {
         beforeEach(() => {
           store = configureStore([ storage ])({ reduxStorage: { STATE_FETCH: { meta: { type: STATE_FETCH }, data: { type: STATE_FETCH } } } })
 
-          action = { type: REDUX_STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_FETCH, data: {} } }
+          action = { type: STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_FETCH, data: {} } }
 
           store.dispatch(action)
 
@@ -1229,7 +1229,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(2)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_FETCH, data: {} } })
+            .to.deep.include({ type: STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_FETCH, data: {} } })
         })
 
         it('dispatches the state storage data action', () => {
@@ -1248,7 +1248,7 @@ describe('Redux Storage Middleware - Storage', () => {
         beforeEach(() => {
           store = configureStore([ storage ])({})
 
-          action = { type: REDUX_STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_FETCH, data: {} } }
+          action = { type: STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_FETCH, data: {} } }
 
           store.dispatch(action)
 
@@ -1269,7 +1269,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(1)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_FETCH, data: {} } })
+            .to.deep.include({ type: STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_FETCH, data: {} } })
         })
 
         it('does not dispatch the state storage data action', () => {
@@ -1292,7 +1292,7 @@ describe('Redux Storage Middleware - Storage', () => {
         beforeEach(() => {
           store = configureStore([ storage ])({})
 
-          action = { type: REDUX_STORAGE_STORE, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_STORE, data: {} } }
+          action = { type: STORAGE_STORE, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_STORE, data: {} } }
 
           store.dispatch(action)
 
@@ -1313,7 +1313,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(1)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_STORE, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_STORE, data: {} } })
+            .to.deep.include({ type: STORAGE_STORE, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_STORE, data: {} } })
         })
 
         it('does not dispatch the state storage data action', () => {
@@ -1332,7 +1332,7 @@ describe('Redux Storage Middleware - Storage', () => {
         beforeEach(() => {
           store = configureStore([ storage ])({})
 
-          action = { type: REDUX_STORAGE_STORE, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_STORE, data: {} } }
+          action = { type: STORAGE_STORE, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_STORE, data: {} } }
 
           store.dispatch(action)
 
@@ -1353,7 +1353,7 @@ describe('Redux Storage Middleware - Storage', () => {
           expect(actions.length).to.eql(1)
 
           expect(actions)
-            .to.deep.include({ type: REDUX_STORAGE_STORE, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_STORE, data: {} } })
+            .to.deep.include({ type: STORAGE_STORE, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_STORE, data: {} } })
         })
 
         it('does not dispatch the state storage data action', () => {
@@ -1373,7 +1373,7 @@ describe('Redux Storage Middleware - Storage', () => {
       beforeEach(() => {
         store = configureStore([ storage ])({})
 
-        action = { type: REDUX_STORAGE_CLEAR, meta: { type: STATE_CLEAR } }
+        action = { type: STORAGE_CLEAR, meta: { type: STATE_CLEAR } }
 
         store.dispatch(action)
 
@@ -1389,7 +1389,7 @@ describe('Redux Storage Middleware - Storage', () => {
         expect(actions.length).to.eql(1)
 
         expect(actions)
-          .to.deep.include({ type: REDUX_STORAGE_CLEAR, meta: { type: STATE_CLEAR } })
+          .to.deep.include({ type: STORAGE_CLEAR, meta: { type: STATE_CLEAR } })
       })
     })
   })

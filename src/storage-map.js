@@ -1,5 +1,5 @@
 import {
-  storageComparisonAction,
+  storageCompareAction,
   storageFetchAction,
   storageStoreAction,
   storageClearAction
@@ -317,7 +317,7 @@ export default (array) => {
           }
         })
 
-        store.dispatch(storageComparisonAction(META, { ...action, type }))
+        store.dispatch(storageCompareAction(META, { ...action, type }))
 
         return { ...action, type }
       } else {

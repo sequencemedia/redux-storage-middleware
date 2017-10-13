@@ -5,10 +5,10 @@ import { expect } from 'chai'
 import sinon from 'sinon'
 
 import {
-  REDUX_STORAGE_COMPARISON,
-  REDUX_STORAGE_FETCH,
-  REDUX_STORAGE_STORE,
-  REDUX_STORAGE_CLEAR
+  STORAGE_COMPARE,
+  STORAGE_FETCH,
+  STORAGE_STORE,
+  STORAGE_CLEAR
 } from 'redux-storage-middleware/actions'
 
 import reducer from 'redux-storage-middleware/reducer'
@@ -50,7 +50,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const comparedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, comparedAt: comparedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_COMPARISON, meta: { type, isHardStorage, comparedAt } })
+            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isHardStorage, comparedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, comparedAt } } })
@@ -62,7 +62,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const comparedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, comparedAt: comparedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_COMPARISON, meta: { type, isHardStorage } })
+            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isHardStorage } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, comparedAt } } })
@@ -78,7 +78,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const accessedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, accessedAt: accessedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_FETCH, meta: { type, isHardStorage, accessedAt } })
+            const now = reducer(was, { type: STORAGE_FETCH, meta: { type, isHardStorage, accessedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, accessedAt } } })
@@ -90,7 +90,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const accessedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, accessedAt: accessedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_FETCH, meta: { type, isHardStorage } })
+            const now = reducer(was, { type: STORAGE_FETCH, meta: { type, isHardStorage } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, accessedAt } } })
@@ -106,7 +106,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const cachedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, cachedAt: cachedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_STORE, meta: { type, isHardStorage, cachedAt } })
+            const now = reducer(was, { type: STORAGE_STORE, meta: { type, isHardStorage, cachedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, cachedAt } } })
@@ -118,7 +118,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const cachedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, cachedAt: cachedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_STORE, meta: { type, isHardStorage } })
+            const now = reducer(was, { type: STORAGE_STORE, meta: { type, isHardStorage } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, cachedAt } } })
@@ -129,7 +129,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Clear', () => {
         it('clears the state of the meta property type', () => {
           const was = { [type]: { meta: { cachedAt: 0, cacheFor: 0 } } }
-          const now = reducer(was, { type: REDUX_STORAGE_CLEAR, meta: { type, isHardStorage } })
+          const now = reducer(was, { type: STORAGE_CLEAR, meta: { type, isHardStorage } })
 
           expect(now)
             .to.eql({})
@@ -144,7 +144,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const comparedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_COMPARISON, meta: { type, isHardStorage, comparedAt } })
+            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isHardStorage, comparedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { comparedAt } } })
@@ -156,7 +156,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const comparedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_COMPARISON, meta: { type, isHardStorage } })
+            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isHardStorage } })
 
             expect(now)
               .to.eql({ [type]: { meta: { comparedAt } } })
@@ -170,7 +170,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const accessedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_FETCH, meta: { type, isHardStorage, accessedAt } })
+            const now = reducer(was, { type: STORAGE_FETCH, meta: { type, isHardStorage, accessedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { accessedAt } } })
@@ -182,7 +182,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const accessedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_FETCH, meta: { type, isHardStorage } })
+            const now = reducer(was, { type: STORAGE_FETCH, meta: { type, isHardStorage } })
 
             expect(now)
               .to.eql({ [type]: { meta: { accessedAt } } })
@@ -196,7 +196,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const cachedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_STORE, meta: { type, isHardStorage, cachedAt } })
+            const now = reducer(was, { type: STORAGE_STORE, meta: { type, isHardStorage, cachedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { cachedAt } } })
@@ -208,7 +208,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const cachedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_STORE, meta: { type, isHardStorage } })
+            const now = reducer(was, { type: STORAGE_STORE, meta: { type, isHardStorage } })
 
             expect(now)
               .to.eql({ [type]: { meta: { cachedAt } } })
@@ -219,7 +219,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Clear', () => {
         it('does not change the state', () => {
           const was = {}
-          const now = reducer(was, { type: REDUX_STORAGE_CLEAR, meta: { type, isHardStorage } })
+          const now = reducer(was, { type: STORAGE_CLEAR, meta: { type, isHardStorage } })
 
           expect(now)
             .to.eql(was)
@@ -252,7 +252,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const comparedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, comparedAt: comparedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_COMPARISON, meta: { type, isSoftStorage, comparedAt } })
+            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isSoftStorage, comparedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, comparedAt } } })
@@ -264,7 +264,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const comparedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, comparedAt: comparedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_COMPARISON, meta: { type, isSoftStorage } })
+            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isSoftStorage } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, comparedAt } } })
@@ -280,7 +280,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const accessedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, accessedAt: accessedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_FETCH, meta: { type, isSoftStorage, accessedAt } })
+            const now = reducer(was, { type: STORAGE_FETCH, meta: { type, isSoftStorage, accessedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, accessedAt } } })
@@ -292,7 +292,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const accessedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, accessedAt: accessedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_FETCH, meta: { type, isSoftStorage } })
+            const now = reducer(was, { type: STORAGE_FETCH, meta: { type, isSoftStorage } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, accessedAt } } })
@@ -308,7 +308,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const cachedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, cachedAt: cachedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_STORE, meta: { type, isSoftStorage, cachedAt } })
+            const now = reducer(was, { type: STORAGE_STORE, meta: { type, isSoftStorage, cachedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, cachedAt } } })
@@ -320,7 +320,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const cachedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, cachedAt: cachedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_STORE, meta: { type, isSoftStorage } })
+            const now = reducer(was, { type: STORAGE_STORE, meta: { type, isSoftStorage } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, cachedAt } } })
@@ -331,7 +331,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Clear', () => {
         it('clears the state of the meta property type', () => {
           const was = { [type]: {} }
-          const now = reducer(was, { type: REDUX_STORAGE_CLEAR, meta: { type, isSoftStorage } })
+          const now = reducer(was, { type: STORAGE_CLEAR, meta: { type, isSoftStorage } })
 
           expect(now)
             .to.eql({})
@@ -346,7 +346,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const comparedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_COMPARISON, meta: { type, isSoftStorage, comparedAt } })
+            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isSoftStorage, comparedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { comparedAt } } })
@@ -358,7 +358,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const comparedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_COMPARISON, meta: { type, isSoftStorage } })
+            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isSoftStorage } })
 
             expect(now)
               .to.eql({ [type]: { meta: { comparedAt } } })
@@ -372,7 +372,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const accessedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_FETCH, meta: { type, isSoftStorage, accessedAt } })
+            const now = reducer(was, { type: STORAGE_FETCH, meta: { type, isSoftStorage, accessedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { accessedAt } } })
@@ -384,7 +384,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const accessedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_FETCH, meta: { type, isSoftStorage } })
+            const now = reducer(was, { type: STORAGE_FETCH, meta: { type, isSoftStorage } })
 
             expect(now)
               .to.eql({ [type]: { meta: { accessedAt } } })
@@ -398,7 +398,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const cachedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_STORE, meta: { type, isSoftStorage, cachedAt } })
+            const now = reducer(was, { type: STORAGE_STORE, meta: { type, isSoftStorage, cachedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { cachedAt } } })
@@ -410,7 +410,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const cachedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_STORE, meta: { type, isSoftStorage } })
+            const now = reducer(was, { type: STORAGE_STORE, meta: { type, isSoftStorage } })
 
             expect(now)
               .to.eql({ [type]: { meta: { cachedAt } } })
@@ -421,7 +421,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Clear', () => {
         it('does not change the state', () => {
           const was = {}
-          const now = reducer(was, { type: REDUX_STORAGE_CLEAR, meta: { type, isSoftStorage } })
+          const now = reducer(was, { type: STORAGE_CLEAR, meta: { type, isSoftStorage } })
 
           expect(now)
             .to.eql(was)
@@ -453,7 +453,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const comparedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, comparedAt: comparedAt - ONE_DAY }, data: { type } } }
-            const now = reducer(was, { type: REDUX_STORAGE_COMPARISON, meta: { type, comparedAt } })
+            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, comparedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, type, comparedAt }, data: { type } } })
@@ -465,7 +465,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const comparedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, comparedAt: comparedAt - ONE_DAY }, data: { type } } }
-            const now = reducer(was, { type: REDUX_STORAGE_COMPARISON, meta: { type } })
+            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, type, comparedAt }, data: { type } } })
@@ -481,7 +481,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const accessedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, accessedAt: accessedAt - ONE_DAY }, data: { type } } }
-            const now = reducer(was, { type: REDUX_STORAGE_FETCH, meta: { type, accessedAt } })
+            const now = reducer(was, { type: STORAGE_FETCH, meta: { type, accessedAt } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, type, accessedAt }, data: { type } } })
@@ -493,7 +493,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const accessedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, accessedAt: accessedAt - ONE_DAY }, data: { type } } }
-            const now = reducer(was, { type: REDUX_STORAGE_FETCH, meta: { type } })
+            const now = reducer(was, { type: STORAGE_FETCH, meta: { type } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, type, accessedAt }, data: { type } } })
@@ -509,7 +509,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const cachedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, cachedAt: cachedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_STORE, meta: { type, cachedAt }, data: { type } })
+            const now = reducer(was, { type: STORAGE_STORE, meta: { type, cachedAt }, data: { type } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, type, cachedAt }, data: { type } } })
@@ -521,7 +521,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const cachedAt = Date.now()
 
             const was = { [type]: { meta: { ...meta, cachedAt: cachedAt - ONE_DAY } } }
-            const now = reducer(was, { type: REDUX_STORAGE_STORE, meta: { type }, data: { type } })
+            const now = reducer(was, { type: STORAGE_STORE, meta: { type }, data: { type } })
 
             expect(now)
               .to.eql({ [type]: { meta: { ...meta, type, cachedAt }, data: { type } } })
@@ -532,7 +532,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Clear', () => {
         it('clears the state of the meta property type', () => {
           const was = { [type]: {} }
-          const now = reducer(was, { type: REDUX_STORAGE_CLEAR, meta: { type }, data: { type } })
+          const now = reducer(was, { type: STORAGE_CLEAR, meta: { type }, data: { type } })
 
           expect(now)
             .to.eql({})
@@ -547,7 +547,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const comparedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_COMPARISON, meta: { type, comparedAt }, data: { type } })
+            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, comparedAt }, data: { type } })
 
             expect(now)
               .to.eql({ [type]: { meta: { type, comparedAt }, data: { type } } })
@@ -559,7 +559,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const comparedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_COMPARISON, meta: { type }, data: { type } })
+            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type }, data: { type } })
 
             expect(now)
               .to.eql({ [type]: { meta: { type, comparedAt }, data: { type } } })
@@ -573,7 +573,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const accessedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_FETCH, meta: { type, accessedAt }, data: { type } })
+            const now = reducer(was, { type: STORAGE_FETCH, meta: { type, accessedAt }, data: { type } })
 
             expect(now)
               .to.eql({ [type]: { meta: { type, accessedAt }, data: { type } } })
@@ -585,7 +585,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const accessedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_FETCH, meta: { type }, data: { type } })
+            const now = reducer(was, { type: STORAGE_FETCH, meta: { type }, data: { type } })
 
             expect(now)
               .to.eql({ [type]: { meta: { type, accessedAt }, data: { type } } })
@@ -599,7 +599,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const cachedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_STORE, meta: { type, cachedAt }, data: { type } })
+            const now = reducer(was, { type: STORAGE_STORE, meta: { type, cachedAt }, data: { type } })
 
             expect(now)
               .to.eql({ [type]: { meta: { type, cachedAt }, data: { type } } })
@@ -611,7 +611,7 @@ describe('Redux Storage Middleware - Reducer', () => {
             const cachedAt = Date.now()
 
             const was = {}
-            const now = reducer(was, { type: REDUX_STORAGE_STORE, meta: { type }, data: { type } })
+            const now = reducer(was, { type: STORAGE_STORE, meta: { type }, data: { type } })
 
             expect(now)
               .to.eql({ [type]: { meta: { type, cachedAt }, data: { type } } })
@@ -622,7 +622,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Clear', () => {
         it('does not change the state', () => {
           const was = {}
-          const now = reducer(was, { type: REDUX_STORAGE_CLEAR, meta: { type }, data: { type } })
+          const now = reducer(was, { type: STORAGE_CLEAR, meta: { type }, data: { type } })
 
           expect(now)
             .to.eql(was)

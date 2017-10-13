@@ -7,10 +7,10 @@ import sinon from 'sinon'
 import configureStore from 'redux-mock-store'
 
 import {
-  REDUX_STORAGE_COMPARISON,
-  REDUX_STORAGE_FETCH,
-  REDUX_STORAGE_STORE,
-  REDUX_STORAGE_CLEAR
+  STORAGE_COMPARE,
+  STORAGE_FETCH,
+  STORAGE_STORE,
+  STORAGE_CLEAR
 } from 'redux-storage-middleware/actions'
 
 import storageMap from 'redux-storage-middleware/storage-map'
@@ -77,7 +77,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             const [ comparisonAction ] = actions
 
             expect(comparisonAction)
-              .to.deep.include({ type: REDUX_STORAGE_COMPARISON, data: { type: HARD_FETCH } })
+              .to.deep.include({ type: STORAGE_COMPARE, data: { type: HARD_FETCH } })
 
             const {
               meta: {
@@ -157,7 +157,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               expect(actions)
                 .not.to.deep.include({
-                  type: REDUX_STORAGE_FETCH,
+                  type: STORAGE_FETCH,
                   meta: {
                     type: HARD_STORE,
                     accessedAt,
@@ -168,7 +168,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               expect(actions)
                 .not.to.deep.include({
-                  type: REDUX_STORAGE_FETCH,
+                  type: STORAGE_FETCH,
                   data: { type: HARD_FETCH },
                   meta: {
                     type: HARD_FETCH,
@@ -226,7 +226,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               expect(actions)
                 .to.deep.include({
-                  type: REDUX_STORAGE_FETCH,
+                  type: STORAGE_FETCH,
                   meta: {
                     type: HARD_STORE,
                     accessedAt,
@@ -237,7 +237,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               expect(actions)
                 .to.deep.include({
-                  type: REDUX_STORAGE_FETCH,
+                  type: STORAGE_FETCH,
                   data: { type: HARD_FETCH },
                   meta: {
                     type: HARD_FETCH,
@@ -296,7 +296,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             expect(actions)
               .not.to.deep.include({
-                type: REDUX_STORAGE_FETCH,
+                type: STORAGE_FETCH,
                 meta: {
                   type: HARD_STORE,
                   accessedAt,
@@ -307,7 +307,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             expect(actions)
               .not.to.deep.include({
-                type: REDUX_STORAGE_FETCH,
+                type: STORAGE_FETCH,
                 data: { type: HARD_FETCH },
                 meta: {
                   type: HARD_FETCH,
@@ -372,7 +372,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 isHardStorage
               },
               data: { type: HARD_STORE },
-              type: REDUX_STORAGE_STORE
+              type: STORAGE_STORE
             })
 
           expect(actions)
@@ -383,7 +383,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 cacheFor: HARD_CACHE_FOR,
                 isHardStorage
               },
-              type: REDUX_STORAGE_STORE
+              type: STORAGE_STORE
             })
         })
 
@@ -429,7 +429,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 cacheFor: HARD_CACHE_FOR,
                 isHardStorage
               },
-              type: REDUX_STORAGE_CLEAR
+              type: STORAGE_CLEAR
             })
 
           expect(actions)
@@ -439,7 +439,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 cacheFor: HARD_CACHE_FOR,
                 isHardStorage
               },
-              type: REDUX_STORAGE_CLEAR
+              type: STORAGE_CLEAR
             })
         })
 
@@ -476,7 +476,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             const [ comparisonAction ] = actions
 
             expect(comparisonAction)
-              .to.deep.include({ type: REDUX_STORAGE_COMPARISON, data: { type: SOFT_FETCH } })
+              .to.deep.include({ type: STORAGE_COMPARE, data: { type: SOFT_FETCH } })
 
             const {
               meta: {
@@ -556,7 +556,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               expect(actions)
                 .not.to.deep.include({
-                  type: REDUX_STORAGE_FETCH,
+                  type: STORAGE_FETCH,
                   meta: {
                     type: SOFT_STORE,
                     accessedAt,
@@ -567,7 +567,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               expect(actions)
                 .not.to.deep.include({
-                  type: REDUX_STORAGE_FETCH,
+                  type: STORAGE_FETCH,
                   data: { type: SOFT_FETCH },
                   meta: {
                     type: SOFT_FETCH,
@@ -625,7 +625,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               expect(actions)
                 .to.deep.include({
-                  type: REDUX_STORAGE_FETCH,
+                  type: STORAGE_FETCH,
                   meta: {
                     type: SOFT_STORE,
                     accessedAt,
@@ -636,7 +636,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               expect(actions)
                 .to.deep.include({
-                  type: REDUX_STORAGE_FETCH,
+                  type: STORAGE_FETCH,
                   data: { type: SOFT_FETCH },
                   meta: {
                     type: SOFT_FETCH,
@@ -695,7 +695,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             expect(actions)
               .not.to.deep.include({
-                type: REDUX_STORAGE_FETCH,
+                type: STORAGE_FETCH,
                 meta: {
                   type: SOFT_STORE,
                   accessedAt,
@@ -706,7 +706,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             expect(actions)
               .not.to.deep.include({
-                type: REDUX_STORAGE_FETCH,
+                type: STORAGE_FETCH,
                 data: { type: SOFT_FETCH },
                 meta: {
                   type: SOFT_FETCH,
@@ -771,7 +771,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 isSoftStorage
               },
               data: { type: SOFT_STORE },
-              type: REDUX_STORAGE_STORE
+              type: STORAGE_STORE
             })
 
           expect(actions)
@@ -782,7 +782,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 cacheFor: SOFT_CACHE_FOR,
                 isSoftStorage
               },
-              type: REDUX_STORAGE_STORE
+              type: STORAGE_STORE
             })
         })
 
@@ -828,7 +828,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 cacheFor: SOFT_CACHE_FOR,
                 isSoftStorage
               },
-              type: REDUX_STORAGE_CLEAR
+              type: STORAGE_CLEAR
             })
 
           expect(actions)
@@ -838,7 +838,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 cacheFor: SOFT_CACHE_FOR,
                 isSoftStorage
               },
-              type: REDUX_STORAGE_CLEAR
+              type: STORAGE_CLEAR
             })
         })
 
@@ -875,7 +875,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             const [ comparisonAction ] = actions
 
             expect(comparisonAction)
-              .to.deep.include({ type: REDUX_STORAGE_COMPARISON, data: { type: STATE_FETCH } })
+              .to.deep.include({ type: STORAGE_COMPARE, data: { type: STATE_FETCH } })
 
             const {
               meta: {
@@ -954,7 +954,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               expect(actions)
                 .not.to.deep.include({
-                  type: REDUX_STORAGE_FETCH,
+                  type: STORAGE_FETCH,
                   meta: {
                     type: STATE_STORE,
                     accessedAt,
@@ -964,7 +964,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               expect(actions)
                 .not.to.deep.include({
-                  type: REDUX_STORAGE_FETCH,
+                  type: STORAGE_FETCH,
                   data: { type: STATE_FETCH },
                   meta: {
                     type: STATE_FETCH,
@@ -1020,7 +1020,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               expect(actions)
                 .to.deep.include({
-                  type: REDUX_STORAGE_FETCH,
+                  type: STORAGE_FETCH,
                   meta: {
                     type: STATE_STORE,
                     accessedAt,
@@ -1030,7 +1030,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               expect(actions)
                 .to.deep.include({
-                  type: REDUX_STORAGE_FETCH,
+                  type: STORAGE_FETCH,
                   data: { type: STATE_FETCH },
                   meta: {
                     type: STATE_FETCH,
@@ -1087,7 +1087,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             expect(actions)
               .not.to.deep.include({
-                type: REDUX_STORAGE_FETCH,
+                type: STORAGE_FETCH,
                 meta: {
                   type: STATE_STORE,
                   accessedAt,
@@ -1097,7 +1097,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             expect(actions)
               .not.to.deep.include({
-                type: REDUX_STORAGE_FETCH,
+                type: STORAGE_FETCH,
                 data: { type: STATE_FETCH },
                 meta: {
                   type: STATE_FETCH,
@@ -1159,7 +1159,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 cacheFor: STATE_CACHE_FOR
               },
               data: { type: STATE_STORE },
-              type: REDUX_STORAGE_STORE
+              type: STORAGE_STORE
             })
 
           expect(actions)
@@ -1169,7 +1169,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 cachedAt,
                 cacheFor: STATE_CACHE_FOR
               },
-              type: REDUX_STORAGE_STORE
+              type: STORAGE_STORE
             })
         })
 
@@ -1212,7 +1212,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 type: STATE_STORE,
                 cacheFor: STATE_CACHE_FOR
               },
-              type: REDUX_STORAGE_CLEAR
+              type: STORAGE_CLEAR
             })
 
           expect(actions)
@@ -1221,7 +1221,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 type: STATE_FETCH,
                 cacheFor: STATE_CACHE_FOR
               },
-              type: REDUX_STORAGE_CLEAR
+              type: STORAGE_CLEAR
             })
         })
 
