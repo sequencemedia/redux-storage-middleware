@@ -3,8 +3,7 @@
   "comments": false,
   "presets": [
     "env",
-    "stage-0",
-    "stage-1"
+    "stage-0"
   ],
   "plugins": [
     [

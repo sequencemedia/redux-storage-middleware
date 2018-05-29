@@ -38,5 +38,7 @@ pids
 *.PublishSettings
 
 # Build Folders
+.nyc_output
 coverage/
 npm-debug.log*
+

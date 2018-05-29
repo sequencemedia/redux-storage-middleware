@@ -152,6 +152,79 @@ export default (array) => {
     )
   }
 
+  const initialiseHardStorageFilterArray = (array) => (
+    array
+      .filter(hardStorageFilter)
+  )
+
+  const initialiseSoftStorageFilterArray = (array) => (
+    array
+      .filter(softStorageFilter)
+  )
+
+  const initaliseStorageFilterArray = (array) => (
+    array
+      .filter(storageFilter)
+  )
+
+  function initialiseHardStorageFilterFetchArray (array) {
+    initialiseHardStorageFilterArray(array)
+      .reduce(fetchReduce, [])
+      .forEach(putIntoFetchMap)
+  }
+
+  function initialiseSoftStorageFilterFetchArray (array) {
+    initialiseSoftStorageFilterArray(array)
+      .reduce(fetchReduce, [])
+      .forEach(putIntoFetchMap)
+  }
+
+  function initialiseStorageFilterFetchArray (array) {
+    initaliseStorageFilterArray(array)
+      .reduce(fetchReduce, [])
+      .forEach(putIntoFetchMap)
+  }
+
+  const initialiseFetchArray = (array) => (
+    array
+      .filter(fetchFilter)
+  )
+
+  const initialiseStoreArray = (array) => (
+    array
+      .filter(storeFilter)
+  )
+
+  const initialiseClearArray = (array) => (
+    array
+      .filter(clearFilter)
+  )
+
+  const initialiseNotFetchMapFilterArray = (array) => (
+    array
+      .filter(notFetchMapFilter)
+  )
+
+  const putArrayIntoFetchMap = (array) => (
+    array
+      .forEach(putIntoFetchMap)
+  )
+
+  const putArrayIntoStoreMap = (array) => (
+    array
+      .forEach(putIntoStoreMap)
+  )
+
+  const putArrayIntoFetchMetaMap = (array) => (
+    array
+      .forEach(putIntoFetchMetaMap)
+  )
+
+  const putArrayIntoStoreMetaMap = (array) => (
+    array
+      .forEach(putIntoStoreMetaMap)
+  )
+
   const fetchMap = new Map()
   const storeMap = new Map()
   const fetchMetaMap = new Map()
@@ -160,35 +233,22 @@ export default (array) => {
 
   if (Array.isArray(array)) {
     {
-      const fetchArray = array
-        .filter(fetchFilter)
+      const fetchArray = initialiseFetchArray(array)
 
-      fetchArray
-        .filter(hardStorageFilter)
-        .reduce(fetchReduce, [])
-        .forEach(putIntoFetchMap)
+      initialiseHardStorageFilterFetchArray(fetchArray)
 
-      fetchArray
-        .filter(softStorageFilter)
-        .reduce(fetchReduce, [])
-        .forEach(putIntoFetchMap)
+      initialiseSoftStorageFilterFetchArray(fetchArray)
 
-      fetchArray
-        .filter(storageFilter)
-        .reduce(fetchReduce, [])
-        .forEach(putIntoFetchMap)
+      initialiseStorageFilterFetchArray(fetchArray)
     }
 
     {
-      const storeArray = array
-        .filter(storeFilter)
+      const storeArray = initialiseStoreArray(array)
 
       {
-        const hardStorageArray = storeArray
-          .filter(hardStorageFilter)
+        const hardStorageArray = initialiseHardStorageFilterArray(storeArray)
 
-        hardStorageArray
-          .filter(notFetchMapFilter)
+        initialiseNotFetchMapFilterArray(hardStorageArray)
           .reduce(storeReduce, [])
           .forEach(putIntoStoreMap)
 
@@ -197,20 +257,16 @@ export default (array) => {
             .reduce(storeReduce, [])
             .reduce(storeDedupe, [])
 
-          hardStorageMetaArray
-            .forEach(putIntoFetchMetaMap)
+          putArrayIntoFetchMetaMap(hardStorageMetaArray)
 
-          hardStorageMetaArray
-            .forEach(putIntoStoreMetaMap)
+          putArrayIntoStoreMetaMap(hardStorageMetaArray)
         }
       }
 
       {
-        const softStorageArray = storeArray
-          .filter(softStorageFilter)
+        const softStorageArray = initialiseSoftStorageFilterArray(storeArray)
 
-        softStorageArray
-          .filter(notFetchMapFilter)
+        initialiseNotFetchMapFilterArray(softStorageArray)
           .reduce(storeReduce, [])
           .forEach(putIntoStoreMap)
 
@@ -219,20 +275,16 @@ export default (array) => {
             .reduce(storeReduce, [])
             .reduce(storeDedupe, [])
 
-          softStorageMetaArray
-            .forEach(putIntoFetchMetaMap)
+          putArrayIntoFetchMetaMap(softStorageMetaArray)
 
-          softStorageMetaArray
-            .forEach(putIntoStoreMetaMap)
+          putArrayIntoStoreMetaMap(softStorageMetaArray)
         }
       }
 
       {
-        const storageArray = storeArray
-          .filter(storageFilter)
+        const storageArray = initaliseStorageFilterArray(storeArray)
 
-        storageArray
-          .filter(notFetchMapFilter)
+        initialiseNotFetchMapFilterArray(storageArray)
           .reduce(storeReduce, [])
           .forEach(putIntoStoreMap)
 
@@ -241,18 +293,15 @@ export default (array) => {
             .reduce(storeReduce, [])
             .reduce(storeDedupe, [])
 
-          storageMetaArray
-            .forEach(putIntoFetchMetaMap)
+          putArrayIntoFetchMetaMap(storageMetaArray)
 
-          storageMetaArray
-            .forEach(putIntoStoreMetaMap)
+          putArrayIntoStoreMetaMap(storageMetaArray)
         }
       }
     }
 
     {
-      const clearArray = array
-        .filter(clearFilter)
+      const clearArray = initialiseClearArray(array)
 
       clearArray
         .filter(isUniqueMapFilter)
