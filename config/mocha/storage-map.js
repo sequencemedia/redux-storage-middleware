@@ -22,7 +22,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   const SOFT_FETCH = 'SOFT_FETCH'
   const SOFT_STORE = 'SOFT_STORE'
-  const SOFT_CLEAR = 'SFOT_CLEAR'
+  const SOFT_CLEAR = 'SOFT_CLEAR'
 
   const STATE_FETCH = 'STATE_FETCH'
   const STATE_STORE = 'STATE_STORE'

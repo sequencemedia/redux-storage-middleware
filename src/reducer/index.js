@@ -153,19 +153,21 @@ export function storageClear (state = STATE, { meta: { type } = {} } = {}) {
  *  @param {Object} state Initial state
  *  @param {Object} action
  */
-export default function storageReducer (state = STATE, { type, ...action } = {}) {
+export default function storageReducer (state = STATE, action = {}) {
+  const { type } = action
+
   switch (type) {
     case STORAGE_COMPARE:
-      return storageCompare(state, { ...action, type })
+      return storageCompare(state, action)
 
     case STORAGE_FETCH:
-      return storageFetch(state, { ...action, type })
+      return storageFetch(state, action)
 
     case STORAGE_STORE:
-      return storageStore(state, { ...action, type })
+      return storageStore(state, action)
 
     case STORAGE_CLEAR:
-      return storageClear(state, { ...action, type })
+      return storageClear(state, action)
 
     default:
       return state

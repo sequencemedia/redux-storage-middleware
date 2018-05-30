@@ -1,13 +1,13 @@
 {
   "name": "redux-storage-middleware",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Redux Storage middleware",
   "main": "./index.js",
   "scripts": {
-    "prepublishOnly": "npm run babel",
-    "build": "npm run babel",
-    "build:clean": "rm -rf lib; npm run babel",
+    "prepublishOnly": "npm run babel:clean",
+    "clean": "rm -rf lib",
     "babel": "babel src -d lib",
+    "babel:clean": "npm run clean; npm run babel",
     "babel:watch": "npm run babel -- -w",
     "lint": "eslint src config/mocha",
     "lint:fix": "npm run lint -- --fix",
