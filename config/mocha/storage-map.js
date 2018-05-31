@@ -1558,15 +1558,23 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
 
     describe('Filtering', () => {
-      describe('The argument matches the configuration "type" value', () => {
-        it('returns true', () => {
-          expect(filterFor('mock type a')({ type: 'mock type a' })).to.be.true
+      describe('With configuration', () => {
+        describe('The argument matches the configuration "type" value', () => {
+          it('returns true', () => {
+            expect(filterFor('mock type a')({ type: 'mock type a' })).to.be.true
+          })
+        })
+
+        describe('The argument does not match the configuration "type" value', () => {
+          it('returns false', () => {
+            expect(filterFor('mock type a')({ type: 'mock type b' })).to.be.false
+          })
         })
       })
 
-      describe('The argument does not match the configuration "type" value', () => {
+      describe('Without configuration', () => {
         it('returns false', () => {
-          expect(filterFor('mock type a')({ type: 'mock type b' })).to.be.false
+          expect(filterFor('mock type')()).to.be.false
         })
       })
     })
@@ -1580,15 +1588,23 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
 
     describe('Filtering', () => {
-      describe('The argument matches the configuration meta "type" value', () => {
-        it('returns true', () => {
-          expect(filterMetaFor('mock type a')({ meta: { type: 'mock type a' } })).to.be.true
+      describe('With configuration', () => {
+        describe('The argument matches the configuration meta "type" value', () => {
+          it('returns true', () => {
+            expect(filterMetaFor('mock type a')({ meta: { type: 'mock type a' } })).to.be.true
+          })
+        })
+
+        describe('The argument does not match the configuration meta "type" value', () => {
+          it('returns false', () => {
+            expect(filterMetaFor('mock type a')({ meta: { type: 'mock type b' } })).to.be.false
+          })
         })
       })
 
-      describe('The argument does not match the configuration meta "type" value', () => {
+      describe('Without configuration', () => {
         it('returns false', () => {
-          expect(filterMetaFor('mock type a')({ meta: { type: 'mock type b' } })).to.be.false
+          expect(filterMetaFor('mock type')()).to.be.false
         })
       })
     })
