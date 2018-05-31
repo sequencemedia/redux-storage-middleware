@@ -116,7 +116,7 @@ describe('Redux Storage Middleware - Storage', () => {
           })
         })
 
-        describe('When the comparator returns true', () => {
+        describe('The comparator returns true', () => {
           let store
           let action
 
@@ -154,7 +154,7 @@ describe('Redux Storage Middleware - Storage', () => {
           })
         })
 
-        describe('When the comparator returns false', () => {
+        describe('The comparator returns false', () => {
           let store
           let action
 
@@ -227,7 +227,7 @@ describe('Redux Storage Middleware - Storage', () => {
           })
         })
 
-        describe('When the comparator returns true', () => {
+        describe('The comparator returns true', () => {
           let store
           let action
 
@@ -265,7 +265,7 @@ describe('Redux Storage Middleware - Storage', () => {
           })
         })
 
-        describe('When the comparator returns false', () => {
+        describe('The comparator returns false', () => {
           let store
           let action
 
@@ -565,7 +565,7 @@ describe('Redux Storage Middleware - Storage', () => {
           })
         })
 
-        describe('When the comparator returns true', () => {
+        describe('The comparator returns true', () => {
           let store
           let action
 
@@ -603,7 +603,7 @@ describe('Redux Storage Middleware - Storage', () => {
           })
         })
 
-        describe('When the comparator returns false', () => {
+        describe('The comparator returns false', () => {
           let store
           let action
 
@@ -676,7 +676,7 @@ describe('Redux Storage Middleware - Storage', () => {
           })
         })
 
-        describe('When the comparator returns true', () => {
+        describe('The comparator returns true', () => {
           let store
           let action
 
@@ -714,7 +714,7 @@ describe('Redux Storage Middleware - Storage', () => {
           })
         })
 
-        describe('When the comparator returns false', () => {
+        describe('The comparator returns false', () => {
           let store
           let action
 
@@ -1008,7 +1008,7 @@ describe('Redux Storage Middleware - Storage', () => {
           })
         })
 
-        describe('When the comparator returns true', () => {
+        describe('The comparator returns true', () => {
           let store
           let action
 
@@ -1046,7 +1046,7 @@ describe('Redux Storage Middleware - Storage', () => {
           })
         })
 
-        describe('When the comparator returns false', () => {
+        describe('The comparator returns false', () => {
           let store
           let action
 
@@ -1119,7 +1119,7 @@ describe('Redux Storage Middleware - Storage', () => {
           })
         })
 
-        describe('When the comparator returns true', () => {
+        describe('The comparator returns true', () => {
           let store
           let action
 
@@ -1157,7 +1157,7 @@ describe('Redux Storage Middleware - Storage', () => {
           })
         })
 
-        describe('When the comparator returns false', () => {
+        describe('The comparator returns false', () => {
           let store
           let action
 

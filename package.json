@@ -4,14 +4,14 @@
   "description": "Redux Storage middleware",
   "main": "./index.js",
   "scripts": {
-    "prepublishOnly": "npm run babel:clean",
+    "prepublishOnly": "npm run clean; npm run babel",
     "clean": "rm -rf lib",
     "babel": "babel src -d lib",
-    "babel:clean": "npm run clean; npm run babel",
     "babel:watch": "npm run babel -- -w",
     "lint": "eslint src config/mocha",
     "lint:fix": "npm run lint -- --fix",
-    "test": "nyc mocha config/mocha --require babel-register"
+    "test": "nyc mocha config/mocha --require babel-register",
+    "pre-commit": "npm run clean; npm run babel; git add ."
   },
   "repository": {
     "type": "git",
@@ -48,6 +48,7 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
+    "husky": "^1.0.0-rc.8",
     "mocha": "^5.2.0",
     "nyc": "^11.8.0",
     "redux": "^4.0.0",

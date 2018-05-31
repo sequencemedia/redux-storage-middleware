@@ -45,7 +45,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Compare', () => {
         const meta = { cachedAt: 0, cacheFor: 0 }
 
-        describe('When the action meta property has a "comparedAt" value', () => {
+        describe('The action meta property has a "comparedAt" value', () => {
           it('changes the state of the meta property type with the "comparedAt" value', () => {
             const comparedAt = Date.now()
 
@@ -57,7 +57,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have a "comparedAt" value', () => {
+        describe('The action meta property does not have a "comparedAt" value', () => {
           it('changes the state of the meta property type with a "comparedAt" value', () => {
             const comparedAt = Date.now()
 
@@ -73,7 +73,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Fetch', () => {
         const meta = { cachedAt: 0, cacheFor: 0 }
 
-        describe('When the action meta property has an "accessedAt" value', () => {
+        describe('The action meta property has an "accessedAt" value', () => {
           it('changes the state of the meta property type with the "accessedAt" value', () => {
             const accessedAt = Date.now()
 
@@ -85,7 +85,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have an "accessedAt" value', () => {
+        describe('The action meta property does not have an "accessedAt" value', () => {
           it('changes the state of the meta property type with an "accessedAt" value', () => {
             const accessedAt = Date.now()
 
@@ -101,7 +101,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Store', () => {
         const meta = { cacheFor: 0 }
 
-        describe('When the action meta property has an "cachedAt" value', () => {
+        describe('The action meta property has an "cachedAt" value', () => {
           it('changes the state of the meta property type with the "cachedAt" value', () => {
             const cachedAt = Date.now()
 
@@ -113,7 +113,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have an "cachedAt" value', () => {
+        describe('The action meta property does not have an "cachedAt" value', () => {
           it('changes the state of the meta property type with a "cachedAt" value', () => {
             const cachedAt = Date.now()
 
@@ -139,7 +139,7 @@ describe('Redux Storage Middleware - Reducer', () => {
 
     describe('Without state', () => {
       describe('Compare', () => {
-        describe('When the action meta property has a "comparedAt" value', () => {
+        describe('The action meta property has a "comparedAt" value', () => {
           it('creates the state of the meta property type with the "comparedAt" value', () => {
             const comparedAt = Date.now()
 
@@ -151,7 +151,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have a "comparedAt" value', () => {
+        describe('The action meta property does not have a "comparedAt" value', () => {
           it('creates the state of the meta property type with a "comparedAt" value', () => {
             const comparedAt = Date.now()
 
@@ -165,7 +165,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       })
 
       describe('Fetch', () => {
-        describe('When the action meta property has an "accessedAt" value', () => {
+        describe('The action meta property has an "accessedAt" value', () => {
           it('creates the state of the meta property type with the "accessedAt" value', () => {
             const accessedAt = Date.now()
 
@@ -177,7 +177,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have an "accessedAt" value', () => {
+        describe('The action meta property does not have an "accessedAt" value', () => {
           it('creates the state of the meta property type with an "accessedAt" value', () => {
             const accessedAt = Date.now()
 
@@ -191,7 +191,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       })
 
       describe('Store', () => {
-        describe('When the action meta property has a "cachedAt" value', () => {
+        describe('The action meta property has a "cachedAt" value', () => {
           it('creates the state of the meta property type with the "cachedAt" value', () => {
             const cachedAt = Date.now()
 
@@ -203,7 +203,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have a "cachedAt" value', () => {
+        describe('The action meta property does not have a "cachedAt" value', () => {
           it('creates the state of the meta property type with a "cachedAt" value', () => {
             const cachedAt = Date.now()
 
@@ -247,7 +247,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Compare', () => {
         const meta = { cachedAt: 0, cacheFor: 0 }
 
-        describe('When the action meta property has a "comparedAt" value', () => {
+        describe('The action meta property has a "comparedAt" value', () => {
           it('changes the state of the meta property type with the "comparedAt" value', () => {
             const comparedAt = Date.now()
 
@@ -259,7 +259,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have a "comparedAt" value', () => {
+        describe('The action meta property does not have a "comparedAt" value', () => {
           it('changes the state of the meta property type with a "comparedAt" value', () => {
             const comparedAt = Date.now()
 
@@ -275,7 +275,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Fetch', () => {
         const meta = { cachedAt: 0, cacheFor: 0 }
 
-        describe('When the action meta property has an "accessedAt" value', () => {
+        describe('The action meta property has an "accessedAt" value', () => {
           it('changes the state of the meta property type with the "accessedAt" value', () => {
             const accessedAt = Date.now()
 
@@ -287,7 +287,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have an "accessedAt" value', () => {
+        describe('The action meta property does not have an "accessedAt" value', () => {
           it('changes the state of the meta property type with an "accessedAt" value', () => {
             const accessedAt = Date.now()
 
@@ -303,7 +303,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Store', () => {
         const meta = { cachedAt: 0, cacheFor: 0 }
 
-        describe('When the action meta property has an "cachedAt" value', () => {
+        describe('The action meta property has an "cachedAt" value', () => {
           it('changes the state of the meta property type with the "cachedAt" value', () => {
             const cachedAt = Date.now()
 
@@ -315,7 +315,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have an "cachedAt" value', () => {
+        describe('The action meta property does not have an "cachedAt" value', () => {
           it('changes the state of the meta property type with a "cachedAt" value', () => {
             const cachedAt = Date.now()
 
@@ -341,7 +341,7 @@ describe('Redux Storage Middleware - Reducer', () => {
 
     describe('Without state', () => {
       describe('Compare', () => {
-        describe('When the action meta property has a "comparedAt" value', () => {
+        describe('The action meta property has a "comparedAt" value', () => {
           it('changes the state of the meta property type with the "comparedAt" value', () => {
             const comparedAt = Date.now()
 
@@ -353,7 +353,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have a "comparedAt" value', () => {
+        describe('The action meta property does not have a "comparedAt" value', () => {
           it('changes the state of the meta property type with a "comparedAt" value', () => {
             const comparedAt = Date.now()
 
@@ -367,7 +367,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       })
 
       describe('Fetch', () => {
-        describe('When the action meta property has an "accessedAt" value', () => {
+        describe('The action meta property has an "accessedAt" value', () => {
           it('creates the state of the meta property type with the "accessedAt" value', () => {
             const accessedAt = Date.now()
 
@@ -379,7 +379,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have an "accessedAt" value', () => {
+        describe('The action meta property does not have an "accessedAt" value', () => {
           it('creates the state of the meta property type with an "accessedAt" value', () => {
             const accessedAt = Date.now()
 
@@ -393,7 +393,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       })
 
       describe('Store', () => {
-        describe('When the action meta property has a "cachedAt" value', () => {
+        describe('The action meta property has a "cachedAt" value', () => {
           it('creates the state of the meta property type with the "cachedAt" value', () => {
             const cachedAt = Date.now()
 
@@ -405,7 +405,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have a "cachedAt" value', () => {
+        describe('The action meta property does not have a "cachedAt" value', () => {
           it('creates the state of the meta property type with a "cachedAt" value', () => {
             const cachedAt = Date.now()
 
@@ -448,7 +448,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Compare', () => {
         const meta = { cachedAt: 0, cacheFor: 0 }
 
-        describe('When the action meta property has a "comparedAt" value', () => {
+        describe('The action meta property has a "comparedAt" value', () => {
           it('changes the state of the meta property type with the "comparedAt" value', () => {
             const comparedAt = Date.now()
 
@@ -460,7 +460,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have a "comparedAt" value', () => {
+        describe('The action meta property does not have a "comparedAt" value', () => {
           it('changes the state of the meta property type with a "comparedAt" value', () => {
             const comparedAt = Date.now()
 
@@ -476,7 +476,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Fetch', () => {
         const meta = { cachedAt: 0, cacheFor: 0 }
 
-        describe('When the action meta property has an "accessedAt" value', () => {
+        describe('The action meta property has an "accessedAt" value', () => {
           it('changes the state of the meta property type with the "accessedAt" value', () => {
             const accessedAt = Date.now()
 
@@ -488,7 +488,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have an "accessedAt" value', () => {
+        describe('The action meta property does not have an "accessedAt" value', () => {
           it('changes the state of the meta property type with an "accessedAt" value', () => {
             const accessedAt = Date.now()
 
@@ -504,7 +504,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       describe('Store', () => {
         const meta = { cachedAt: 0, cacheFor: 0 }
 
-        describe('When the action meta property has an "cachedAt" value', () => {
+        describe('The action meta property has an "cachedAt" value', () => {
           it('changes the state of the meta property type with the "cachedAt" value', () => {
             const cachedAt = Date.now()
 
@@ -516,7 +516,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have an "cachedAt" value', () => {
+        describe('The action meta property does not have an "cachedAt" value', () => {
           it('changes the state of the meta property type with a "cachedAt" value', () => {
             const cachedAt = Date.now()
 
@@ -542,7 +542,7 @@ describe('Redux Storage Middleware - Reducer', () => {
 
     describe('Without state', () => {
       describe('Compare', () => {
-        describe('When the action meta property has a "comparedAt" value', () => {
+        describe('The action meta property has a "comparedAt" value', () => {
           it('creates the state of the meta property type with the "comparedAt" value', () => {
             const comparedAt = Date.now()
 
@@ -554,7 +554,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have a "comparedAt" value', () => {
+        describe('The action meta property does not have a "comparedAt" value', () => {
           it('creates the state of the meta property type with a "comparedAt" value', () => {
             const comparedAt = Date.now()
 
@@ -568,7 +568,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       })
 
       describe('Fetch', () => {
-        describe('When the action meta property has an "accessedAt" value', () => {
+        describe('The action meta property has an "accessedAt" value', () => {
           it('changes the state of the meta property type with the "accessedAt" value', () => {
             const accessedAt = Date.now()
 
@@ -580,7 +580,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have an "accessedAt" value', () => {
+        describe('The action meta property does not have an "accessedAt" value', () => {
           it('changes the state of the meta property type with an "accessedAt" value', () => {
             const accessedAt = Date.now()
 
@@ -594,7 +594,7 @@ describe('Redux Storage Middleware - Reducer', () => {
       })
 
       describe('Store', () => {
-        describe('When the action meta property has a "cachedAt" value', () => {
+        describe('The action meta property has a "cachedAt" value', () => {
           it('creates the state of the meta property type with the "cachedAt" value', () => {
             const cachedAt = Date.now()
 
@@ -606,7 +606,7 @@ describe('Redux Storage Middleware - Reducer', () => {
           })
         })
 
-        describe('When the action meta property does not have a "cachedAt" value', () => {
+        describe('The action meta property does not have a "cachedAt" value', () => {
           it('creates the state of the meta property type with a "cachedAt" value', () => {
             const cachedAt = Date.now()
 

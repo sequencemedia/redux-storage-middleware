@@ -13,7 +13,90 @@ import {
   STORAGE_CLEAR
 } from 'redux-storage-middleware/actions'
 
-import storageMap from 'redux-storage-middleware/storage-map'
+import storageMap, {
+  initialise,
+  initialiseFetch,
+  initialiseStore,
+  initialiseClear,
+  initialiseFetchStorage,
+  initialiseFetchHardStorage,
+  initialiseFetchSoftStorage,
+  initialiseFetchMetaMap,
+  initialiseStoreStorage,
+  initialiseStoreHardStorage,
+  initialiseStoreSoftStorage,
+  initialiseStoreNotFetchMap,
+  initialiseStoreMetaMap,
+  initialiseClearIsUniqueMap,
+
+  isStale,
+  isHardStorage,
+  isSoftStorage,
+  hasComparator,
+
+  filterFor,
+  filterMetaFor,
+
+  mapType,
+  mapMetaType,
+  mapCacheFor,
+  mapCachedAt,
+
+  createIsHardStorage,
+  createIsSoftStorage,
+
+  createComparator,
+  createAccessedAt,
+  createCachedAt,
+  createCacheFor,
+
+  createMeta,
+
+  hasCacheFor,
+  notCacheFor,
+
+  filterFetch,
+  filterStore,
+  filterClear,
+
+  max,
+  min,
+
+  reduceFetch,
+  reduceStore,
+  reduceClear,
+
+  dedupeFetch,
+  dedupeStore,
+  dedupeClear,
+
+  filterHardStorage,
+  filterSoftStorage,
+  filterStorage,
+
+  filterNotFetchMap,
+  filterNotStoreMap,
+  filterIsUniqueMap,
+
+  putIntoFetchMap,
+  putIntoStoreMap,
+  putIntoClearMap,
+
+  putIntoFetchMetaMap,
+  putIntoStoreMetaMap,
+
+  filterStoreHardStorageArray,
+  filterStoreSoftStorageArray,
+  filterStoreStorageArray,
+
+  filterFetchArray,
+  filterStoreArray,
+  filterClearArray,
+
+  filterNotFetchMapArray,
+  filterIsUniqueMapArray,
+  createStoreMetaArray
+} from 'redux-storage-middleware/storage-map'
 
 describe('Redux Storage Middleware - Storage Map', () => {
   const HARD_FETCH = 'HARD_FETCH'
@@ -1255,5 +1338,475 @@ describe('Redux Storage Middleware - Storage Map', () => {
     it('returns the action', () => {
       expect(action).to.eql({ type: 'ACTION' })
     })
+  })
+
+  xdescribe('`initialise()`', () => {
+
+  })
+
+  xdescribe('`initialiseFetch()`', () => {
+
+  })
+
+  xdescribe('`initialiseStore()`', () => {
+
+  })
+
+  xdescribe('`initialiseClear()`', () => {
+
+  })
+
+  xdescribe('`initialiseFetchStorage()`', () => {
+
+  })
+
+  xdescribe('`initialiseFetchHardStorage()`', () => {
+
+  })
+
+  xdescribe('`initialiseFetchSoftStorage()`', () => {
+
+  })
+
+  xdescribe('`initialiseFetchMetaMap()`', () => {
+
+  })
+
+  xdescribe('`initialiseStoreStorage()`', () => {
+
+  })
+
+  xdescribe('`initialiseStoreHardStorage()`', () => {
+
+  })
+
+  xdescribe('`initialiseStoreSoftStorage()`', () => {
+
+  })
+
+  xdescribe('`initialiseStoreNotFetchMap()`', () => {
+
+  })
+
+  xdescribe('`initialiseStoreMetaMap()`', () => {
+
+  })
+
+  xdescribe('`initialiseClearIsUniqueMap()`', () => {
+
+  })
+
+  describe('`min()`', () => {
+    describe('With values', () => {
+      describe('A range of values', () => {
+        it('returns the smallest number', () => {
+          expect(min([1, 10, 2, 9, 3, 8, 4, 7, 5, 6])).to.eq(1)
+        })
+      })
+
+      describe('A single value', () => {
+        it('returns the number', () => {
+          expect(min([1])).to.eq(1)
+        })
+      })
+    })
+
+    describe('Without values', () => {
+      it('returns `Number.POSITIVE_INFINITY`', () => {
+        expect(min()).to.eq(Number.POSITIVE_INFINITY)
+      })
+    })
+  })
+
+  describe('`max()`', () => {
+    describe('With values', () => {
+      describe('A range of values', () => {
+        it('returns the largest number', () => {
+          expect(max([1, 10, 2, 9, 3, 8, 4, 7, 5, 6])).to.eq(10)
+        })
+      })
+
+      describe('A single value', () => {
+        it('returns the number', () => {
+          expect(max([1])).to.eq(1)
+        })
+      })
+    })
+
+    describe('Without values', () => {
+      it('returns `Number.NEGATIVE_INFINITY`', () => {
+        expect(max()).to.eq(Number.NEGATIVE_INFINITY)
+      })
+    })
+  })
+
+  describe('`isStale()`', () => {
+    describe('With configuration', () => {
+      describe('The state is stale', () => {
+        it('returns true', () => {
+          const cachedAt = (new Date('1 January 1970')).valueOf()
+          const cacheFor = 1000 * 60 * 60 * 24
+
+          expect(isStale({ cachedAt, cacheFor })).to.be.true
+        })
+      })
+
+      describe('The state is not stale', () => {
+        it('returns false', () => {
+          const cachedAt = Date.now()
+          const cacheFor = 1000 * 60 * 60 * 24
+
+          expect(isStale({ cachedAt, cacheFor })).to.be.false
+        })
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns true', () => {
+        expect(isStale()).to.be.true
+      })
+    })
+  })
+
+  describe('`isHardStorage()`', () => {
+    describe('With configuration', () => {
+      const cacheFor = 1000 * 60 * 60 * 24
+
+      describe('The state is to be cached for one day', () => {
+        it('returns true', () => {
+          expect(isHardStorage({ cacheFor })).to.be.true
+        })
+      })
+
+      describe('The state is to be cached for more than one day', () => {
+        it('returns true', () => {
+          expect(isHardStorage({ cacheFor: cacheFor + 1 })).to.be.true
+        })
+      })
+
+      describe('The state is to be cached for less than one day', () => {
+        it('returns false', () => {
+          expect(isHardStorage({ cacheFor: cacheFor - 1 })).to.be.false
+        })
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns false', () => {
+        expect(isHardStorage()).to.be.false
+      })
+    })
+  })
+
+  describe('`isSoftStorage()`', () => {
+    describe('With configuration', () => {
+      const cacheFor = 1000 * 60 * 60
+
+      describe('The state is to be cached for more than an hour', () => {
+        it('returns true', () => {
+          expect(isSoftStorage({ cacheFor })).to.be.true
+        })
+      })
+
+      describe('The state is to be cached for less than one day', () => {
+        it('returns true', () => {
+          expect(isSoftStorage({ cacheFor: (cacheFor * 24) - 1 })).to.be.true
+        })
+      })
+
+      describe('The state is to be cached for less than an hour', () => {
+        it('returns false', () => {
+          expect(isSoftStorage({ cacheFor: cacheFor - 1 })).to.be.false
+        })
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns false', () => {
+        expect(isSoftStorage()).to.be.false
+      })
+    })
+  })
+
+  describe('`hasComparator()`', () => {
+    describe('With configuration', () => {
+      describe('The configuration has a comparator function', () => {
+        it('returns true', () => {
+          expect(hasComparator({ comparator: () => {} })).to.be.true
+        })
+      })
+
+      describe('The configuration does not have a comparator function', () => {
+        it('returns false', () => {
+          expect(hasComparator({})).to.be.false
+        })
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns false', () => {
+        expect(hasComparator()).to.be.false
+      })
+    })
+  })
+
+  describe('`filterFor()`', () => {
+    describe('Always', () => {
+      it('returns a function', () => {
+        expect(filterFor()).to.be.a('function')
+      })
+    })
+
+    describe('Filtering', () => {
+      describe('The argument matches the configuration "type" value', () => {
+        it('returns true', () => {
+          expect(filterFor('mock type a')({ type: 'mock type a' })).to.be.true
+        })
+      })
+
+      describe('The argument does not match the configuration "type" value', () => {
+        it('returns false', () => {
+          expect(filterFor('mock type a')({ type: 'mock type b' })).to.be.false
+        })
+      })
+    })
+  })
+
+  describe('`filterMetaFor()`', () => {
+    describe('Always', () => {
+      it('returns a function', () => {
+        expect(filterMetaFor()).to.be.a('function')
+      })
+    })
+
+    describe('Filtering', () => {
+      describe('The argument matches the configuration meta "type" value', () => {
+        it('returns true', () => {
+          expect(filterMetaFor('mock type a')({ meta: { type: 'mock type a' } })).to.be.true
+        })
+      })
+
+      describe('The argument does not match the configuration meta "type" value', () => {
+        it('returns false', () => {
+          expect(filterMetaFor('mock type a')({ meta: { type: 'mock type b' } })).to.be.false
+        })
+      })
+    })
+  })
+
+  describe('`mapType()`', () => {
+    describe('With configuration', () => {
+      describe('The configuration has a "type" value', () => {
+        it('returns the value', () => {
+          expect(mapType({ type: 'mock type' })).to.eq('mock type')
+        })
+      })
+
+      describe('The configuration does not have a "type" value', () => {
+        it('returns null', () => {
+          expect(mapType({})).to.be.null
+        })
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns null', () => {
+        expect(mapType()).to.be.null
+      })
+    })
+  })
+
+  describe('`mapMetaType()`', () => {
+    describe('With configuration', () => {
+      describe('The configuration has a meta "type" value', () => {
+        it('returns the value', () => {
+          expect(mapMetaType({ meta: { type: 'mock meta type' } })).to.eq('mock meta type')
+        })
+      })
+
+      describe('The configuration does not have a meta "type" value', () => {
+        it('returns null', () => {
+          expect(mapMetaType({ meta: {} })).to.be.null
+        })
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns null', () => {
+        expect(mapMetaType()).to.be.null
+      })
+    })
+  })
+
+  describe('`mapCacheFor()`', () => {
+    describe('With configuration', () => {
+      describe('The configuration has a "cacheFor" value', () => {
+        it('returns the value', () => {
+          expect(mapCacheFor({ meta: { cacheFor: 1 } })).to.eq(1)
+        })
+      })
+
+      describe('The configuration does not have a "cacheFor" value', () => {
+        it('returns zero', () => {
+          expect(mapCacheFor({ meta: {} })).to.eq(0)
+        })
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns zero', () => {
+        expect(mapCacheFor()).to.eq(0)
+      })
+    })
+  })
+
+  describe('`mapCachedAt()`', () => {
+    describe('With configuration', () => {
+      describe('The configuration has a "cachedAt" value', () => {
+        it('returns the value', () => {
+          expect(mapCachedAt({ meta: { cachedAt: 1 } })).to.eq(1)
+        })
+      })
+
+      describe('The configuration does not have a "cachedAt" value', () => {
+        it('returns zero', () => {
+          expect(mapCachedAt({ meta: {} })).to.eq(0)
+        })
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns zero', () => {
+        expect(mapCachedAt()).to.eq(0)
+      })
+    })
+  })
+
+  xdescribe('`createIsHardStorage()`', () => {
+
+  })
+  xdescribe('`createIsSoftStorage()`', () => {
+
+  })
+
+  xdescribe('`createComparator()`', () => {
+
+  })
+  xdescribe('`createAccessedAt()`', () => {
+
+  })
+  xdescribe('`createCachedAt()`', () => {
+
+  })
+  xdescribe('`createCacheFor()`', () => {
+
+  })
+
+  xdescribe('`createMeta()`', () => {
+
+  })
+
+  xdescribe('`hasCacheFor()`', () => {
+
+  })
+  xdescribe('`notCacheFor()`', () => {
+
+  })
+
+  xdescribe('`filterFetch()`', () => {
+
+  })
+  xdescribe('`filterStore()`', () => {
+
+  })
+  xdescribe('`filterClear()`', () => {
+
+  })
+
+  xdescribe('`reduceFetch()`', () => {
+
+  })
+  xdescribe('`reduceStore()`', () => {
+
+  })
+  xdescribe('`reduceClear()`', () => {
+
+  })
+
+  xdescribe('`dedupeFetch()`', () => {
+
+  })
+  xdescribe('`dedupeStore()`', () => {
+
+  })
+  xdescribe('`dedupeClear()`', () => {
+
+  })
+
+  xdescribe('`filterHardStorage()`', () => {
+
+  })
+  xdescribe('`filterSoftStorage()`', () => {
+
+  })
+  xdescribe('`filterStorage()`', () => {
+
+  })
+
+  xdescribe('`filterNotFetchMap()`', () => {
+
+  })
+  xdescribe('`filterNotStoreMap()`', () => {
+
+  })
+  xdescribe('`filterIsUniqueMap()`', () => {
+
+  })
+
+  xdescribe('`putIntoFetchMap()`', () => {
+
+  })
+  xdescribe('`putIntoStoreMap()`', () => {
+
+  })
+  xdescribe('`putIntoClearMap()`', () => {
+
+  })
+
+  xdescribe('`putIntoFetchMetaMap()`', () => {
+
+  })
+  xdescribe('`putIntoStoreMetaMap()`', () => {
+
+  })
+
+  xdescribe('`filterStoreHardStorageArray()`', () => {
+
+  })
+  xdescribe('`filterStoreSoftStorageArray()`', () => {
+
+  })
+  xdescribe('`filterStoreStorageArray()`', () => {
+
+  })
+
+  xdescribe('`filterFetchArray()`', () => {
+
+  })
+  xdescribe('`filterStoreArray()`', () => {
+
+  })
+  xdescribe('`filterClearArray()`', () => {
+
+  })
+
+  xdescribe('`filterNotFetchMapArray()`', () => {
+
+  })
+  xdescribe('`filterIsUniqueMapArray()`', () => {
+
+  })
+  xdescribe('`createStoreMetaArray()`', () => {
+
   })
 })
