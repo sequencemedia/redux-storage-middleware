@@ -116,7 +116,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
   const ONE_HOUR = ONE_MINUTE * 60
   const ONE_DAY = ONE_HOUR * 24
 
-  const DATE = (new Date('1 January 1970')).valueOf()
+  const DATE_NOW = Date.now()
+  const DATE_WAS = (new Date('1 January 1970')).valueOf()
 
   const HARD_CACHE_FOR = ONE_DAY // (1000 * 60 * 60 * 24)
   const SOFT_CACHE_FOR = ONE_HOUR // (1000 * 60 * 60)
@@ -205,10 +206,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let action
             let actions
 
-            const NOW = Date.now()
-
-            const accessedAt = NOW
-            const cachedAt = NOW - (HARD_CACHE_FOR + ONE_SECOND)
+            const accessedAt = DATE_NOW
+            const cachedAt = DATE_NOW - (HARD_CACHE_FOR + ONE_SECOND)
             const isHardStorage = true
 
             const configuration = [
@@ -217,7 +216,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             beforeEach(() => {
               sinon.stub(Date, 'now')
-                .returns(NOW)
+                .returns(DATE_NOW)
 
               store = configureStore([ storageMap(configuration) ])({ reduxStorage: { [HARD_FETCH]: { meta: { cacheFor: HARD_CACHE_FOR, cachedAt, accessedAt } } } })
 
@@ -257,7 +256,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   data: { type: HARD_FETCH },
                   meta: {
                     type: HARD_FETCH,
-                    accessedAt: NOW,
+                    accessedAt: DATE_NOW,
                     cacheFor: HARD_CACHE_FOR,
                     isHardStorage
                   }
@@ -274,10 +273,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let action
             let actions
 
-            const NOW = Date.now()
-
-            const accessedAt = NOW
-            const cachedAt = NOW - (HARD_CACHE_FOR - ONE_SECOND)
+            const accessedAt = DATE_NOW
+            const cachedAt = DATE_NOW - (HARD_CACHE_FOR - ONE_SECOND)
             const isHardStorage = true
 
             const configuration = [
@@ -286,7 +283,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             beforeEach(() => {
               sinon.stub(Date, 'now')
-                .returns(NOW)
+                .returns(DATE_NOW)
 
               store = configureStore([ storageMap(configuration) ])({ reduxStorage: { [HARD_FETCH]: { meta: { cacheFor: HARD_CACHE_FOR, cachedAt, accessedAt } } } })
 
@@ -326,7 +323,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   data: { type: HARD_FETCH },
                   meta: {
                     type: HARD_FETCH,
-                    accessedAt: NOW,
+                    accessedAt: DATE_NOW,
                     cacheFor: HARD_CACHE_FOR,
                     isHardStorage
                   }
@@ -344,10 +341,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
           let action
           let actions
 
-          const NOW = Date.now()
-
-          const accessedAt = NOW
-          const cachedAt = NOW - (HARD_CACHE_FOR + ONE_SECOND)
+          const accessedAt = DATE_NOW
+          const cachedAt = DATE_NOW - (HARD_CACHE_FOR + ONE_SECOND)
           const isHardStorage = true
 
           const configuration = [
@@ -356,7 +351,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
           beforeEach(() => {
             sinon.stub(Date, 'now')
-              .returns(NOW)
+              .returns(DATE_NOW)
 
             store = configureStore([ storageMap(configuration) ])({})
 
@@ -396,7 +391,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 data: { type: HARD_FETCH },
                 meta: {
                   type: HARD_FETCH,
-                  accessedAt: NOW,
+                  accessedAt: DATE_NOW,
                   cacheFor: HARD_CACHE_FOR,
                   isHardStorage
                 }
@@ -414,9 +409,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         let action
         let actions
 
-        const NOW = Date.now()
-
-        const cachedAt = NOW
+        const cachedAt = DATE_NOW
         const isHardStorage = true
 
         const configuration = [
@@ -425,7 +418,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
         beforeEach(() => {
           sinon.stub(Date, 'now')
-            .returns(NOW)
+            .returns(DATE_NOW)
 
           store = configureStore([ storageMap(configuration) ])({})
 
@@ -604,10 +597,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let action
             let actions
 
-            const NOW = Date.now()
-
-            const accessedAt = NOW
-            const cachedAt = NOW - (SOFT_CACHE_FOR + ONE_SECOND)
+            const accessedAt = DATE_NOW
+            const cachedAt = DATE_NOW - (SOFT_CACHE_FOR + ONE_SECOND)
             const isSoftStorage = true
 
             const configuration = [
@@ -616,7 +607,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             beforeEach(() => {
               sinon.stub(Date, 'now')
-                .returns(NOW)
+                .returns(DATE_NOW)
 
               store = configureStore([ storageMap(configuration) ])({ reduxStorage: { [SOFT_FETCH]: { meta: { cacheFor: SOFT_CACHE_FOR, cachedAt, accessedAt } } } })
 
@@ -656,7 +647,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   data: { type: SOFT_FETCH },
                   meta: {
                     type: SOFT_FETCH,
-                    accessedAt: NOW,
+                    accessedAt: DATE_NOW,
                     cacheFor: SOFT_CACHE_FOR,
                     isSoftStorage
                   }
@@ -673,10 +664,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let action
             let actions
 
-            const NOW = Date.now()
-
-            const accessedAt = NOW
-            const cachedAt = NOW - (SOFT_CACHE_FOR - ONE_SECOND)
+            const accessedAt = DATE_NOW
+            const cachedAt = DATE_NOW - (SOFT_CACHE_FOR - ONE_SECOND)
             const isSoftStorage = true
 
             const configuration = [
@@ -685,7 +674,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             beforeEach(() => {
               sinon.stub(Date, 'now')
-                .returns(NOW)
+                .returns(DATE_NOW)
 
               store = configureStore([ storageMap(configuration) ])({ reduxStorage: { [SOFT_FETCH]: { meta: { cacheFor: SOFT_CACHE_FOR, cachedAt, accessedAt } } } })
 
@@ -725,7 +714,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   data: { type: SOFT_FETCH },
                   meta: {
                     type: SOFT_FETCH,
-                    accessedAt: NOW,
+                    accessedAt: DATE_NOW,
                     cacheFor: SOFT_CACHE_FOR,
                     isSoftStorage
                   }
@@ -743,10 +732,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
           let action
           let actions
 
-          const NOW = Date.now()
-
-          const accessedAt = NOW
-          const cachedAt = NOW - (SOFT_CACHE_FOR + ONE_SECOND)
+          const accessedAt = DATE_NOW
+          const cachedAt = DATE_NOW - (SOFT_CACHE_FOR + ONE_SECOND)
           const isSoftStorage = true
 
           const configuration = [
@@ -755,7 +742,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
           beforeEach(() => {
             sinon.stub(Date, 'now')
-              .returns(NOW)
+              .returns(DATE_NOW)
 
             store = configureStore([ storageMap(configuration) ])({})
 
@@ -795,7 +782,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 data: { type: SOFT_FETCH },
                 meta: {
                   type: SOFT_FETCH,
-                  accessedAt: NOW,
+                  accessedAt: DATE_NOW,
                   cacheFor: SOFT_CACHE_FOR,
                   isSoftStorage
                 }
@@ -813,9 +800,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         let action
         let actions
 
-        const NOW = Date.now()
-
-        const cachedAt = NOW
+        const cachedAt = DATE_NOW
         const isSoftStorage = true
 
         const configuration = [
@@ -824,7 +809,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
         beforeEach(() => {
           sinon.stub(Date, 'now')
-            .returns(NOW)
+            .returns(DATE_NOW)
 
           store = configureStore([ storageMap(configuration) ])({})
 
@@ -1003,10 +988,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let action
             let actions
 
-            const NOW = Date.now()
-
-            const accessedAt = NOW
-            const cachedAt = NOW - (STATE_CACHE_FOR + ONE_SECOND)
+            const accessedAt = DATE_NOW
+            const cachedAt = DATE_NOW - (STATE_CACHE_FOR + ONE_SECOND)
 
             const configuration = [
               { type: STATE_FETCH, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR } }
@@ -1014,7 +997,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             beforeEach(() => {
               sinon.stub(Date, 'now')
-                .returns(NOW)
+                .returns(DATE_NOW)
 
               store = configureStore([ storageMap(configuration) ])({ reduxStorage: { [STATE_FETCH]: { meta: { cacheFor: STATE_CACHE_FOR, cachedAt, accessedAt } } } })
 
@@ -1053,7 +1036,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   data: { type: STATE_FETCH },
                   meta: {
                     type: STATE_FETCH,
-                    accessedAt: NOW,
+                    accessedAt: DATE_NOW,
                     cacheFor: STATE_CACHE_FOR
                   }
                 })
@@ -1069,10 +1052,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let action
             let actions
 
-            const NOW = Date.now()
-
-            const accessedAt = NOW
-            const cachedAt = NOW - (STATE_CACHE_FOR - ONE_SECOND)
+            const accessedAt = DATE_NOW
+            const cachedAt = DATE_NOW - (STATE_CACHE_FOR - ONE_SECOND)
 
             const configuration = [
               { type: STATE_FETCH, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR } }
@@ -1080,7 +1061,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             beforeEach(() => {
               sinon.stub(Date, 'now')
-                .returns(NOW)
+                .returns(DATE_NOW)
 
               store = configureStore([ storageMap(configuration) ])({ reduxStorage: { [STATE_FETCH]: { meta: { cacheFor: STATE_CACHE_FOR, cachedAt, accessedAt } } } })
 
@@ -1119,7 +1100,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   data: { type: STATE_FETCH },
                   meta: {
                     type: STATE_FETCH,
-                    accessedAt: NOW,
+                    accessedAt: DATE_NOW,
                     cacheFor: STATE_CACHE_FOR
                   }
                 })
@@ -1136,10 +1117,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
           let action
           let actions
 
-          const NOW = Date.now()
-
-          const accessedAt = NOW
-          const cachedAt = NOW - (STATE_CACHE_FOR + ONE_SECOND)
+          const accessedAt = DATE_NOW
+          const cachedAt = DATE_NOW - (STATE_CACHE_FOR + ONE_SECOND)
 
           const configuration = [
             { type: STATE_FETCH, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR } }
@@ -1147,7 +1126,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
           beforeEach(() => {
             sinon.stub(Date, 'now')
-              .returns(NOW)
+              .returns(DATE_NOW)
 
             store = configureStore([ storageMap(configuration) ])({})
 
@@ -1186,7 +1165,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 data: { type: STATE_FETCH },
                 meta: {
                   type: STATE_FETCH,
-                  accessedAt: NOW,
+                  accessedAt: DATE_NOW,
                   cacheFor: STATE_CACHE_FOR
                 }
               })
@@ -1203,9 +1182,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         let action
         let actions
 
-        const NOW = Date.now()
-
-        const cachedAt = NOW
+        const cachedAt = DATE_NOW
 
         const configuration = [
           { type: STATE_FETCH, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR } }
@@ -1213,7 +1190,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
         beforeEach(() => {
           sinon.stub(Date, 'now')
-            .returns(NOW)
+            .returns(DATE_NOW)
 
           store = configureStore([ storageMap(configuration) ])({})
 
@@ -1446,7 +1423,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With configuration', () => {
       describe('The state is stale', () => {
         it('returns true', () => {
-          const cachedAt = DATE
+          const cachedAt = DATE_WAS
           const cacheFor = ONE_DAY
 
           expect(isStale({ cachedAt, cacheFor })).to.be.true
@@ -1455,7 +1432,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state is not stale', () => {
         it('returns false', () => {
-          const cachedAt = Date.now()
+          const cachedAt = DATE_NOW
           const cacheFor = ONE_DAY
 
           expect(isStale({ cachedAt, cacheFor })).to.be.false
@@ -1681,12 +1658,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('`mapCachedAt()`', () => {
-    const cachedAt = DATE
+    const cachedAt = DATE_WAS
 
     describe('With configuration', () => {
       describe('The configuration has a "cachedAt" value', () => {
         it('returns the value', () => {
-          expect(mapCachedAt({ meta: { cachedAt } })).to.eq(DATE)
+          expect(mapCachedAt({ meta: { cachedAt } })).to.eq(DATE_WAS)
         })
       })
 
