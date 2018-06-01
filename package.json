@@ -11,7 +11,7 @@
     "lint": "eslint src config/mocha",
     "lint:fix": "npm run lint -- --fix",
     "test": "nyc mocha config/mocha --require babel-register",
-    "precommit": "npm run clean; npm run babel; git add ."
+    "precommit": "npm run lint:fix; npm run clean; npm run babel; git add ."
   },
   "repository": {
     "type": "git",
