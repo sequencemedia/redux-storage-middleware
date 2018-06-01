@@ -116,6 +116,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
   const ONE_HOUR = ONE_MINUTE * 60
   const ONE_DAY = ONE_HOUR * 24
 
+  const DATE = (new Date('1 January 1970')).valueOf()
+
   const HARD_CACHE_FOR = ONE_DAY // (1000 * 60 * 60 * 24)
   const SOFT_CACHE_FOR = ONE_HOUR // (1000 * 60 * 60)
   const STATE_CACHE_FOR = ONE_MINUTE // (1000 * 60)
@@ -1444,8 +1446,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With configuration', () => {
       describe('The state is stale', () => {
         it('returns true', () => {
-          const cachedAt = (new Date('1 January 1970')).valueOf()
-          const cacheFor = 1000 * 60 * 60 * 24
+          const cachedAt = DATE
+          const cacheFor = ONE_DAY
 
           expect(isStale({ cachedAt, cacheFor })).to.be.true
         })
@@ -1454,7 +1456,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
       describe('The state is not stale', () => {
         it('returns false', () => {
           const cachedAt = Date.now()
-          const cacheFor = 1000 * 60 * 60 * 24
+          const cacheFor = ONE_DAY
 
           expect(isStale({ cachedAt, cacheFor })).to.be.false
         })
@@ -1470,7 +1472,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('`isHardStorage()`', () => {
     describe('With configuration', () => {
-      const cacheFor = 1000 * 60 * 60 * 24
+      const cacheFor = ONE_DAY
 
       describe('The state is to be cached for one day', () => {
         it('returns true', () => {
@@ -1500,7 +1502,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('`isSoftStorage()`', () => {
     describe('With configuration', () => {
-      const cacheFor = 1000 * 60 * 60
+      const cacheFor = ONE_HOUR
 
       describe('The state is to be cached for more than an hour', () => {
         it('returns true', () => {
@@ -1532,7 +1534,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With configuration', () => {
       describe('The configuration has a comparator function', () => {
         it('returns true', () => {
-          expect(hasComparator({ comparator: () => {} })).to.be.true
+          expect(hasComparator({ comparator: COMPARATOR })).to.be.true
         })
       })
 
@@ -1561,13 +1563,13 @@ describe('Redux Storage Middleware - Storage Map', () => {
       describe('With configuration', () => {
         describe('The argument matches the configuration "type" value', () => {
           it('returns true', () => {
-            expect(filterFor('mock type a')({ type: 'mock type a' })).to.be.true
+            expect(filterFor(HARD_FETCH)({ type: HARD_FETCH })).to.be.true
           })
         })
 
         describe('The argument does not match the configuration "type" value', () => {
           it('returns false', () => {
-            expect(filterFor('mock type a')({ type: 'mock type b' })).to.be.false
+            expect(filterFor(HARD_FETCH)({ type: SOFT_FETCH })).to.be.false
           })
         })
       })
@@ -1591,20 +1593,20 @@ describe('Redux Storage Middleware - Storage Map', () => {
       describe('With configuration', () => {
         describe('The argument matches the configuration meta "type" value', () => {
           it('returns true', () => {
-            expect(filterMetaFor('mock type a')({ meta: { type: 'mock type a' } })).to.be.true
+            expect(filterMetaFor(HARD_FETCH)({ meta: { type: HARD_FETCH } })).to.be.true
           })
         })
 
         describe('The argument does not match the configuration meta "type" value', () => {
           it('returns false', () => {
-            expect(filterMetaFor('mock type a')({ meta: { type: 'mock type b' } })).to.be.false
+            expect(filterMetaFor(HARD_FETCH)({ meta: { type: SOFT_FETCH } })).to.be.false
           })
         })
       })
 
       describe('Without configuration', () => {
         it('returns false', () => {
-          expect(filterMetaFor('mock type')()).to.be.false
+          expect(filterMetaFor(HARD_FETCH)()).to.be.false
         })
       })
     })
@@ -1614,7 +1616,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With configuration', () => {
       describe('The configuration has a "type" value', () => {
         it('returns the value', () => {
-          expect(mapType({ type: 'mock type' })).to.eq('mock type')
+          expect(mapType({ type: HARD_FETCH })).to.eq(HARD_FETCH)
         })
       })
 
@@ -1636,7 +1638,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With configuration', () => {
       describe('The configuration has a meta "type" value', () => {
         it('returns the value', () => {
-          expect(mapMetaType({ meta: { type: 'mock meta type' } })).to.eq('mock meta type')
+          expect(mapMetaType({ meta: { type: HARD_FETCH } })).to.eq(HARD_FETCH)
         })
       })
 
@@ -1655,10 +1657,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('`mapCacheFor()`', () => {
+    const cacheFor = ONE_DAY
+
     describe('With configuration', () => {
       describe('The configuration has a "cacheFor" value', () => {
         it('returns the value', () => {
-          expect(mapCacheFor({ meta: { cacheFor: 1 } })).to.eq(1)
+          expect(mapCacheFor({ meta: { cacheFor } })).to.eq(ONE_DAY)
         })
       })
 
@@ -1677,10 +1681,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('`mapCachedAt()`', () => {
+    const cachedAt = DATE
+
     describe('With configuration', () => {
       describe('The configuration has a "cachedAt" value', () => {
         it('returns the value', () => {
-          expect(mapCachedAt({ meta: { cachedAt: 1 } })).to.eq(1)
+          expect(mapCachedAt({ meta: { cachedAt } })).to.eq(DATE)
         })
       })
 
