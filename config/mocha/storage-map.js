@@ -111,17 +111,17 @@ describe('Redux Storage Middleware - Storage Map', () => {
   const STATE_STORE = 'STATE_STORE'
   const STATE_CLEAR = 'STATE_CLEAR'
 
-  const ONE_SECOND = 1000
-  const ONE_MINUTE = ONE_SECOND * 60
-  const ONE_HOUR = ONE_MINUTE * 60
-  const ONE_DAY = ONE_HOUR * 24
+  const TIME_ONE_SECOND = 1000
+  const TIME_ONE_MINUTE = TIME_ONE_SECOND * 60
+  const TIME_ONE_HOUR = TIME_ONE_MINUTE * 60
+  const TIME_ONE_DAY = TIME_ONE_HOUR * 24
 
   const DATE_NOW = Date.now()
   const DATE_WAS = (new Date('1 January 1970')).valueOf()
 
-  const HARD_CACHE_FOR = ONE_DAY // (1000 * 60 * 60 * 24)
-  const SOFT_CACHE_FOR = ONE_HOUR // (1000 * 60 * 60)
-  const STATE_CACHE_FOR = ONE_MINUTE // (1000 * 60)
+  const HARD_CACHE_FOR = TIME_ONE_DAY // (1000 * 60 * 60 * 24)
+  const SOFT_CACHE_FOR = TIME_ONE_HOUR // (1000 * 60 * 60)
+  const STATE_CACHE_FOR = TIME_ONE_MINUTE // (1000 * 60)
 
   const COMPARATOR = () => {}
 
@@ -156,7 +156,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           })
 
           it('dispatches a comparison action', () => {
-            expect(actions.length).to.eql(1)
+            expect(actions.length).to.equal(1)
           })
 
           it('assigns meta values to the "meta" property of the comparison action', () => {
@@ -177,10 +177,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
             } = comparisonAction
 
             expect(type)
-              .to.eq(HARD_FETCH)
+              .to.equal(HARD_FETCH)
 
             expect(cacheFor)
-              .to.eq(HARD_CACHE_FOR)
+              .to.equal(HARD_CACHE_FOR)
 
             expect(isHardStorage)
               .to.be.true
@@ -189,14 +189,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
               .to.be.undefined
 
             expect(comparator)
-              .to.eq(COMPARATOR)
+              .to.equal(COMPARATOR)
 
             expect(then)
               .to.be.a('function')
           })
 
           it('returns the fetch action', () => {
-            expect(action).to.eql({ type: HARD_FETCH })
+            expect(action).to.deep.equal({ type: HARD_FETCH })
           })
         })
 
@@ -207,7 +207,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let actions
 
             const accessedAt = DATE_NOW
-            const cachedAt = DATE_NOW - (HARD_CACHE_FOR + ONE_SECOND)
+            const cachedAt = DATE_NOW - (HARD_CACHE_FOR + TIME_ONE_SECOND)
             const isHardStorage = true
 
             const configuration = [
@@ -230,17 +230,17 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('invokes the "next" middleware with the fetch action', () => {
-              expect(actions.length).to.eql(1)
+              expect(actions.length).to.equal(1)
 
               expect(actions)
                 .to.deep.equal([{ type: HARD_FETCH }])
             })
 
             it('does not dispatch the hard storage fetch actions', () => {
-              expect(actions.length).not.to.eql(2)
+              expect(actions.length).to.not.equal(2)
 
               expect(actions)
-                .not.to.deep.include({
+                .to.not.deep.include({
                   type: STORAGE_FETCH,
                   meta: {
                     type: HARD_STORE,
@@ -251,7 +251,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 })
 
               expect(actions)
-                .not.to.deep.include({
+                .to.not.deep.include({
                   type: STORAGE_FETCH,
                   data: { type: HARD_FETCH },
                   meta: {
@@ -264,7 +264,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('returns the fetch action', () => {
-              expect(action).to.eql({ type: HARD_FETCH })
+              expect(action).to.deep.equal({ type: HARD_FETCH })
             })
           })
 
@@ -274,7 +274,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let actions
 
             const accessedAt = DATE_NOW
-            const cachedAt = DATE_NOW - (HARD_CACHE_FOR - ONE_SECOND)
+            const cachedAt = DATE_NOW - (HARD_CACHE_FOR - TIME_ONE_SECOND)
             const isHardStorage = true
 
             const configuration = [
@@ -297,14 +297,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('does not invoke the "next" middleware with the fetch action', () => {
-              expect(actions.length).not.to.eql(1)
+              expect(actions.length).to.not.equal(1)
 
               expect(actions)
-                .not.to.deep.equal([{ type: HARD_FETCH }])
+                .to.not.deep.equal([{ type: HARD_FETCH }])
             })
 
             it('dispatches the hard storage fetch actions', () => {
-              expect(actions.length).to.eql(2)
+              expect(actions.length).to.equal(2)
 
               expect(actions)
                 .to.deep.include({
@@ -331,7 +331,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('returns the fetch action', () => {
-              expect(action).to.eql({ type: HARD_FETCH })
+              expect(action).to.deep.equal({ type: HARD_FETCH })
             })
           })
         })
@@ -342,7 +342,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           let actions
 
           const accessedAt = DATE_NOW
-          const cachedAt = DATE_NOW - (HARD_CACHE_FOR + ONE_SECOND)
+          const cachedAt = DATE_NOW - (HARD_CACHE_FOR + TIME_ONE_SECOND)
           const isHardStorage = true
 
           const configuration = [
@@ -365,17 +365,17 @@ describe('Redux Storage Middleware - Storage Map', () => {
           })
 
           it('invokes the "next" middleware with the fetch action', () => {
-            expect(actions.length).to.eql(1)
+            expect(actions.length).to.equal(1)
 
             expect(actions)
               .to.deep.equal([{ type: HARD_FETCH }])
           })
 
           it('does not dispatch the hard storage fetch actions', () => {
-            expect(actions.length).not.to.eql(2)
+            expect(actions.length).to.not.equal(2)
 
             expect(actions)
-              .not.to.deep.include({
+              .to.not.deep.include({
                 type: STORAGE_FETCH,
                 meta: {
                   type: HARD_STORE,
@@ -386,7 +386,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               })
 
             expect(actions)
-              .not.to.deep.include({
+              .to.not.deep.include({
                 type: STORAGE_FETCH,
                 data: { type: HARD_FETCH },
                 meta: {
@@ -399,7 +399,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           })
 
           it('returns the fetch action', () => {
-            expect(action).to.eql({ type: HARD_FETCH })
+            expect(action).to.deep.equal({ type: HARD_FETCH })
           })
         })
       })
@@ -432,14 +432,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('invokes the "next" middleware with the store action', () => {
-          expect(actions.length).to.eql(3)
+          expect(actions.length).to.equal(3)
 
           expect(actions)
             .to.deep.include({ type: HARD_STORE })
         })
 
         it('dispatches the hard storage store actions', () => {
-          expect(actions.length).to.eql(3)
+          expect(actions.length).to.equal(3)
 
           expect(actions)
             .to.deep.include({
@@ -466,7 +466,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('returns the store action', () => {
-          expect(action).to.eql({ type: HARD_STORE })
+          expect(action).to.deep.equal({ type: HARD_STORE })
         })
       })
 
@@ -491,14 +491,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('invokes the "next" middleware with the clear action', () => {
-          expect(actions.length).to.eql(3)
+          expect(actions.length).to.equal(3)
 
           expect(actions)
             .to.deep.include({ type: HARD_CLEAR })
         })
 
         it('dispatches the hard storage clear actions', () => {
-          expect(actions.length).to.eql(3)
+          expect(actions.length).to.equal(3)
 
           expect(actions)
             .to.deep.include({
@@ -522,7 +522,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('returns the clear action', () => {
-          expect(action).to.eql({ type: HARD_CLEAR })
+          expect(action).to.deep.equal({ type: HARD_CLEAR })
         })
       })
     })
@@ -547,7 +547,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           })
 
           it('dispatches a comparison action', () => {
-            expect(actions.length).to.eql(1)
+            expect(actions.length).to.equal(1)
           })
 
           it('assigns meta values to the "meta" property of the comparison action', () => {
@@ -568,10 +568,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
             } = comparisonAction
 
             expect(type)
-              .to.eq(SOFT_FETCH)
+              .to.equal(SOFT_FETCH)
 
             expect(cacheFor)
-              .to.eq(SOFT_CACHE_FOR)
+              .to.equal(SOFT_CACHE_FOR)
 
             expect(isHardStorage)
               .to.be.undefined
@@ -580,14 +580,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
               .to.be.true
 
             expect(comparator)
-              .to.eq(COMPARATOR)
+              .to.equal(COMPARATOR)
 
             expect(then)
               .to.be.a('function')
           })
 
           it('returns the fetch action', () => {
-            expect(action).to.eql({ type: SOFT_FETCH })
+            expect(action).to.deep.equal({ type: SOFT_FETCH })
           })
         })
 
@@ -598,7 +598,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let actions
 
             const accessedAt = DATE_NOW
-            const cachedAt = DATE_NOW - (SOFT_CACHE_FOR + ONE_SECOND)
+            const cachedAt = DATE_NOW - (SOFT_CACHE_FOR + TIME_ONE_SECOND)
             const isSoftStorage = true
 
             const configuration = [
@@ -621,17 +621,17 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('invokes the "next" middleware with the fetch action', () => {
-              expect(actions.length).to.eql(1)
+              expect(actions.length).to.equal(1)
 
               expect(actions)
                 .to.deep.equal([{ type: SOFT_FETCH }])
             })
 
             it('does not dispatch the soft storage fetch actions', () => {
-              expect(actions.length).not.to.eql(2)
+              expect(actions.length).to.not.equal(2)
 
               expect(actions)
-                .not.to.deep.include({
+                .to.not.deep.include({
                   type: STORAGE_FETCH,
                   meta: {
                     type: SOFT_STORE,
@@ -642,7 +642,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 })
 
               expect(actions)
-                .not.to.deep.include({
+                .to.not.deep.include({
                   type: STORAGE_FETCH,
                   data: { type: SOFT_FETCH },
                   meta: {
@@ -655,7 +655,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('returns the fetch action', () => {
-              expect(action).to.eql({ type: SOFT_FETCH })
+              expect(action).to.deep.equal({ type: SOFT_FETCH })
             })
           })
 
@@ -665,7 +665,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let actions
 
             const accessedAt = DATE_NOW
-            const cachedAt = DATE_NOW - (SOFT_CACHE_FOR - ONE_SECOND)
+            const cachedAt = DATE_NOW - (SOFT_CACHE_FOR - TIME_ONE_SECOND)
             const isSoftStorage = true
 
             const configuration = [
@@ -688,14 +688,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('does not invoke the "next" middleware with the fetch action', () => {
-              expect(actions.length).not.to.eql(1)
+              expect(actions.length).to.not.equal(1)
 
               expect(actions)
-                .not.to.deep.equal([{ type: SOFT_FETCH }])
+                .to.not.deep.equal([{ type: SOFT_FETCH }])
             })
 
             it('dispatches the soft storage fetch actions', () => {
-              expect(actions.length).to.eql(2)
+              expect(actions.length).to.equal(2)
 
               expect(actions)
                 .to.deep.include({
@@ -722,7 +722,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('returns the fetch action', () => {
-              expect(action).to.eql({ type: SOFT_FETCH })
+              expect(action).to.deep.equal({ type: SOFT_FETCH })
             })
           })
         })
@@ -733,7 +733,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           let actions
 
           const accessedAt = DATE_NOW
-          const cachedAt = DATE_NOW - (SOFT_CACHE_FOR + ONE_SECOND)
+          const cachedAt = DATE_NOW - (SOFT_CACHE_FOR + TIME_ONE_SECOND)
           const isSoftStorage = true
 
           const configuration = [
@@ -756,17 +756,17 @@ describe('Redux Storage Middleware - Storage Map', () => {
           })
 
           it('invokes the "next" middleware with the fetch action', () => {
-            expect(actions.length).to.eql(1)
+            expect(actions.length).to.equal(1)
 
             expect(actions)
               .to.deep.equal([{ type: SOFT_FETCH }])
           })
 
           it('does not dispatch the soft storage fetch actions', () => {
-            expect(actions.length).not.to.eql(2)
+            expect(actions.length).to.not.equal(2)
 
             expect(actions)
-              .not.to.deep.include({
+              .to.not.deep.include({
                 type: STORAGE_FETCH,
                 meta: {
                   type: SOFT_STORE,
@@ -777,7 +777,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               })
 
             expect(actions)
-              .not.to.deep.include({
+              .to.not.deep.include({
                 type: STORAGE_FETCH,
                 data: { type: SOFT_FETCH },
                 meta: {
@@ -790,7 +790,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           })
 
           it('returns the fetch action', () => {
-            expect(action).to.eql({ type: SOFT_FETCH })
+            expect(action).to.deep.equal({ type: SOFT_FETCH })
           })
         })
       })
@@ -823,14 +823,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('invokes the "next" middleware with the store action', () => {
-          expect(actions.length).to.eql(3)
+          expect(actions.length).to.equal(3)
 
           expect(actions)
             .to.deep.include({ type: SOFT_STORE })
         })
 
         it('dispatches the soft storage store actions', () => {
-          expect(actions.length).to.eql(3)
+          expect(actions.length).to.equal(3)
 
           expect(actions)
             .to.deep.include({
@@ -857,7 +857,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('returns the store action', () => {
-          expect(action).to.eql({ type: SOFT_STORE })
+          expect(action).to.deep.equal({ type: SOFT_STORE })
         })
       })
 
@@ -882,14 +882,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('invokes the "next" middleware with the clear action', () => {
-          expect(actions.length).to.eql(3)
+          expect(actions.length).to.equal(3)
 
           expect(actions)
             .to.deep.include({ type: SOFT_CLEAR })
         })
 
         it('dispatches the soft storage clear actions', () => {
-          expect(actions.length).to.eql(3)
+          expect(actions.length).to.equal(3)
 
           expect(actions)
             .to.deep.include({
@@ -913,7 +913,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('returns the clear action', () => {
-          expect(action).to.eql({ type: SOFT_CLEAR })
+          expect(action).to.deep.equal({ type: SOFT_CLEAR })
         })
       })
     })
@@ -938,7 +938,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           })
 
           it('dispatches a comparison action', () => {
-            expect(actions.length).to.eql(1)
+            expect(actions.length).to.equal(1)
           })
 
           it('assigns meta values to the "meta" property of the comparison action', () => {
@@ -959,10 +959,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
             } = comparisonAction
 
             expect(type)
-              .to.eq(STATE_FETCH)
+              .to.equal(STATE_FETCH)
 
             expect(cacheFor)
-              .to.eq(STATE_CACHE_FOR)
+              .to.equal(STATE_CACHE_FOR)
 
             expect(isHardStorage)
               .to.be.undefined
@@ -971,14 +971,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
               .to.be.undefined
 
             expect(comparator)
-              .to.eq(COMPARATOR)
+              .to.equal(COMPARATOR)
 
             expect(then)
               .to.be.a('function')
           })
 
           it('returns the fetch action', () => {
-            expect(action).to.eql({ type: STATE_FETCH })
+            expect(action).to.deep.equal({ type: STATE_FETCH })
           })
         })
 
@@ -989,7 +989,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let actions
 
             const accessedAt = DATE_NOW
-            const cachedAt = DATE_NOW - (STATE_CACHE_FOR + ONE_SECOND)
+            const cachedAt = DATE_NOW - (STATE_CACHE_FOR + TIME_ONE_SECOND)
 
             const configuration = [
               { type: STATE_FETCH, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR } }
@@ -1011,17 +1011,17 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('invokes the "next" middleware with the fetch action', () => {
-              expect(actions.length).to.eql(1)
+              expect(actions.length).to.equal(1)
 
               expect(actions)
                 .to.deep.equal([{ type: STATE_FETCH }])
             })
 
             it('does not dispatch the soft storage fetch actions', () => {
-              expect(actions.length).not.to.eql(2)
+              expect(actions.length).to.not.equal(2)
 
               expect(actions)
-                .not.to.deep.include({
+                .to.not.deep.include({
                   type: STORAGE_FETCH,
                   meta: {
                     type: STATE_STORE,
@@ -1031,7 +1031,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 })
 
               expect(actions)
-                .not.to.deep.include({
+                .to.not.deep.include({
                   type: STORAGE_FETCH,
                   data: { type: STATE_FETCH },
                   meta: {
@@ -1043,7 +1043,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('returns the fetch action', () => {
-              expect(action).to.eql({ type: STATE_FETCH })
+              expect(action).to.deep.equal({ type: STATE_FETCH })
             })
           })
 
@@ -1053,7 +1053,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let actions
 
             const accessedAt = DATE_NOW
-            const cachedAt = DATE_NOW - (STATE_CACHE_FOR - ONE_SECOND)
+            const cachedAt = DATE_NOW - (STATE_CACHE_FOR - TIME_ONE_SECOND)
 
             const configuration = [
               { type: STATE_FETCH, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR } }
@@ -1075,14 +1075,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('does not invoke the "next" middleware with the fetch action', () => {
-              expect(actions.length).not.to.eql(1)
+              expect(actions.length).to.not.equal(1)
 
               expect(actions)
-                .not.to.deep.equal([{ type: STATE_FETCH }])
+                .to.not.deep.equal([{ type: STATE_FETCH }])
             })
 
             it('dispatches the soft storage fetch actions', () => {
-              expect(actions.length).to.eql(2)
+              expect(actions.length).to.equal(2)
 
               expect(actions)
                 .to.deep.include({
@@ -1107,7 +1107,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('returns the fetch action', () => {
-              expect(action).to.eql({ type: STATE_FETCH })
+              expect(action).to.deep.equal({ type: STATE_FETCH })
             })
           })
         })
@@ -1118,7 +1118,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           let actions
 
           const accessedAt = DATE_NOW
-          const cachedAt = DATE_NOW - (STATE_CACHE_FOR + ONE_SECOND)
+          const cachedAt = DATE_NOW - (STATE_CACHE_FOR + TIME_ONE_SECOND)
 
           const configuration = [
             { type: STATE_FETCH, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR } }
@@ -1140,17 +1140,17 @@ describe('Redux Storage Middleware - Storage Map', () => {
           })
 
           it('invokes the "next" middleware with the fetch action', () => {
-            expect(actions.length).to.eql(1)
+            expect(actions.length).to.equal(1)
 
             expect(actions)
               .to.deep.equal([{ type: STATE_FETCH }])
           })
 
           it('does not dispatch the soft storage fetch actions', () => {
-            expect(actions.length).not.to.eql(2)
+            expect(actions.length).to.not.equal(2)
 
             expect(actions)
-              .not.to.deep.include({
+              .to.not.deep.include({
                 type: STORAGE_FETCH,
                 meta: {
                   type: STATE_STORE,
@@ -1160,7 +1160,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               })
 
             expect(actions)
-              .not.to.deep.include({
+              .to.not.deep.include({
                 type: STORAGE_FETCH,
                 data: { type: STATE_FETCH },
                 meta: {
@@ -1172,7 +1172,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           })
 
           it('returns the fetch action', () => {
-            expect(action).to.eql({ type: STATE_FETCH })
+            expect(action).to.deep.equal({ type: STATE_FETCH })
           })
         })
       })
@@ -1204,14 +1204,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('invokes the "next" middleware with the store action', () => {
-          expect(actions.length).to.eql(3)
+          expect(actions.length).to.equal(3)
 
           expect(actions)
             .to.deep.include({ type: STATE_STORE })
         })
 
         it('dispatches the state storage store actions', () => {
-          expect(actions.length).to.eql(3)
+          expect(actions.length).to.equal(3)
 
           expect(actions)
             .to.deep.include({
@@ -1236,7 +1236,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('returns the store action', () => {
-          expect(action).to.eql({ type: STATE_STORE })
+          expect(action).to.deep.equal({ type: STATE_STORE })
         })
       })
 
@@ -1259,14 +1259,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('invokes the "next" middleware with the clear action', () => {
-          expect(actions.length).to.eql(3)
+          expect(actions.length).to.equal(3)
 
           expect(actions)
             .to.deep.include({ type: STATE_CLEAR })
         })
 
         it('dispatches the soft storage clear actions', () => {
-          expect(actions.length).to.eql(3)
+          expect(actions.length).to.equal(3)
 
           expect(actions)
             .to.deep.include({
@@ -1288,7 +1288,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('returns the clear action', () => {
-          expect(action).to.eql({ type: STATE_CLEAR })
+          expect(action).to.deep.equal({ type: STATE_CLEAR })
         })
       })
     })
@@ -1308,123 +1308,123 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
 
     it('invokes the "next" middleware with the action', () => {
-      expect(actions.length).to.eql(1)
+      expect(actions.length).to.equal(1)
 
       expect(actions)
         .to.deep.include({ type: 'ACTION' })
     })
 
     it('returns the action', () => {
-      expect(action).to.eql({ type: 'ACTION' })
+      expect(action).to.deep.equal({ type: 'ACTION' })
     })
   })
 
-  xdescribe('`initialise()`', () => {
+  xdescribe('initialise()', () => {
 
   })
 
-  xdescribe('`initialiseFetch()`', () => {
+  xdescribe('initialiseFetch()', () => {
 
   })
 
-  xdescribe('`initialiseStore()`', () => {
+  xdescribe('initialiseStore()', () => {
 
   })
 
-  xdescribe('`initialiseClear()`', () => {
+  xdescribe('initialiseClear()', () => {
 
   })
 
-  xdescribe('`initialiseFetchStorage()`', () => {
+  xdescribe('initialiseFetchStorage()', () => {
 
   })
 
-  xdescribe('`initialiseFetchHardStorage()`', () => {
+  xdescribe('initialiseFetchHardStorage()', () => {
 
   })
 
-  xdescribe('`initialiseFetchSoftStorage()`', () => {
+  xdescribe('initialiseFetchSoftStorage()', () => {
 
   })
 
-  xdescribe('`initialiseFetchMetaMap()`', () => {
+  xdescribe('initialiseFetchMetaMap()', () => {
 
   })
 
-  xdescribe('`initialiseStoreStorage()`', () => {
+  xdescribe('initialiseStoreStorage()', () => {
 
   })
 
-  xdescribe('`initialiseStoreHardStorage()`', () => {
+  xdescribe('initialiseStoreHardStorage()', () => {
 
   })
 
-  xdescribe('`initialiseStoreSoftStorage()`', () => {
+  xdescribe('initialiseStoreSoftStorage()', () => {
 
   })
 
-  xdescribe('`initialiseStoreNotFetchMap()`', () => {
+  xdescribe('initialiseStoreNotFetchMap()', () => {
 
   })
 
-  xdescribe('`initialiseStoreMetaMap()`', () => {
+  xdescribe('initialiseStoreMetaMap()', () => {
 
   })
 
-  xdescribe('`initialiseClearIsUniqueMap()`', () => {
+  xdescribe('initialiseClearIsUniqueMap()', () => {
 
   })
 
-  describe('`min()`', () => {
+  describe('min()', () => {
     describe('With values', () => {
       describe('A range of values', () => {
         it('returns the smallest number', () => {
-          expect(min([1, 10, 2, 9, 3, 8, 4, 7, 5, 6])).to.eq(1)
+          expect(min([1, 10, 2, 9, 3, 8, 4, 7, 5, 6])).to.equal(1)
         })
       })
 
       describe('A single value', () => {
         it('returns the number', () => {
-          expect(min([1])).to.eq(1)
+          expect(min([1])).to.equal(1)
         })
       })
     })
 
     describe('Without values', () => {
       it('returns `Number.POSITIVE_INFINITY`', () => {
-        expect(min()).to.eq(Number.POSITIVE_INFINITY)
+        expect(min()).to.equal(Number.POSITIVE_INFINITY)
       })
     })
   })
 
-  describe('`max()`', () => {
+  describe('max()', () => {
     describe('With values', () => {
       describe('A range of values', () => {
         it('returns the largest number', () => {
-          expect(max([1, 10, 2, 9, 3, 8, 4, 7, 5, 6])).to.eq(10)
+          expect(max([1, 10, 2, 9, 3, 8, 4, 7, 5, 6])).to.equal(10)
         })
       })
 
       describe('A single value', () => {
         it('returns the number', () => {
-          expect(max([1])).to.eq(1)
+          expect(max([1])).to.equal(1)
         })
       })
     })
 
     describe('Without values', () => {
       it('returns `Number.NEGATIVE_INFINITY`', () => {
-        expect(max()).to.eq(Number.NEGATIVE_INFINITY)
+        expect(max()).to.equal(Number.NEGATIVE_INFINITY)
       })
     })
   })
 
-  describe('`isStale()`', () => {
+  describe('isStale()', () => {
     describe('With configuration', () => {
       describe('The state is stale', () => {
         it('returns true', () => {
           const cachedAt = DATE_WAS
-          const cacheFor = ONE_DAY
+          const cacheFor = TIME_ONE_DAY
 
           expect(isStale({ cachedAt, cacheFor })).to.be.true
         })
@@ -1433,7 +1433,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
       describe('The state is not stale', () => {
         it('returns false', () => {
           const cachedAt = DATE_NOW
-          const cacheFor = ONE_DAY
+          const cacheFor = TIME_ONE_DAY
 
           expect(isStale({ cachedAt, cacheFor })).to.be.false
         })
@@ -1447,9 +1447,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  describe('`isHardStorage()`', () => {
+  describe('isHardStorage()', () => {
     describe('With configuration', () => {
-      const cacheFor = ONE_DAY
+      const cacheFor = TIME_ONE_DAY
 
       describe('The state is to be cached for one day', () => {
         it('returns true', () => {
@@ -1477,11 +1477,11 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  describe('`isSoftStorage()`', () => {
+  describe('isSoftStorage()', () => {
     describe('With configuration', () => {
-      const cacheFor = ONE_HOUR
+      const cacheFor = TIME_ONE_HOUR
 
-      describe('The state is to be cached for more than an hour', () => {
+      describe('The state is to be cached for one hour', () => {
         it('returns true', () => {
           expect(isSoftStorage({ cacheFor })).to.be.true
         })
@@ -1493,7 +1493,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
       })
 
-      describe('The state is to be cached for less than an hour', () => {
+      describe('The state is to be cached for less than one hour', () => {
         it('returns false', () => {
           expect(isSoftStorage({ cacheFor: cacheFor - 1 })).to.be.false
         })
@@ -1507,7 +1507,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  describe('`hasComparator()`', () => {
+  describe('hasComparator()', () => {
     describe('With configuration', () => {
       describe('The configuration has a comparator function', () => {
         it('returns true', () => {
@@ -1529,7 +1529,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  describe('`filterFor()`', () => {
+  describe('filterFor()', () => {
     describe('Always', () => {
       it('returns a function', () => {
         expect(filterFor()).to.be.a('function')
@@ -1559,7 +1559,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  describe('`filterMetaFor()`', () => {
+  describe('filterMetaFor()', () => {
     describe('Always', () => {
       it('returns a function', () => {
         expect(filterMetaFor()).to.be.a('function')
@@ -1589,11 +1589,11 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  describe('`mapType()`', () => {
+  describe('mapType()', () => {
     describe('With configuration', () => {
       describe('The configuration has a "type" value', () => {
         it('returns the value', () => {
-          expect(mapType({ type: HARD_FETCH })).to.eq(HARD_FETCH)
+          expect(mapType({ type: HARD_FETCH })).to.equal(HARD_FETCH)
         })
       })
 
@@ -1611,11 +1611,11 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  describe('`mapMetaType()`', () => {
+  describe('mapMetaType()', () => {
     describe('With configuration', () => {
       describe('The configuration has a meta "type" value', () => {
         it('returns the value', () => {
-          expect(mapMetaType({ meta: { type: HARD_FETCH } })).to.eq(HARD_FETCH)
+          expect(mapMetaType({ meta: { type: HARD_FETCH } })).to.equal(HARD_FETCH)
         })
       })
 
@@ -1633,179 +1633,406 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  describe('`mapCacheFor()`', () => {
-    const cacheFor = ONE_DAY
+  describe('mapCacheFor()', () => {
+    const cacheFor = TIME_ONE_DAY
 
     describe('With configuration', () => {
       describe('The configuration has a "cacheFor" value', () => {
         it('returns the value', () => {
-          expect(mapCacheFor({ meta: { cacheFor } })).to.eq(ONE_DAY)
+          expect(mapCacheFor({ meta: { cacheFor } })).to.equal(TIME_ONE_DAY)
         })
       })
 
       describe('The configuration does not have a "cacheFor" value', () => {
         it('returns zero', () => {
-          expect(mapCacheFor({ meta: {} })).to.eq(0)
+          expect(mapCacheFor({ meta: {} })).to.equal(0)
         })
       })
     })
 
     describe('Without configuration', () => {
       it('returns zero', () => {
-        expect(mapCacheFor()).to.eq(0)
+        expect(mapCacheFor()).to.equal(0)
       })
     })
   })
 
-  describe('`mapCachedAt()`', () => {
+  describe('mapCachedAt()', () => {
     const cachedAt = DATE_WAS
 
     describe('With configuration', () => {
       describe('The configuration has a "cachedAt" value', () => {
         it('returns the value', () => {
-          expect(mapCachedAt({ meta: { cachedAt } })).to.eq(DATE_WAS)
+          expect(mapCachedAt({ meta: { cachedAt } })).to.equal(DATE_WAS)
         })
       })
 
       describe('The configuration does not have a "cachedAt" value', () => {
         it('returns zero', () => {
-          expect(mapCachedAt({ meta: {} })).to.eq(0)
+          expect(mapCachedAt({ meta: {} })).to.equal(0)
         })
       })
     })
 
     describe('Without configuration', () => {
       it('returns zero', () => {
-        expect(mapCachedAt()).to.eq(0)
+        expect(mapCachedAt()).to.equal(0)
       })
     })
   })
 
-  xdescribe('`createIsHardStorage()`', () => {
+  describe('createIsHardStorage()', () => {
+    describe('With configuration', () => {
+      const cacheFor = TIME_ONE_DAY
 
-  })
-  xdescribe('`createIsSoftStorage()`', () => {
+      describe('The state is to be cached for one day', () => {
+        it('returns an object', () => {
+          expect(createIsHardStorage({ cacheFor })).to.deep.equal({ cacheFor, isHardStorage: true })
+        })
+      })
 
-  })
+      describe('The state is to be cached for more than one day', () => {
+        it('returns an object', () => {
+          expect(createIsHardStorage({ cacheFor: cacheFor + 1 })).to.deep.equal({ cacheFor: cacheFor + 1, isHardStorage: true })
+        })
+      })
 
-  xdescribe('`createComparator()`', () => {
+      describe('The state is to be cached for less than one day', () => {
+        it('returns an object', () => {
+          expect(createIsHardStorage({ cacheFor: cacheFor - 1 })).to.deep.equal({ cacheFor: cacheFor - 1 })
+        })
+      })
+    })
 
-  })
-  xdescribe('`createAccessedAt()`', () => {
-
-  })
-  xdescribe('`createCachedAt()`', () => {
-
-  })
-  xdescribe('`createCacheFor()`', () => {
-
-  })
-
-  xdescribe('`createMeta()`', () => {
-
-  })
-
-  xdescribe('`hasCacheFor()`', () => {
-
-  })
-  xdescribe('`notCacheFor()`', () => {
-
-  })
-
-  xdescribe('`filterFetch()`', () => {
-
-  })
-  xdescribe('`filterStore()`', () => {
-
-  })
-  xdescribe('`filterClear()`', () => {
-
+    describe('Without configuration', () => {
+      it('returns an object', () => {
+        expect(createIsHardStorage()).to.deep.equal({})
+      })
+    })
   })
 
-  xdescribe('`reduceFetch()`', () => {
+  describe('createIsSoftStorage()', () => {
+    describe('With configuration', () => {
+      const cacheFor = TIME_ONE_HOUR
 
-  })
-  xdescribe('`reduceStore()`', () => {
+      describe('The state is to be cached for one hour', () => {
+        it('returns an object', () => {
+          expect(createIsSoftStorage({ cacheFor })).to.deep.equal({ cacheFor, isSoftStorage: true })
+        })
+      })
 
-  })
-  xdescribe('`reduceClear()`', () => {
+      describe('The state is to be cached for less than one day', () => {
+        it('returns an object', () => {
+          expect(createIsSoftStorage({ cacheFor: (cacheFor * 24) - 1 })).to.deep.equal({ cacheFor: (cacheFor * 24) - 1, isSoftStorage: true })
+        })
+      })
 
-  })
+      describe('The state is to be cached for less than one hour', () => {
+        it('returns an object', () => {
+          expect(createIsSoftStorage({ cacheFor: cacheFor - 1 })).to.deep.equal({ cacheFor: cacheFor - 1 })
+        })
+      })
+    })
 
-  xdescribe('`dedupeFetch()`', () => {
-
-  })
-  xdescribe('`dedupeStore()`', () => {
-
-  })
-  xdescribe('`dedupeClear()`', () => {
-
-  })
-
-  xdescribe('`filterHardStorage()`', () => {
-
-  })
-  xdescribe('`filterSoftStorage()`', () => {
-
-  })
-  xdescribe('`filterStorage()`', () => {
-
-  })
-
-  xdescribe('`filterNotFetchMap()`', () => {
-
-  })
-  xdescribe('`filterNotStoreMap()`', () => {
-
-  })
-  xdescribe('`filterIsUniqueMap()`', () => {
-
+    describe('Without configuration', () => {
+      it('returns an object', () => {
+        expect(createIsSoftStorage()).to.deep.equal({})
+      })
+    })
   })
 
-  xdescribe('`putIntoFetchMap()`', () => {
+  describe('createComparator()', () => {
+    describe('With configuration', () => {
+      describe('The state has a "comparator" function', () => {
+        it('returns an object', () => {
+          expect(createComparator({ comparator: COMPARATOR })).to.deep.equal({ comparator: COMPARATOR })
+        })
+      })
 
-  })
-  xdescribe('`putIntoStoreMap()`', () => {
+      describe('The state does not have a "comparator" function', () => {
+        it('returns an object', () => {
+          expect(createComparator({})).to.deep.equal({})
+        })
+      })
+    })
 
-  })
-  xdescribe('`putIntoClearMap()`', () => {
-
-  })
-
-  xdescribe('`putIntoFetchMetaMap()`', () => {
-
-  })
-  xdescribe('`putIntoStoreMetaMap()`', () => {
-
-  })
-
-  xdescribe('`filterStoreHardStorageArray()`', () => {
-
-  })
-  xdescribe('`filterStoreSoftStorageArray()`', () => {
-
-  })
-  xdescribe('`filterStoreStorageArray()`', () => {
-
+    describe('Without configuration', () => {
+      it('returns an object', () => {
+        expect(createComparator()).to.deep.equal({})
+      })
+    })
   })
 
-  xdescribe('`filterFetchArray()`', () => {
+  describe('createAccessedAt()', () => {
+    describe('With configuration', () => {
+      describe('The state has an "accessedAt" value', () => {
+        it('returns an object', () => {
+          expect(createAccessedAt({ accessedAt: DATE_NOW })).to.deep.equal({ accessedAt: DATE_NOW })
+        })
+      })
+
+      describe('The state does not have an "accessedAt" value', () => {
+        it('returns an object', () => {
+          expect(createAccessedAt({})).to.deep.equal({})
+        })
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns an object', () => {
+        expect(createAccessedAt()).to.deep.equal({})
+      })
+    })
+  })
+
+  describe('createCachedAt()', () => {
+    describe('With configuration', () => {
+      describe('The state has a "cachedAt" value', () => {
+        it('returns an object', () => {
+          expect(createCachedAt({ cachedAt: DATE_NOW })).to.deep.equal({ cachedAt: DATE_NOW })
+        })
+      })
+
+      describe('The state does not have a "cachedAt" value', () => {
+        it('returns an object', () => {
+          expect(createCachedAt({})).to.deep.equal({})
+        })
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns an object', () => {
+        expect(createCachedAt()).to.deep.equal({})
+      })
+    })
+  })
+
+  describe('createCacheFor()', () => {
+    describe('With configuration', () => {
+      describe('The state has a "cacheFor" value', () => {
+        it('returns an object', () => {
+          expect(createCacheFor({ cacheFor: DATE_NOW })).to.deep.equal({ cacheFor: DATE_NOW })
+        })
+      })
+
+      describe('The state does not have a "cacheFor" value', () => {
+        it('returns an object', () => {
+          expect(createCacheFor({})).to.deep.equal({})
+        })
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns an object', () => {
+        expect(createCacheFor()).to.deep.equal({})
+      })
+    })
+  })
+
+  xdescribe('createMeta()', () => {
+    describe('With configuration', () => { })
+
+    describe('Without configuration', () => { })
+  })
+
+  describe('hasCacheFor()', () => {
+    describe('With configuration', () => {
+      it('is a positive number', () => {
+        expect(hasCacheFor(+1)).to.be.true
+      })
+
+      it('is not a positive number', () => {
+        expect(hasCacheFor(0)).to.be.false
+
+        expect(hasCacheFor(-1)).to.be.false
+      })
+
+      it('is a positive number as a string', () => {
+        expect(hasCacheFor('+1')).to.be.true
+      })
+
+      it('is not a positive number as a string', () => {
+        expect(hasCacheFor('0')).to.be.false
+
+        expect(hasCacheFor('-1')).to.be.false
+      })
+
+      it('can coerce to a positive number', () => {
+        expect(hasCacheFor(true)).to.be.true
+      })
+
+      it('cannot coerce to a positive number', () => {
+        expect(hasCacheFor(false)).to.be.false
+
+        expect(hasCacheFor(undefined)).to.be.false
+
+        expect(hasCacheFor(null)).to.be.false
+      })
+
+      it('coerces to NaN', () => {
+        expect(hasCacheFor('x')).to.be.false
+
+        expect(hasCacheFor({})).to.be.false
+
+        expect(hasCacheFor([])).to.be.false
+
+        expect(hasCacheFor(NaN)).to.be.false
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns false', () => {
+        expect(hasCacheFor()).to.be.false
+      })
+    })
+  })
+
+  describe('notCacheFor()', () => {
+    describe('With configuration', () => {
+      it('is zero or a negative number', () => {
+        expect(notCacheFor(0)).to.be.true
+
+        expect(notCacheFor(-1)).to.be.true
+      })
+
+      it('is not zero or a negative number', () => {
+        expect(notCacheFor(+1)).to.be.false
+      })
+
+      it('is zero or a negative number as a string', () => {
+        expect(notCacheFor('0')).to.be.true
+
+        expect(notCacheFor('-1')).to.be.true
+      })
+
+      it('is not zero or a negative number as a string', () => {
+        expect(notCacheFor('+1')).to.be.false
+      })
+
+      it('can coerce to zero or a negative number', () => {
+        expect(notCacheFor(false)).to.be.true
+
+        expect(notCacheFor(undefined)).to.be.true
+
+        expect(notCacheFor(null)).to.be.true
+      })
+
+      it('cannot coerce to zero or a negative number', () => {
+        expect(notCacheFor(true)).to.be.false
+      })
+
+      it('coerces to NaN', () => {
+        expect(notCacheFor('x')).to.be.true
+
+        expect(notCacheFor({})).to.be.true
+
+        expect(notCacheFor([])).to.be.true
+
+        expect(notCacheFor(NaN)).to.be.true
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns false', () => {
+        expect(notCacheFor()).to.be.true
+      })
+    })
+  })
+
+  xdescribe('filterFetch()', () => {
 
   })
-  xdescribe('`filterStoreArray()`', () => {
+  xdescribe('filterStore()', () => {
 
   })
-  xdescribe('`filterClearArray()`', () => {
+  xdescribe('filterClear()', () => {
 
   })
 
-  xdescribe('`filterNotFetchMapArray()`', () => {
+  xdescribe('reduceFetch()', () => {
 
   })
-  xdescribe('`filterIsUniqueMapArray()`', () => {
+  xdescribe('reduceStore()', () => {
 
   })
-  xdescribe('`createStoreMetaArray()`', () => {
+  xdescribe('reduceClear()', () => {
+
+  })
+
+  xdescribe('dedupeFetch()', () => {
+
+  })
+  xdescribe('dedupeStore()', () => {
+
+  })
+  xdescribe('dedupeClear()', () => {
+
+  })
+
+  xdescribe('filterHardStorage()', () => {
+
+  })
+  xdescribe('filterSoftStorage()', () => {
+
+  })
+  xdescribe('filterStorage()', () => {
+
+  })
+
+  xdescribe('filterNotFetchMap()', () => {
+
+  })
+  xdescribe('filterNotStoreMap()', () => {
+
+  })
+  xdescribe('filterIsUniqueMap()', () => {
+
+  })
+
+  xdescribe('putIntoFetchMap()', () => {
+
+  })
+  xdescribe('putIntoStoreMap()', () => {
+
+  })
+  xdescribe('putIntoClearMap()', () => {
+
+  })
+
+  xdescribe('putIntoFetchMetaMap()', () => {
+
+  })
+  xdescribe('putIntoStoreMetaMap()', () => {
+
+  })
+
+  xdescribe('filterStoreHardStorageArray()', () => {
+
+  })
+  xdescribe('filterStoreSoftStorageArray()', () => {
+
+  })
+  xdescribe('filterStoreStorageArray()', () => {
+
+  })
+
+  xdescribe('filterFetchArray()', () => {
+
+  })
+  xdescribe('filterStoreArray()', () => {
+
+  })
+  xdescribe('filterClearArray()', () => {
+
+  })
+
+  xdescribe('filterNotFetchMapArray()', () => {
+
+  })
+  xdescribe('filterIsUniqueMapArray()', () => {
+
+  })
+  xdescribe('createStoreMetaArray()', () => {
 
   })
 })

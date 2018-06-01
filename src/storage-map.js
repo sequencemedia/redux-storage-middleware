@@ -45,8 +45,8 @@ export const createMeta = (meta = {}) => (
   )
 )
 
-export const hasCacheFor = (value) => !!Number(value)
-export const notCacheFor = (value) => !(Number(value))
+export const hasCacheFor = (value) => Math.floor(Number(value)) > 0
+export const notCacheFor = (value) => isNaN(Number(value)) || Math.floor(Number(value)) < 1
 
 export const filterFetch = ({ meta: { type, cacheFor = 0 } = {} } = {}) => hasCacheFor(cacheFor)
 export const filterStore = ({ meta: { type, cacheFor = 0 } = {} } = {}) => hasCacheFor(cacheFor)
