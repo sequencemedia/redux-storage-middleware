@@ -124,6 +124,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
   const STATE_CACHE_FOR = TIME_ONE_MINUTE // (1000 * 60)
 
   const COMPARATOR = () => {}
+  const ACCESSED_AT = DATE_NOW
+  const CACHED_AT = TIME_ONE_SECOND
+  const CACHE_FOR = TIME_ONE_SECOND
 
   describe('Always', () => {
     it('is a function', () => {
@@ -1789,7 +1792,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With configuration', () => {
       describe('The state has a "cachedAt" value', () => {
         it('returns an object', () => {
-          expect(createCachedAt({ cachedAt: DATE_NOW })).to.deep.equal({ cachedAt: DATE_NOW })
+          expect(createCachedAt({ cachedAt: CACHED_AT })).to.deep.equal({ cachedAt: CACHED_AT })
         })
       })
 
@@ -1811,7 +1814,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With configuration', () => {
       describe('The state has a "cacheFor" value', () => {
         it('returns an object', () => {
-          expect(createCacheFor({ cacheFor: DATE_NOW })).to.deep.equal({ cacheFor: DATE_NOW })
+          expect(createCacheFor({ cacheFor: CACHE_FOR })).to.deep.equal({ cacheFor: CACHE_FOR })
         })
       })
 
@@ -1829,10 +1832,176 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  xdescribe('createMeta()', () => {
-    describe('With configuration', () => { })
+  describe('createMeta()', () => {
+    describe('With configuration', () => {
+      describe('The state has a "comparator" function', () => {
+        it('returns an object', () => {
+          expect(createMeta({ comparator: COMPARATOR })).to.deep.equal({ comparator: COMPARATOR })
+        })
+      })
 
-    describe('Without configuration', () => { })
+      describe('The state has an "accessedAt" value', () => {
+        it('returns an object', () => {
+          expect(createMeta({ accessedAt: DATE_NOW })).to.deep.equal({ accessedAt: DATE_NOW })
+        })
+      })
+
+      describe('The state has a "cachedAt" value', () => {
+        it('returns an object', () => {
+          expect(createMeta({ cachedAt: CACHED_AT })).to.deep.equal({ cachedAt: CACHED_AT })
+        })
+      })
+
+      describe('The state has a "cacheFor" value', () => {
+        it('returns an object', () => {
+          expect(createMeta({ cacheFor: CACHE_FOR })).to.deep.equal({ cacheFor: CACHE_FOR })
+        })
+      })
+
+      describe('The state has an "isSoftStorage" value', () => {
+        it('returns an object', () => {
+          expect(createMeta({ isSoftStorage: true })).to.deep.equal({ isSoftStorage: true })
+        })
+      })
+
+      describe('The state has an "isHardStorage" value', () => {
+        it('returns an object', () => {
+          expect(createMeta({ isHardStorage: true })).to.deep.equal({ isHardStorage: true })
+        })
+      })
+
+      describe('The state does not have a "comparator" function', () => {
+        it('returns an object', () => {
+          expect(
+            createMeta({
+              accessedAt: ACCESSED_AT,
+              cachedAt: CACHED_AT,
+              cacheFor: CACHE_FOR,
+              isSoftStorage: true,
+              isHardStorage: true
+            })
+          )
+            .to.deep.equal({
+              accessedAt: ACCESSED_AT,
+              cachedAt: CACHED_AT,
+              cacheFor: CACHE_FOR,
+              isSoftStorage: true,
+              isHardStorage: true
+            })
+        })
+      })
+
+      describe('The state does not have an "accessedAt" value', () => {
+        it('returns an object', () => {
+          expect(
+            createMeta({
+              comparator: COMPARATOR,
+              cachedAt: CACHED_AT,
+              cacheFor: CACHE_FOR,
+              isSoftStorage: true,
+              isHardStorage: true
+            })
+          )
+            .to.deep.equal({
+              comparator: COMPARATOR,
+              cachedAt: CACHED_AT,
+              cacheFor: CACHE_FOR,
+              isSoftStorage: true,
+              isHardStorage: true
+            })
+        })
+      })
+
+      describe('The state does not have a "cachedAt" value', () => {
+        it('returns an object', () => {
+          expect(
+            createMeta({
+              comparator: COMPARATOR,
+              accessedAt: ACCESSED_AT,
+              cacheFor: CACHE_FOR,
+              isSoftStorage: true,
+              isHardStorage: true
+            })
+          )
+            .to.deep.equal({
+              comparator: COMPARATOR,
+              accessedAt: ACCESSED_AT,
+              cacheFor: CACHE_FOR,
+              isSoftStorage: true,
+              isHardStorage: true
+            })
+        })
+      })
+
+      describe('The state does not have a "cacheFor" value', () => {
+        it('returns an object', () => {
+          expect(
+            createMeta({
+              comparator: COMPARATOR,
+              accessedAt: ACCESSED_AT,
+              cachedAt: CACHED_AT,
+              isSoftStorage: true,
+              isHardStorage: true
+            })
+          )
+            .to.deep.equal({
+              comparator: COMPARATOR,
+              accessedAt: ACCESSED_AT,
+              cachedAt: CACHED_AT,
+              isSoftStorage: true,
+              isHardStorage: true
+            })
+        })
+      })
+
+      describe('The state does not have an "isSoftStorage" value', () => {
+        it('returns an object', () => {
+          expect(
+            createMeta({
+              comparator: COMPARATOR,
+              accessedAt: ACCESSED_AT,
+              cachedAt: CACHED_AT,
+              cacheFor: CACHE_FOR,
+              isHardStorage: true
+            })
+          )
+            .to.deep.equal({
+              comparator: COMPARATOR,
+              accessedAt: ACCESSED_AT,
+              cachedAt: CACHED_AT,
+              cacheFor: CACHE_FOR,
+              isHardStorage: true
+            })
+        })
+      })
+
+      describe('The state does not have an "isHardStorage" value', () => {
+        it('returns an object', () => {
+          expect(
+            createMeta({
+              comparator: COMPARATOR,
+              accessedAt: ACCESSED_AT,
+              cachedAt: CACHED_AT,
+              cacheFor: CACHE_FOR,
+              isSoftStorage: true
+            })
+          )
+            .to.deep.equal({
+              comparator: COMPARATOR,
+              accessedAt: ACCESSED_AT,
+              cachedAt: CACHED_AT,
+              cacheFor: CACHE_FOR,
+              isSoftStorage: true
+            })
+        })
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns an object', () => {
+        expect(createMeta()).to.deep.equal({})
+      })
+    })
   })
 
   describe('hasCacheFor()', () => {
