@@ -1640,12 +1640,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('mapCacheFor()', () => {
-    const cacheFor = TIME_ONE_DAY
+    const cacheFor = CACHE_FOR
 
     describe('With configuration', () => {
       describe('The configuration has a "cacheFor" value', () => {
         it('returns the value', () => {
-          expect(mapCacheFor({ meta: { cacheFor } })).to.equal(TIME_ONE_DAY)
+          expect(mapCacheFor({ meta: { cacheFor } })).to.equal(CACHE_FOR)
         })
       })
 
@@ -1664,12 +1664,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('mapCachedAt()', () => {
-    const cachedAt = DATE_WAS
+    const cachedAt = CACHED_AT
 
     describe('With configuration', () => {
       describe('The configuration has a "cachedAt" value', () => {
         it('returns the value', () => {
-          expect(mapCachedAt({ meta: { cachedAt } })).to.equal(DATE_WAS)
+          expect(mapCachedAt({ meta: { cachedAt } })).to.equal(CACHED_AT)
         })
       })
 
@@ -1900,15 +1900,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state does not have a "comparator" function', () => {
         it('returns an object', () => {
-          const meta = createMeta({
+          const configuration = {
             accessedAt: ACCESSED_AT,
             cachedAt: CACHED_AT,
             cacheFor: CACHE_FOR,
             isSoftStorage: true,
             isHardStorage: true
-          })
+          }
 
-          expect(meta)
+          expect(createMeta(configuration))
             .to.deep.equal({
               accessedAt: ACCESSED_AT,
               cachedAt: CACHED_AT,
@@ -1921,15 +1921,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state does not have an "accessedAt" value', () => {
         it('returns an object', () => {
-          const meta = createMeta({
+          const configuration = {
             comparator: COMPARATOR,
             cachedAt: CACHED_AT,
             cacheFor: CACHE_FOR,
             isSoftStorage: true,
             isHardStorage: true
-          })
+          }
 
-          expect(meta)
+          expect(createMeta(configuration))
             .to.deep.equal({
               comparator: COMPARATOR,
               cachedAt: CACHED_AT,
@@ -1942,15 +1942,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state does not have a "cachedAt" value', () => {
         it('returns an object', () => {
-          const meta = createMeta({
+          const configuration = {
             comparator: COMPARATOR,
             accessedAt: ACCESSED_AT,
             cacheFor: CACHE_FOR,
             isSoftStorage: true,
             isHardStorage: true
-          })
+          }
 
-          expect(meta)
+          expect(createMeta(configuration))
             .to.deep.equal({
               comparator: COMPARATOR,
               accessedAt: ACCESSED_AT,
@@ -1963,15 +1963,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state does not have a "cacheFor" value', () => {
         it('returns an object', () => {
-          const meta = createMeta({
+          const configuration = {
             comparator: COMPARATOR,
             accessedAt: ACCESSED_AT,
             cachedAt: CACHED_AT,
             isSoftStorage: true,
             isHardStorage: true
-          })
+          }
 
-          expect(meta)
+          expect(createMeta(configuration))
             .to.deep.equal({
               comparator: COMPARATOR,
               accessedAt: ACCESSED_AT,
@@ -1984,15 +1984,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state does not have an "isSoftStorage" value', () => {
         it('returns an object', () => {
-          const meta = createMeta({
+          const configuration = {
             comparator: COMPARATOR,
             accessedAt: ACCESSED_AT,
             cachedAt: CACHED_AT,
             cacheFor: CACHE_FOR,
             isHardStorage: true
-          })
+          }
 
-          expect(meta)
+          expect(createMeta(configuration))
             .to.deep.equal({
               comparator: COMPARATOR,
               accessedAt: ACCESSED_AT,
@@ -2005,15 +2005,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state does not have an "isHardStorage" value', () => {
         it('returns an object', () => {
-          const meta = createMeta({
+          const configuration = {
             comparator: COMPARATOR,
             accessedAt: ACCESSED_AT,
             cachedAt: CACHED_AT,
             cacheFor: CACHE_FOR,
             isSoftStorage: true
-          })
+          }
 
-          expect(meta)
+          expect(createMeta(configuration))
             .to.deep.equal({
               comparator: COMPARATOR,
               accessedAt: ACCESSED_AT,
