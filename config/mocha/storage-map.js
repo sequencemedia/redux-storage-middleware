@@ -2173,7 +2173,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With parameters', () => {
       describe('Always', () => {
         beforeEach(() => {
-          dedupeFetch(array, { type: TYPE })
+          dedupeFetch(array, { type: TYPE, meta: {} })
         })
 
         it('invokes the "map" function', () => {
@@ -2213,11 +2213,11 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('returns an array', () => {
-          expect(dedupeFetch(array, { type: TYPE })).to.deep.equal([])
+          expect(dedupeFetch(array, { type: TYPE, meta: {} })).to.deep.equal([])
         })
 
         it('does not call concat', () => {
-          dedupeFetch(array, { type: TYPE })
+          dedupeFetch(array, { type: TYPE, meta: {} })
 
           expect(array.concat).not.to.have.been.called
         })
@@ -2235,11 +2235,11 @@ describe('Redux Storage Middleware - Storage Map', () => {
         })
 
         it('returns an array', () => {
-          expect(dedupeFetch(array, { type: TYPE })).to.deep.equal([])
+          expect(dedupeFetch(array, { type: TYPE, meta: {} })).to.deep.equal([])
         })
 
         it('calls concat with an object', () => {
-          dedupeFetch(array, { type: TYPE })
+          dedupeFetch(array, { type: TYPE, meta: {} })
 
           const {
             concat: {
@@ -2249,7 +2249,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             }
           } = array
 
-          expect(object).to.deep.equal({ type: TYPE })
+          expect(object).to.deep.equal({ type: TYPE, meta: {} })
         })
       })
     })
@@ -2548,7 +2548,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
       })
 
       beforeEach(() => {
-        dedupeStore()
+        dedupeClear()
       })
 
       it('invokes the "map" function', () => {
