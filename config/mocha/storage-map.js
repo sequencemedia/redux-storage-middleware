@@ -111,6 +111,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
   const STATE_STORE = 'STATE_STORE'
   const STATE_CLEAR = 'STATE_CLEAR'
 
+  const TYPE = 'TYPE'
+  const META_TYPE = 'META_TYPE'
+
   const TIME_ONE_SECOND = 1000
   const TIME_ONE_MINUTE = TIME_ONE_SECOND * 60
   const TIME_ONE_HOUR = TIME_ONE_MINUTE * 60
@@ -1305,7 +1308,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
     beforeEach(() => {
       store = configureStore([ storageMap() ])({})
 
-      action = store.dispatch({ type: 'ACTION' })
+      action = store.dispatch({ type: TYPE })
 
       actions = store.getActions()
     })
@@ -1314,11 +1317,11 @@ describe('Redux Storage Middleware - Storage Map', () => {
       expect(actions.length).to.equal(1)
 
       expect(actions)
-        .to.deep.include({ type: 'ACTION' })
+        .to.deep.include({ type: TYPE })
     })
 
     it('returns the action', () => {
-      expect(action).to.deep.equal({ type: 'ACTION' })
+      expect(action).to.deep.equal({ type: TYPE })
     })
   })
 
@@ -2154,14 +2157,424 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   })
 
-  xdescribe('dedupeFetch()', () => {
+  describe('dedupeFetch()', () => {
+    const array = []
 
+    beforeEach(() => {
+      sinon.stub(array, 'map').returns(array)
+      sinon.stub(array, 'includes')
+    })
+
+    afterEach(() => {
+      array.map.restore()
+      array.includes.restore()
+    })
+
+    describe('With parameters', () => {
+      describe('Always', () => {
+        beforeEach(() => {
+          dedupeFetch(array, { type: TYPE })
+        })
+
+        it('invokes the "map" function', () => {
+          const {
+            map: {
+              firstCall: {
+                args: [ map ]
+              }
+            }
+          } = array
+
+          expect(map).to.equal(mapType)
+        })
+
+        it('invokes the "includes" function with the "type" value', () => {
+          const {
+            includes: {
+              firstCall: {
+                args: [ type ]
+              }
+            }
+          } = array
+
+          expect(type).to.equal(TYPE)
+        })
+      })
+
+      describe('The mapped array includes the "type" value', () => {
+        beforeEach(() => {
+          sinon.stub(array, 'concat').returns([])
+
+          array.includes.returns(true)
+        })
+
+        afterEach(() => {
+          array.concat.restore()
+        })
+
+        it('returns an array', () => {
+          expect(dedupeFetch(array, { type: TYPE })).to.deep.equal([])
+        })
+
+        it('does not call concat', () => {
+          dedupeFetch(array, { type: TYPE })
+
+          expect(array.concat).not.to.have.been.called
+        })
+      })
+
+      describe('The mapped array does not include the "type" value', () => {
+        beforeEach(() => {
+          sinon.stub(array, 'concat').returns([])
+
+          array.includes.returns(false)
+        })
+
+        afterEach(() => {
+          array.concat.restore()
+        })
+
+        it('returns an array', () => {
+          expect(dedupeFetch(array, { type: TYPE })).to.deep.equal([])
+        })
+
+        it('calls concat with an object', () => {
+          dedupeFetch(array, { type: TYPE })
+
+          const {
+            concat: {
+              firstCall: {
+                args: [ object ]
+              }
+            }
+          } = array
+
+          expect(object).to.deep.equal({ type: TYPE })
+        })
+      })
+    })
+
+    describe('Without parameters', () => {
+      const array = []
+
+      beforeEach(() => {
+        sinon.stub(Array.prototype, 'map').returns(array)
+        sinon.stub(array, 'includes')
+      })
+
+      afterEach(() => {
+        Array.prototype.map.restore()
+        array.includes.restore()
+      })
+
+      beforeEach(() => {
+        dedupeFetch()
+      })
+
+      it('invokes the "map" function', () => {
+        const {
+          map: {
+            firstCall: {
+              args: [ map ]
+            }
+          }
+        } = Array.prototype
+
+        expect(map).to.equal(mapType)
+      })
+
+      it('invokes the "includes" function with the "type" value', () => {
+        const {
+          includes: {
+            firstCall: {
+              args: [ type ]
+            }
+          }
+        } = array
+
+        expect(type).to.be.undefined
+      })
+    })
   })
-  xdescribe('dedupeStore()', () => {
 
+  describe('dedupeStore()', () => {
+    const array = []
+
+    beforeEach(() => {
+      sinon.stub(array, 'map').returns(array)
+      sinon.stub(array, 'includes')
+    })
+
+    afterEach(() => {
+      array.map.restore()
+      array.includes.restore()
+    })
+
+    describe('With parameters', () => {
+      describe('Always', () => {
+        beforeEach(() => {
+          dedupeStore(array, { type: TYPE, meta: { type: META_TYPE } })
+        })
+
+        it('invokes the "map" function', () => {
+          const {
+            map: {
+              firstCall: {
+                args: [ map ]
+              }
+            }
+          } = array
+
+          expect(map).to.equal(mapMetaType)
+        })
+
+        it('invokes the "includes" function with the meta "type" value', () => {
+          const {
+            includes: {
+              firstCall: {
+                args: [ metaType ]
+              }
+            }
+          } = array
+
+          expect(metaType).to.equal(META_TYPE)
+        })
+      })
+
+      describe('The mapped array includes the meta "type" value', () => {
+        beforeEach(() => {
+          sinon.stub(array, 'concat').returns([])
+
+          array.includes.returns(true)
+        })
+
+        afterEach(() => {
+          array.concat.restore()
+        })
+
+        it('returns an array', () => {
+          expect(dedupeStore(array, { type: TYPE, meta: { type: META_TYPE } })).to.deep.equal([])
+        })
+
+        it('does not call concat', () => {
+          dedupeStore(array, { type: TYPE, meta: { type: META_TYPE } })
+
+          expect(array.concat).not.to.have.been.called
+        })
+      })
+
+      describe('The mapped array does not include the meta "type" value', () => {
+        beforeEach(() => {
+          sinon.stub(array, 'concat').returns([])
+
+          array.includes.returns(false)
+        })
+
+        afterEach(() => {
+          array.concat.restore()
+        })
+
+        it('returns an array', () => {
+          expect(dedupeStore(array, { type: TYPE, meta: { type: META_TYPE } })).to.deep.equal([])
+        })
+
+        it('calls concat with an object', () => {
+          dedupeStore(array, { type: TYPE, meta: { type: META_TYPE } })
+
+          const {
+            concat: {
+              firstCall: {
+                args: [ object ]
+              }
+            }
+          } = array
+
+          expect(object).to.deep.equal({ type: TYPE, meta: { type: META_TYPE } })
+        })
+      })
+    })
+
+    describe('Without parameters', () => {
+      const array = []
+
+      beforeEach(() => {
+        sinon.stub(Array.prototype, 'map').returns(array)
+        sinon.stub(array, 'includes')
+      })
+
+      afterEach(() => {
+        Array.prototype.map.restore()
+        array.includes.restore()
+      })
+
+      beforeEach(() => {
+        dedupeStore()
+      })
+
+      it('invokes the "map" function', () => {
+        const {
+          map: {
+            firstCall: {
+              args: [ map ]
+            }
+          }
+        } = Array.prototype
+
+        expect(map).to.equal(mapMetaType)
+      })
+
+      it('invokes the "includes" function with the meta "type" value', () => {
+        const {
+          includes: {
+            firstCall: {
+              args: [ metaType ]
+            }
+          }
+        } = array
+
+        expect(metaType).to.be.undefined
+      })
+    })
   })
-  xdescribe('dedupeClear()', () => {
 
+  describe('dedupeClear()', () => {
+    const array = []
+
+    beforeEach(() => {
+      sinon.stub(array, 'map').returns(array)
+      sinon.stub(array, 'includes')
+    })
+
+    afterEach(() => {
+      array.map.restore()
+      array.includes.restore()
+    })
+
+    describe('With parameters', () => {
+      describe('Always', () => {
+        beforeEach(() => {
+          dedupeClear(array, { type: TYPE, meta: { type: META_TYPE } })
+        })
+
+        it('invokes the "map" function', () => {
+          const {
+            map: {
+              firstCall: {
+                args: [ map ]
+              }
+            }
+          } = array
+
+          expect(map).to.equal(mapMetaType)
+        })
+
+        it('invokes the "includes" function with the meta "type" value', () => {
+          const {
+            includes: {
+              firstCall: {
+                args: [ metaType ]
+              }
+            }
+          } = array
+
+          expect(metaType).to.equal(META_TYPE)
+        })
+      })
+
+      describe('The mapped array includes the meta "type" value', () => {
+        beforeEach(() => {
+          sinon.stub(array, 'concat').returns([])
+
+          array.includes.returns(true)
+        })
+
+        afterEach(() => {
+          array.concat.restore()
+        })
+
+        it('returns an array', () => {
+          expect(dedupeClear(array, { type: TYPE, meta: { type: META_TYPE } })).to.deep.equal([])
+        })
+
+        it('does not call concat', () => {
+          dedupeClear(array, { type: TYPE, meta: { type: META_TYPE } })
+
+          expect(array.concat).not.to.have.been.called
+        })
+      })
+
+      describe('The mapped array does not include the meta "type" value', () => {
+        beforeEach(() => {
+          sinon.stub(array, 'concat').returns([])
+
+          array.includes.returns(false)
+        })
+
+        afterEach(() => {
+          array.concat.restore()
+        })
+
+        it('returns an array', () => {
+          expect(dedupeClear(array, { type: TYPE, meta: { type: META_TYPE } })).to.deep.equal([])
+        })
+
+        it('calls concat with an object', () => {
+          dedupeClear(array, { type: TYPE, meta: { type: META_TYPE } })
+
+          const {
+            concat: {
+              firstCall: {
+                args: [ object ]
+              }
+            }
+          } = array
+
+          expect(object).to.deep.equal({ type: TYPE, meta: { type: META_TYPE } })
+        })
+      })
+    })
+
+    describe('Without parameters', () => {
+      const array = []
+
+      beforeEach(() => {
+        sinon.stub(Array.prototype, 'map').returns(array)
+        sinon.stub(array, 'includes')
+      })
+
+      afterEach(() => {
+        Array.prototype.map.restore()
+        array.includes.restore()
+      })
+
+      beforeEach(() => {
+        dedupeStore()
+      })
+
+      it('invokes the "map" function', () => {
+        const {
+          map: {
+            firstCall: {
+              args: [ map ]
+            }
+          }
+        } = Array.prototype
+
+        expect(map).to.equal(mapMetaType)
+      })
+
+      it('invokes the "includes" function with the meta "type" value', () => {
+        const {
+          includes: {
+            firstCall: {
+              args: [ metaType ]
+            }
+          }
+        } = array
+
+        expect(metaType).to.be.undefined
+      })
+    })
   })
 
   xdescribe('filterHardStorage()', () => {
@@ -2483,8 +2896,16 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('createStoreMetaArray()', () => {
     describe('Always', () => {
-      it('returns an array', () => {
-        expect(createStoreMetaArray([])).to.be.an('array')
+      describe('An array is passed as an argument', () => {
+        it('returns an array', () => {
+          expect(createStoreMetaArray([])).to.be.an('array')
+        })
+      })
+
+      describe('An array is not passed as an argument', () => {
+        it('returns an array', () => {
+          expect(createStoreMetaArray()).to.be.an('array')
+        })
       })
     })
 
