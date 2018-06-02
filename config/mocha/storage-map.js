@@ -1690,19 +1690,22 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state is to be cached for one day', () => {
         it('returns an object', () => {
-          expect(createIsHardStorage({ cacheFor })).to.deep.equal({ cacheFor, isHardStorage: true })
+          expect(createIsHardStorage({ cacheFor }))
+            .to.deep.equal({ cacheFor, isHardStorage: true })
         })
       })
 
       describe('The state is to be cached for more than one day', () => {
         it('returns an object', () => {
-          expect(createIsHardStorage({ cacheFor: cacheFor + 1 })).to.deep.equal({ cacheFor: cacheFor + 1, isHardStorage: true })
+          expect(createIsHardStorage({ cacheFor: cacheFor + 1 }))
+            .to.deep.equal({ cacheFor: cacheFor + 1, isHardStorage: true })
         })
       })
 
       describe('The state is to be cached for less than one day', () => {
         it('returns an object', () => {
-          expect(createIsHardStorage({ cacheFor: cacheFor - 1 })).to.deep.equal({ cacheFor: cacheFor - 1 })
+          expect(createIsHardStorage({ cacheFor: cacheFor - 1 }))
+            .to.deep.equal({ cacheFor: cacheFor - 1 })
         })
       })
     })
@@ -1720,26 +1723,30 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state is to be cached for one hour', () => {
         it('returns an object', () => {
-          expect(createIsSoftStorage({ cacheFor })).to.deep.equal({ cacheFor, isSoftStorage: true })
+          expect(createIsSoftStorage({ cacheFor }))
+            .to.deep.equal({ cacheFor, isSoftStorage: true })
         })
       })
 
       describe('The state is to be cached for less than one day', () => {
         it('returns an object', () => {
-          expect(createIsSoftStorage({ cacheFor: (cacheFor * 24) - 1 })).to.deep.equal({ cacheFor: (cacheFor * 24) - 1, isSoftStorage: true })
+          expect(createIsSoftStorage({ cacheFor: (cacheFor * 24) - 1 }))
+            .to.deep.equal({ cacheFor: (cacheFor * 24) - 1, isSoftStorage: true })
         })
       })
 
       describe('The state is to be cached for less than one hour', () => {
         it('returns an object', () => {
-          expect(createIsSoftStorage({ cacheFor: cacheFor - 1 })).to.deep.equal({ cacheFor: cacheFor - 1 })
+          expect(createIsSoftStorage({ cacheFor: cacheFor - 1 }))
+            .to.deep.equal({ cacheFor: cacheFor - 1 })
         })
       })
     })
 
     describe('Without configuration', () => {
       it('returns an object', () => {
-        expect(createIsSoftStorage()).to.deep.equal({})
+        expect(createIsSoftStorage())
+          .to.deep.equal({})
       })
     })
   })
@@ -1748,20 +1755,23 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With configuration', () => {
       describe('The state has a "comparator" function', () => {
         it('returns an object', () => {
-          expect(createComparator({ comparator: COMPARATOR })).to.deep.equal({ comparator: COMPARATOR })
+          expect(createComparator({ comparator: COMPARATOR }))
+            .to.deep.equal({ comparator: COMPARATOR })
         })
       })
 
       describe('The state does not have a "comparator" function', () => {
         it('returns an object', () => {
-          expect(createComparator({})).to.deep.equal({})
+          expect(createComparator({}))
+            .to.deep.equal({})
         })
       })
     })
 
     describe('Without configuration', () => {
       it('returns an object', () => {
-        expect(createComparator()).to.deep.equal({})
+        expect(createComparator())
+          .to.deep.equal({})
       })
     })
   })
@@ -1770,20 +1780,23 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With configuration', () => {
       describe('The state has an "accessedAt" value', () => {
         it('returns an object', () => {
-          expect(createAccessedAt({ accessedAt: DATE_NOW })).to.deep.equal({ accessedAt: DATE_NOW })
+          expect(createAccessedAt({ accessedAt: DATE_NOW }))
+            .to.deep.equal({ accessedAt: DATE_NOW })
         })
       })
 
       describe('The state does not have an "accessedAt" value', () => {
         it('returns an object', () => {
-          expect(createAccessedAt({})).to.deep.equal({})
+          expect(createAccessedAt({}))
+            .to.deep.equal({})
         })
       })
     })
 
     describe('Without configuration', () => {
       it('returns an object', () => {
-        expect(createAccessedAt()).to.deep.equal({})
+        expect(createAccessedAt())
+          .to.deep.equal({})
       })
     })
   })
@@ -1792,20 +1805,23 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With configuration', () => {
       describe('The state has a "cachedAt" value', () => {
         it('returns an object', () => {
-          expect(createCachedAt({ cachedAt: CACHED_AT })).to.deep.equal({ cachedAt: CACHED_AT })
+          expect(createCachedAt({ cachedAt: CACHED_AT }))
+            .to.deep.equal({ cachedAt: CACHED_AT })
         })
       })
 
       describe('The state does not have a "cachedAt" value', () => {
         it('returns an object', () => {
-          expect(createCachedAt({})).to.deep.equal({})
+          expect(createCachedAt({}))
+            .to.deep.equal({})
         })
       })
     })
 
     describe('Without configuration', () => {
       it('returns an object', () => {
-        expect(createCachedAt()).to.deep.equal({})
+        expect(createCachedAt())
+          .to.deep.equal({})
       })
     })
   })
@@ -1814,20 +1830,23 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With configuration', () => {
       describe('The state has a "cacheFor" value', () => {
         it('returns an object', () => {
-          expect(createCacheFor({ cacheFor: CACHE_FOR })).to.deep.equal({ cacheFor: CACHE_FOR })
+          expect(createCacheFor({ cacheFor: CACHE_FOR }))
+            .to.deep.equal({ cacheFor: CACHE_FOR })
         })
       })
 
       describe('The state does not have a "cacheFor" value', () => {
         it('returns an object', () => {
-          expect(createCacheFor({})).to.deep.equal({})
+          expect(createCacheFor({}))
+            .to.deep.equal({})
         })
       })
     })
 
     describe('Without configuration', () => {
       it('returns an object', () => {
-        expect(createCacheFor()).to.deep.equal({})
+        expect(createCacheFor())
+          .to.deep.equal({})
       })
     })
   })
@@ -1836,51 +1855,57 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('With configuration', () => {
       describe('The state has a "comparator" function', () => {
         it('returns an object', () => {
-          expect(createMeta({ comparator: COMPARATOR })).to.deep.equal({ comparator: COMPARATOR })
+          expect(createMeta({ comparator: COMPARATOR }))
+            .to.deep.equal({ comparator: COMPARATOR })
         })
       })
 
       describe('The state has an "accessedAt" value', () => {
         it('returns an object', () => {
-          expect(createMeta({ accessedAt: DATE_NOW })).to.deep.equal({ accessedAt: DATE_NOW })
+          expect(createMeta({ accessedAt: DATE_NOW }))
+            .to.deep.equal({ accessedAt: DATE_NOW })
         })
       })
 
       describe('The state has a "cachedAt" value', () => {
         it('returns an object', () => {
-          expect(createMeta({ cachedAt: CACHED_AT })).to.deep.equal({ cachedAt: CACHED_AT })
+          expect(createMeta({ cachedAt: CACHED_AT }))
+            .to.deep.equal({ cachedAt: CACHED_AT })
         })
       })
 
       describe('The state has a "cacheFor" value', () => {
         it('returns an object', () => {
-          expect(createMeta({ cacheFor: CACHE_FOR })).to.deep.equal({ cacheFor: CACHE_FOR })
+          expect(createMeta({ cacheFor: CACHE_FOR }))
+            .to.deep.equal({ cacheFor: CACHE_FOR })
         })
       })
 
       describe('The state has an "isSoftStorage" value', () => {
         it('returns an object', () => {
-          expect(createMeta({ isSoftStorage: true })).to.deep.equal({ isSoftStorage: true })
+          expect(createMeta({ isSoftStorage: true }))
+            .to.deep.equal({ isSoftStorage: true })
         })
       })
 
       describe('The state has an "isHardStorage" value', () => {
         it('returns an object', () => {
-          expect(createMeta({ isHardStorage: true })).to.deep.equal({ isHardStorage: true })
+          expect(createMeta({ isHardStorage: true }))
+            .to.deep.equal({ isHardStorage: true })
         })
       })
 
       describe('The state does not have a "comparator" function', () => {
         it('returns an object', () => {
-          expect(
-            createMeta({
-              accessedAt: ACCESSED_AT,
-              cachedAt: CACHED_AT,
-              cacheFor: CACHE_FOR,
-              isSoftStorage: true,
-              isHardStorage: true
-            })
-          )
+          const meta = createMeta({
+            accessedAt: ACCESSED_AT,
+            cachedAt: CACHED_AT,
+            cacheFor: CACHE_FOR,
+            isSoftStorage: true,
+            isHardStorage: true
+          })
+
+          expect(meta)
             .to.deep.equal({
               accessedAt: ACCESSED_AT,
               cachedAt: CACHED_AT,
@@ -1893,15 +1918,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state does not have an "accessedAt" value', () => {
         it('returns an object', () => {
-          expect(
-            createMeta({
-              comparator: COMPARATOR,
-              cachedAt: CACHED_AT,
-              cacheFor: CACHE_FOR,
-              isSoftStorage: true,
-              isHardStorage: true
-            })
-          )
+          const meta = createMeta({
+            comparator: COMPARATOR,
+            cachedAt: CACHED_AT,
+            cacheFor: CACHE_FOR,
+            isSoftStorage: true,
+            isHardStorage: true
+          })
+
+          expect(meta)
             .to.deep.equal({
               comparator: COMPARATOR,
               cachedAt: CACHED_AT,
@@ -1914,15 +1939,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state does not have a "cachedAt" value', () => {
         it('returns an object', () => {
-          expect(
-            createMeta({
-              comparator: COMPARATOR,
-              accessedAt: ACCESSED_AT,
-              cacheFor: CACHE_FOR,
-              isSoftStorage: true,
-              isHardStorage: true
-            })
-          )
+          const meta = createMeta({
+            comparator: COMPARATOR,
+            accessedAt: ACCESSED_AT,
+            cacheFor: CACHE_FOR,
+            isSoftStorage: true,
+            isHardStorage: true
+          })
+
+          expect(meta)
             .to.deep.equal({
               comparator: COMPARATOR,
               accessedAt: ACCESSED_AT,
@@ -1935,15 +1960,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state does not have a "cacheFor" value', () => {
         it('returns an object', () => {
-          expect(
-            createMeta({
-              comparator: COMPARATOR,
-              accessedAt: ACCESSED_AT,
-              cachedAt: CACHED_AT,
-              isSoftStorage: true,
-              isHardStorage: true
-            })
-          )
+          const meta = createMeta({
+            comparator: COMPARATOR,
+            accessedAt: ACCESSED_AT,
+            cachedAt: CACHED_AT,
+            isSoftStorage: true,
+            isHardStorage: true
+          })
+
+          expect(meta)
             .to.deep.equal({
               comparator: COMPARATOR,
               accessedAt: ACCESSED_AT,
@@ -1956,15 +1981,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state does not have an "isSoftStorage" value', () => {
         it('returns an object', () => {
-          expect(
-            createMeta({
-              comparator: COMPARATOR,
-              accessedAt: ACCESSED_AT,
-              cachedAt: CACHED_AT,
-              cacheFor: CACHE_FOR,
-              isHardStorage: true
-            })
-          )
+          const meta = createMeta({
+            comparator: COMPARATOR,
+            accessedAt: ACCESSED_AT,
+            cachedAt: CACHED_AT,
+            cacheFor: CACHE_FOR,
+            isHardStorage: true
+          })
+
+          expect(meta)
             .to.deep.equal({
               comparator: COMPARATOR,
               accessedAt: ACCESSED_AT,
@@ -1977,15 +2002,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
       describe('The state does not have an "isHardStorage" value', () => {
         it('returns an object', () => {
-          expect(
-            createMeta({
-              comparator: COMPARATOR,
-              accessedAt: ACCESSED_AT,
-              cachedAt: CACHED_AT,
-              cacheFor: CACHE_FOR,
-              isSoftStorage: true
-            })
-          )
+          const meta = createMeta({
+            comparator: COMPARATOR,
+            accessedAt: ACCESSED_AT,
+            cachedAt: CACHED_AT,
+            cacheFor: CACHE_FOR,
+            isSoftStorage: true
+          })
+
+          expect(meta)
             .to.deep.equal({
               comparator: COMPARATOR,
               accessedAt: ACCESSED_AT,
@@ -1999,7 +2024,8 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
     describe('Without configuration', () => {
       it('returns an object', () => {
-        expect(createMeta()).to.deep.equal({})
+        expect(createMeta())
+          .to.deep.equal({})
       })
     })
   })
@@ -2175,33 +2201,335 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   })
 
-  xdescribe('filterStoreHardStorageArray()', () => {
+  describe('filterStoreHardStorageArray()', () => {
+    describe('Always', () => {
+      describe('With parameters', () => {
+        it('returns an array', () => {
+          expect(filterStoreHardStorageArray([]))
+        })
+      })
 
+      describe('Without parameters', () => {
+        it('returns an array', () => {
+          expect(filterStoreHardStorageArray())
+        })
+      })
+    })
+
+    describe('An array is passed as an argument', () => {
+      it('Filters the array', () => {
+        const array = []
+        sinon.stub(array, 'filter')
+
+        filterStoreHardStorageArray(array)
+
+        const {
+          filter: {
+            firstCall: {
+              args: [ filter ]
+            }
+          }
+        } = array
+
+        expect(filter).to.equal(filterHardStorage)
+      })
+    })
   })
-  xdescribe('filterStoreSoftStorageArray()', () => {
 
+  describe('filterStoreSoftStorageArray()', () => {
+    describe('Always', () => {
+      describe('With parameters', () => {
+        it('returns an array', () => {
+          expect(filterStoreSoftStorageArray([]))
+        })
+      })
+
+      describe('Without parameters', () => {
+        it('returns an array', () => {
+          expect(filterStoreSoftStorageArray())
+        })
+      })
+    })
+
+    describe('An array is passed as an argument', () => {
+      it('Filters the array', () => {
+        const array = []
+        sinon.stub(array, 'filter')
+
+        filterStoreSoftStorageArray(array)
+
+        const {
+          filter: {
+            firstCall: {
+              args: [ filter ]
+            }
+          }
+        } = array
+
+        expect(filter).to.equal(filterSoftStorage)
+      })
+    })
   })
-  xdescribe('filterStoreStorageArray()', () => {
 
+  describe('filterStoreStorageArray()', () => {
+    describe('Always', () => {
+      describe('With parameters', () => {
+        it('returns an array', () => {
+          expect(filterStoreStorageArray([]))
+        })
+      })
+
+      describe('Without parameters', () => {
+        it('returns an array', () => {
+          expect(filterStoreStorageArray())
+        })
+      })
+    })
+
+    describe('An array is passed as an argument', () => {
+      it('Filters the array', () => {
+        const array = []
+        sinon.stub(array, 'filter')
+
+        filterStoreStorageArray(array)
+
+        const {
+          filter: {
+            firstCall: {
+              args: [ filter ]
+            }
+          }
+        } = array
+
+        expect(filter).to.equal(filterStorage)
+      })
+    })
   })
 
-  xdescribe('filterFetchArray()', () => {
+  describe('filterFetchArray()', () => {
+    describe('Always', () => {
+      describe('With parameters', () => {
+        it('returns an array', () => {
+          expect(filterFetchArray([]))
+        })
+      })
 
+      describe('Without parameters', () => {
+        it('returns an array', () => {
+          expect(filterFetchArray())
+        })
+      })
+    })
+
+    describe('An array is passed as an argument', () => {
+      it('Filters the array', () => {
+        const array = []
+        sinon.stub(array, 'filter')
+
+        filterFetchArray(array)
+
+        const {
+          filter: {
+            firstCall: {
+              args: [ filter ]
+            }
+          }
+        } = array
+
+        expect(filter).to.equal(filterFetch)
+      })
+    })
   })
-  xdescribe('filterStoreArray()', () => {
 
+  describe('filterStoreArray()', () => {
+    describe('Always', () => {
+      describe('With parameters', () => {
+        it('returns an array', () => {
+          expect(filterStoreArray([]))
+        })
+      })
+
+      describe('Without parameters', () => {
+        it('returns an array', () => {
+          expect(filterStoreArray())
+        })
+      })
+    })
+
+    describe('An array is passed as an argument', () => {
+      it('Filters the array', () => {
+        const array = []
+        sinon.stub(array, 'filter')
+
+        filterStoreArray(array)
+
+        const {
+          filter: {
+            firstCall: {
+              args: [ filter ]
+            }
+          }
+        } = array
+
+        expect(filter).to.equal(filterStore)
+      })
+    })
   })
-  xdescribe('filterClearArray()', () => {
 
+  describe('filterClearArray()', () => {
+    describe('Always', () => {
+      describe('With parameters', () => {
+        it('returns an array', () => {
+          expect(filterClearArray([]))
+        })
+      })
+
+      describe('Without parameters', () => {
+        it('returns an array', () => {
+          expect(filterClearArray())
+        })
+      })
+    })
+
+    describe('An array is passed as an argument', () => {
+      it('Filters the array', () => {
+        const array = []
+        sinon.stub(array, 'filter')
+
+        filterClearArray(array)
+
+        const {
+          filter: {
+            firstCall: {
+              args: [ filter ]
+            }
+          }
+        } = array
+
+        expect(filter).to.equal(filterClear)
+      })
+    })
   })
 
-  xdescribe('filterNotFetchMapArray()', () => {
+  describe('filterNotFetchMapArray()', () => {
+    describe('Always', () => {
+      describe('With parameters', () => {
+        it('returns an array', () => {
+          expect(filterNotFetchMapArray([], {}))
+        })
+      })
 
+      describe('Without parameters', () => {
+        it('returns an array', () => {
+          expect(filterNotFetchMapArray())
+        })
+      })
+    })
+
+    describe('An array is passed as an argument', () => {
+      it('Filters the array', () => {
+        const array = []
+        sinon.stub(array, 'filter')
+
+        filterNotFetchMapArray(array, {})
+
+        const {
+          filter: {
+            firstCall: {
+              args: [ filter ]
+            }
+          }
+        } = array
+
+        expect(filter).to.be.a('function')
+      })
+    })
   })
-  xdescribe('filterIsUniqueMapArray()', () => {
 
+  describe('filterIsUniqueMapArray()', () => {
+    describe('Always', () => {
+      describe('With parameters', () => {
+        it('returns an array', () => {
+          expect(filterIsUniqueMapArray([], {}))
+        })
+      })
+
+      describe('Without parameters', () => {
+        it('returns an array', () => {
+          expect(filterIsUniqueMapArray())
+        })
+      })
+    })
+
+    describe('An array is passed as an argument', () => {
+      it('Filters the array', () => {
+        const array = []
+        sinon.stub(array, 'filter')
+
+        filterIsUniqueMapArray(array, {})
+
+        const {
+          filter: {
+            firstCall: {
+              args: [ filter ]
+            }
+          }
+        } = array
+
+        expect(filter).to.be.a('function')
+      })
+    })
   })
-  xdescribe('createStoreMetaArray()', () => {
 
+  describe('createStoreMetaArray()', () => {
+    describe('Always', () => {
+      it('returns an array', () => {
+        expect(createStoreMetaArray([])).to.be.an('array')
+      })
+    })
+
+    describe('An array is passed as an argument', () => {
+      const one = []
+
+      beforeEach(() => {
+        sinon.stub(one, 'reduce')
+
+        one.reduce.onCall(0).returns(one)
+      })
+
+      afterEach(() => {
+        one.reduce.restore()
+      })
+
+      it('calls reduce with "reduceStore" and an array', () => {
+        createStoreMetaArray(one)
+
+        const {
+          reduce: {
+            firstCall: {
+              args: [ ONE, TWO ]
+            }
+          }
+        } = one
+
+        expect(ONE).to.equal(reduceStore)
+        expect(TWO).to.be.an('array')
+      })
+
+      it('calls reduce with "dedupeStore" and an array', () => {
+        createStoreMetaArray(one)
+
+        const {
+          reduce: {
+            secondCall: {
+              args: [ ONE, TWO ]
+            }
+          }
+        } = one
+
+        expect(ONE).to.equal(dedupeStore)
+        expect(TWO).to.be.an('array')
+      })
+    })
   })
 })

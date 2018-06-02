@@ -156,8 +156,8 @@ export const filterFetchArray = (array = []) => array.filter(filterFetch)
 export const filterStoreArray = (array = []) => array.filter(filterStore)
 export const filterClearArray = (array = []) => array.filter(filterClear)
 
-export const filterNotFetchMapArray = (params = {}, array = []) => array.filter((configuration) => filterNotFetchMap(params, configuration))
-export const filterIsUniqueMapArray = (params = {}, array = []) => array.filter((configuration) => filterIsUniqueMap(params, configuration))
+export const filterNotFetchMapArray = (array = [], params = {}) => array.filter((configuration) => filterNotFetchMap(params, configuration))
+export const filterIsUniqueMapArray = (array = [], params = {}) => array.filter((configuration) => filterIsUniqueMap(params, configuration))
 
 export const createStoreMetaArray = (array = []) => (
   array
@@ -165,114 +165,114 @@ export const createStoreMetaArray = (array = []) => (
     .reduce(dedupeStore, [])
 )
 
-export function initialiseFetchMetaMap (params = {}, array = []) {
+export function initialiseFetchMetaMap (array = [], params = {}) {
   array
     .forEach((configuration) => putIntoFetchMetaMap(params, configuration))
 }
 
-export function initialiseFetchHardStorage (params = {}, array = []) {
+export function initialiseFetchHardStorage (array = [], params = {}) {
   filterStoreHardStorageArray(array)
     .reduce(reduceFetch, [])
     .forEach((configuration) => putIntoFetchMap(params, configuration))
 }
 
-export function initialiseFetchSoftStorage (params = {}, array = []) {
+export function initialiseFetchSoftStorage (array = [], params = {}) {
   filterStoreSoftStorageArray(array)
     .reduce(reduceFetch, [])
     .forEach((configuration) => putIntoFetchMap(params, configuration))
 }
 
-export function initialiseFetchStorage (params = {}, array = []) {
+export function initialiseFetchStorage (array = [], params = {}) {
   filterStoreStorageArray(array)
     .reduce(reduceFetch, [])
     .forEach((configuration) => putIntoFetchMap(params, configuration))
 }
 
-export function initialiseFetch (params = {}, array = []) {
+export function initialiseFetch (array = [], params = {}) {
   const fetchArray = filterFetchArray(array)
 
-  initialiseFetchHardStorage(params, fetchArray)
+  initialiseFetchHardStorage(fetchArray, params)
 
-  initialiseFetchSoftStorage(params, fetchArray)
+  initialiseFetchSoftStorage(fetchArray, params)
 
-  initialiseFetchStorage(params, fetchArray)
+  initialiseFetchStorage(fetchArray, params)
 }
 
-export function initialiseStoreMetaMap (params = {}, array = []) {
+export function initialiseStoreMetaMap (array = [], params = {}) {
   array
     .forEach((configuration) => putIntoStoreMetaMap(params, configuration))
 }
 
-export function initialiseStoreNotFetchMap (params = {}, array = []) {
-  filterNotFetchMapArray(params, array)
+export function initialiseStoreNotFetchMap (array = [], params = {}) {
+  filterNotFetchMapArray(array, params)
     .reduce(reduceStore, [])
     .forEach((configuration) => putIntoStoreMap(params, configuration))
 }
 
-export function initialiseStoreHardStorage (params = {}, array = []) {
+export function initialiseStoreHardStorage (array = [], params = {}) {
   const hardStorageArray = filterStoreHardStorageArray(array)
 
-  initialiseStoreNotFetchMap(params, hardStorageArray)
+  initialiseStoreNotFetchMap(hardStorageArray, params)
 
   const hardStorageMetaArray = createStoreMetaArray(hardStorageArray)
 
-  initialiseFetchMetaMap(params, hardStorageMetaArray)
+  initialiseFetchMetaMap(hardStorageMetaArray, params)
 
-  initialiseStoreMetaMap(params, hardStorageMetaArray)
+  initialiseStoreMetaMap(hardStorageMetaArray, params)
 }
 
-export function initialiseStoreSoftStorage (params = {}, array = []) {
+export function initialiseStoreSoftStorage (array = [], params = {}) {
   const softStorageArray = filterStoreSoftStorageArray(array)
 
-  initialiseStoreNotFetchMap(params, softStorageArray)
+  initialiseStoreNotFetchMap(softStorageArray, params)
 
   const softStorageMetaArray = createStoreMetaArray(softStorageArray)
 
-  initialiseFetchMetaMap(params, softStorageMetaArray)
+  initialiseFetchMetaMap(softStorageMetaArray, params)
 
-  initialiseStoreMetaMap(params, softStorageMetaArray)
+  initialiseStoreMetaMap(softStorageMetaArray, params)
 }
 
-export function initialiseStoreStorage (params = {}, array = []) {
+export function initialiseStoreStorage (array = [], params = {}) {
   const storageArray = filterStoreStorageArray(array)
 
-  initialiseStoreNotFetchMap(params, storageArray)
+  initialiseStoreNotFetchMap(storageArray, params)
 
   const storageMetaArray = createStoreMetaArray(storageArray)
 
-  initialiseFetchMetaMap(params, storageMetaArray)
+  initialiseFetchMetaMap(storageMetaArray, params)
 
-  initialiseStoreMetaMap(params, storageMetaArray)
+  initialiseStoreMetaMap(storageMetaArray, params)
 }
 
-export function initialiseStore (params = {}, array = []) {
+export function initialiseStore (array = [], params = {}) {
   const storeArray = filterStoreArray(array)
 
-  initialiseStoreHardStorage(params, storeArray)
+  initialiseStoreHardStorage(storeArray, params)
 
-  initialiseStoreSoftStorage(params, storeArray)
+  initialiseStoreSoftStorage(storeArray, params)
 
-  initialiseStoreStorage(params, storeArray)
+  initialiseStoreStorage(storeArray, params)
 }
 
-export function initialiseClearIsUniqueMap (params = {}, array = []) {
-  filterIsUniqueMapArray(params, array)
+export function initialiseClearIsUniqueMap (array = [], params = {}) {
+  filterIsUniqueMapArray(array, params)
     .reduce(reduceClear, [])
     .forEach((configuration) => putIntoClearMap(params, configuration))
 }
 
-export function initialiseClear (params = {}, array = []) {
+export function initialiseClear (array = [], params = {}) {
   const clearArray = filterClearArray(array)
 
-  initialiseClearIsUniqueMap(params, clearArray)
+  initialiseClearIsUniqueMap(clearArray, params)
 }
 
-export function initialise (params = {}, array = []) {
-  initialiseFetch(params, array)
+export function initialise (array = [], params = {}) {
+  initialiseFetch(array, params)
 
-  initialiseStore(params, array)
+  initialiseStore(array, params)
 
-  initialiseClear(params, array)
+  initialiseClear(array, params)
 }
 
 export default (array) => {
@@ -283,7 +283,7 @@ export default (array) => {
     const storeMetaMap = new Map()
     const clearMap = new Map()
 
-    initialise({ fetchMap, storeMap, fetchMetaMap, storeMetaMap, clearMap }, array)
+    initialise(array, { fetchMap, storeMap, fetchMetaMap, storeMetaMap, clearMap })
 
     return (store) => (next) => ({ type, ...action } = {}) => {
       if (fetchMap.has(type)) {
