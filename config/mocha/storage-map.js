@@ -243,10 +243,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('does not dispatch the hard storage fetch actions', () => {
-              expect(actions.length).to.not.equal(2)
+              expect(actions.length).not.to.equal(2)
 
               expect(actions)
-                .to.not.deep.include({
+                .not.to.deep.include({
                   type: STORAGE_FETCH,
                   meta: {
                     type: HARD_STORE,
@@ -257,7 +257,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 })
 
               expect(actions)
-                .to.not.deep.include({
+                .not.to.deep.include({
                   type: STORAGE_FETCH,
                   data: { type: HARD_FETCH },
                   meta: {
@@ -303,10 +303,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('does not invoke the "next" middleware with the fetch action', () => {
-              expect(actions.length).to.not.equal(1)
+              expect(actions.length).not.to.equal(1)
 
               expect(actions)
-                .to.not.deep.equal([{ type: HARD_FETCH }])
+                .not.to.deep.equal([{ type: HARD_FETCH }])
             })
 
             it('dispatches the hard storage fetch actions', () => {
@@ -378,10 +378,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
           })
 
           it('does not dispatch the hard storage fetch actions', () => {
-            expect(actions.length).to.not.equal(2)
+            expect(actions.length).not.to.equal(2)
 
             expect(actions)
-              .to.not.deep.include({
+              .not.to.deep.include({
                 type: STORAGE_FETCH,
                 meta: {
                   type: HARD_STORE,
@@ -392,7 +392,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               })
 
             expect(actions)
-              .to.not.deep.include({
+              .not.to.deep.include({
                 type: STORAGE_FETCH,
                 data: { type: HARD_FETCH },
                 meta: {
@@ -634,10 +634,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('does not dispatch the soft storage fetch actions', () => {
-              expect(actions.length).to.not.equal(2)
+              expect(actions.length).not.to.equal(2)
 
               expect(actions)
-                .to.not.deep.include({
+                .not.to.deep.include({
                   type: STORAGE_FETCH,
                   meta: {
                     type: SOFT_STORE,
@@ -648,7 +648,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 })
 
               expect(actions)
-                .to.not.deep.include({
+                .not.to.deep.include({
                   type: STORAGE_FETCH,
                   data: { type: SOFT_FETCH },
                   meta: {
@@ -694,10 +694,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('does not invoke the "next" middleware with the fetch action', () => {
-              expect(actions.length).to.not.equal(1)
+              expect(actions.length).not.to.equal(1)
 
               expect(actions)
-                .to.not.deep.equal([{ type: SOFT_FETCH }])
+                .not.to.deep.equal([{ type: SOFT_FETCH }])
             })
 
             it('dispatches the soft storage fetch actions', () => {
@@ -769,10 +769,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
           })
 
           it('does not dispatch the soft storage fetch actions', () => {
-            expect(actions.length).to.not.equal(2)
+            expect(actions.length).not.to.equal(2)
 
             expect(actions)
-              .to.not.deep.include({
+              .not.to.deep.include({
                 type: STORAGE_FETCH,
                 meta: {
                   type: SOFT_STORE,
@@ -783,7 +783,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               })
 
             expect(actions)
-              .to.not.deep.include({
+              .not.to.deep.include({
                 type: STORAGE_FETCH,
                 data: { type: SOFT_FETCH },
                 meta: {
@@ -1024,10 +1024,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('does not dispatch the soft storage fetch actions', () => {
-              expect(actions.length).to.not.equal(2)
+              expect(actions.length).not.to.equal(2)
 
               expect(actions)
-                .to.not.deep.include({
+                .not.to.deep.include({
                   type: STORAGE_FETCH,
                   meta: {
                     type: STATE_STORE,
@@ -1037,7 +1037,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 })
 
               expect(actions)
-                .to.not.deep.include({
+                .not.to.deep.include({
                   type: STORAGE_FETCH,
                   data: { type: STATE_FETCH },
                   meta: {
@@ -1081,10 +1081,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('does not invoke the "next" middleware with the fetch action', () => {
-              expect(actions.length).to.not.equal(1)
+              expect(actions.length).not.to.equal(1)
 
               expect(actions)
-                .to.not.deep.equal([{ type: STATE_FETCH }])
+                .not.to.deep.equal([{ type: STATE_FETCH }])
             })
 
             it('dispatches the soft storage fetch actions', () => {
@@ -1153,10 +1153,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
           })
 
           it('does not dispatch the soft storage fetch actions', () => {
-            expect(actions.length).to.not.equal(2)
+            expect(actions.length).not.to.equal(2)
 
             expect(actions)
-              .to.not.deep.include({
+              .not.to.deep.include({
                 type: STORAGE_FETCH,
                 meta: {
                   type: STATE_STORE,
@@ -1166,7 +1166,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               })
 
             expect(actions)
-              .to.not.deep.include({
+              .not.to.deep.include({
                 type: STORAGE_FETCH,
                 data: { type: STATE_FETCH },
                 meta: {

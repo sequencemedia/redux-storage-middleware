@@ -1,6 +1,6 @@
 {
   "name": "redux-storage-middleware",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Redux Storage middleware",
   "main": "./index.js",
   "scripts": {
@@ -47,13 +47,13 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
-    "husky": "^1.0.0-rc.8",
+    "husky": "^1.0.0-rc.9",
     "mocha": "^5.2.0",
-    "nyc": "^11.8.0",
+    "nyc": "^12.0.2",
     "redux": "^4.0.0",
-    "redux-mock-store": "^1.5.1",
-    "sinon": "^5.0.10",
-    "sinon-chai": "^3.1.0"
+    "redux-mock-store": "^1.5.3",
+    "sinon": "^6.0.0",
+    "sinon-chai": "^3.2.0"
   },
   "husky": {
     "hooks": {
