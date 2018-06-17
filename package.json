@@ -1,6 +1,6 @@
 {
   "name": "redux-storage-middleware",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Redux Storage middleware",
   "main": "./index.js",
   "scripts": {
@@ -19,7 +19,7 @@
   "license": "MIT",
   "author": "Jonathan Perry for Sequence Media Limited",
   "engines": {
-    "node": ">=7.0.0"
+    "node": ">=8.11.3"
   },
   "nyc": {
     "include": [
