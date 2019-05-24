@@ -1,6 +1,3 @@
-/* eslint-env mocha */
-/* eslint no-unused-vars: 0, no-unused-expressions: 0, no-shadow: 0 */
-
 import { expect } from 'chai'
 import sinon from 'sinon'
 

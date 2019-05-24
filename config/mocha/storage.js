@@ -1,6 +1,3 @@
-/* eslint-env mocha */
-/* eslint no-unused-vars: 0, no-unused-expressions: 0, no-shadow: 0 */
-
 import chai, { expect } from 'chai'
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
@@ -21,8 +18,6 @@ import storage from 'redux-storage-middleware/storage'
 chai.use(sinonChai)
 
 describe('Redux Storage Middleware - Storage', () => {
-  let store
-
   const ONE_SECOND = 1000
   const ONE_MINUTE = ONE_SECOND * 60
   const ONE_HOUR = ONE_MINUTE * 60
@@ -67,8 +62,6 @@ describe('Redux Storage Middleware - Storage', () => {
 
   describe('Hard storage', () => {
     describe('Compare', () => {
-      let action
-
       const isHardStorage = true
 
       describe('With state', () => {
@@ -516,8 +509,6 @@ describe('Redux Storage Middleware - Storage', () => {
 
   describe('Soft storage', () => {
     describe('Compare', () => {
-      let action
-
       const isSoftStorage = true
 
       describe('With state', () => {
@@ -965,8 +956,6 @@ describe('Redux Storage Middleware - Storage', () => {
 
   describe('State storage', () => {
     describe('Compare', () => {
-      let action
-
       describe('With state', () => {
         describe('Always', () => {
           let store

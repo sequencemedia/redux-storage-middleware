@@ -1,6 +1,6 @@
 {
   "name": "redux-storage-middleware",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Redux Storage middleware",
   "main": "./index.js",
   "scripts": {
@@ -8,13 +8,13 @@
     "clean": "rm -rf lib",
     "babel": "babel src -d lib",
     "babel:watch": "npm run babel -- -w",
-    "lint": "eslint src config/mocha",
+    "lint": "eslint *.js src config/mocha",
     "lint:fix": "npm run lint -- --fix",
-    "test": "nyc mocha config/mocha --require babel-register"
+    "test": "nyc mocha config/mocha --require @babel/register"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/sequencemedia/Redux.Storage.Middleware.git"
+    "url": "git://github.com/sequencemedia/redux-storage-middleware.git"
   },
   "license": "MIT",
   "author": "Jonathan Perry for Sequence Media Limited",
@@ -31,23 +31,23 @@
     "report-dir": "config/coverage"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.3",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-module-resolver": "^3.1.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-0": "^6.5.0",
-    "babel-preset-stage-1": "^6.24.1",
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/register": "^7.4.4",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-module-resolver": "^3.2.0",
     "chai": "^4.1.2",
-    "eslint": "^4.19.1",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-import-resolver-babel-module": "^4.0.0",
-    "eslint-plugin-import": "^2.12.0",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.8.0",
-    "eslint-plugin-standard": "^3.1.0",
-    "husky": "^1.0.0-rc.9",
+    "core-js": "^3.1.2",
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-import-resolver-babel-module": "^5.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-node": "^9.0.1",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "husky": "^2.3.0",
     "mocha": "^5.2.0",
     "nyc": "^12.0.2",
     "redux": "^4.0.0",
@@ -57,7 +57,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint:fix; npm run clean; npm run babel; git add ."
+      "pre-commit": "npm run lint:fix && npm run clean && npm run babel && git add lib"
     }
   }
 }

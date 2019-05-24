@@ -1,0 +1,16 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "extends": [
+    "../../.eslintrc"
+  ],
+  "overrides": [
+    {
+      "files": ["storage.js", "storage-map.js", "components/index.js"],
+      "rules": {
+        "no-unused-expressions": "off"
+      }
+    }
+  ]
+}

@@ -1,15 +1,15 @@
 const storage = Symbol.for('storage')
 
 export default class Storage {
-  constructor () {
-    this[storage] = new Map()
+  constructor (map = new Map()) {
+    this[storage] = map
   }
 
   getItem (key) {
     const map = this[storage]
 
     return map.has(key)
-      ? `${map.get(key)}`
+      ? String(map.get(key))
       : null
   }
 
@@ -18,7 +18,7 @@ export default class Storage {
   }
 
   removeItem (key) {
-    this[storage].remove(key)
+    this[storage].delete(key)
   }
 
   clear () {
@@ -26,7 +26,7 @@ export default class Storage {
   }
 
   key (index) {
-    return this[storage].keys[index]
+    return Array.from(this[storage].keys())[index]
   }
 
   get length () {

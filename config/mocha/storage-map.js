@@ -1,6 +1,3 @@
-/* eslint-env mocha */
-/* eslint no-unused-vars: 0, no-unused-expressions: 0, no-shadow: 0 */
-
 import { expect } from 'chai'
 import sinon from 'sinon'
 
@@ -13,7 +10,7 @@ import {
   STORAGE_CLEAR
 } from 'redux-storage-middleware/actions'
 
-import storageMap, {
+import storageMap, { /*
   initialise,
   initialiseFetch,
   initialiseStore,
@@ -27,7 +24,7 @@ import storageMap, {
   initialiseStoreSoftStorage,
   initialiseStoreNotFetchMap,
   initialiseStoreMetaMap,
-  initialiseClearIsUniqueMap,
+  initialiseClearIsUniqueMap, */
 
   isStale,
   isHardStorage,
@@ -60,11 +57,11 @@ import storageMap, {
   filterClear,
 
   max,
-  min,
+  min, /*
 
-  reduceFetch,
-  reduceStore,
-  reduceClear,
+  reduceFetch, */
+  reduceStore, /*
+  reduceClear, */
 
   dedupeFetch,
   dedupeStore,
@@ -72,7 +69,7 @@ import storageMap, {
 
   filterHardStorage,
   filterSoftStorage,
-  filterStorage,
+  filterStorage, /*
 
   filterNotFetchMap,
   filterNotStoreMap,
@@ -83,7 +80,7 @@ import storageMap, {
   putIntoClearMap,
 
   putIntoFetchMetaMap,
-  putIntoStoreMetaMap,
+  putIntoStoreMetaMap, */
 
   filterStoreHardStorageArray,
   filterStoreSoftStorageArray,
@@ -348,7 +345,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           let actions
 
           const accessedAt = DATE_NOW
-          const cachedAt = DATE_NOW - (HARD_CACHE_FOR + TIME_ONE_SECOND)
+          // const cachedAt = DATE_NOW - (HARD_CACHE_FOR + TIME_ONE_SECOND)
           const isHardStorage = true
 
           const configuration = [
@@ -739,7 +736,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           let actions
 
           const accessedAt = DATE_NOW
-          const cachedAt = DATE_NOW - (SOFT_CACHE_FOR + TIME_ONE_SECOND)
+          // const cachedAt = DATE_NOW - (SOFT_CACHE_FOR + TIME_ONE_SECOND)
           const isSoftStorage = true
 
           const configuration = [
@@ -1124,7 +1121,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           let actions
 
           const accessedAt = DATE_NOW
-          const cachedAt = DATE_NOW - (STATE_CACHE_FOR + TIME_ONE_SECOND)
+          // const cachedAt = DATE_NOW - (STATE_CACHE_FOR + TIME_ONE_SECOND)
 
           const configuration = [
             { type: STATE_FETCH, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR } }
@@ -2140,9 +2137,11 @@ describe('Redux Storage Middleware - Storage Map', () => {
   xdescribe('filterFetch()', () => {
 
   })
+
   xdescribe('filterStore()', () => {
 
   })
+
   xdescribe('filterClear()', () => {
 
   })
@@ -2150,9 +2149,11 @@ describe('Redux Storage Middleware - Storage Map', () => {
   xdescribe('reduceFetch()', () => {
 
   })
+
   xdescribe('reduceStore()', () => {
 
   })
+
   xdescribe('reduceClear()', () => {
 
   })
