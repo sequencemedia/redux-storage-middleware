@@ -18,9 +18,6 @@
   },
   "license": "MIT",
   "author": "Jonathan Perry for Sequence Media Limited",
-  "engines": {
-    "node": ">=8.11.3"
-  },
   "nyc": {
     "include": [
       "src/**/*.js"

@@ -10,7 +10,7 @@ import {
   STORAGE_CLEAR
 } from 'redux-storage-middleware/actions'
 
-import storageMap, { /*
+import storageMap, {
   initialise,
   initialiseFetch,
   initialiseStore,
@@ -24,7 +24,7 @@ import storageMap, { /*
   initialiseStoreSoftStorage,
   initialiseStoreNotFetchMap,
   initialiseStoreMetaMap,
-  initialiseClearIsUniqueMap, */
+  initialiseClearIsUniqueMap,
 
   isStale,
   isHardStorage,
@@ -1322,63 +1322,125 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  xdescribe('initialise()', () => {
-
+  describe('initialise()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialise).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseFetch()', () => {
-
+  describe('initialiseFetch()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseFetch).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseStore()', () => {
-
+  describe('initialiseStore()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseStore).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseClear()', () => {
-
+  describe('initialiseClear()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseClear).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseFetchStorage()', () => {
-
+  describe('initialiseFetchStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseFetchStorage).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseFetchHardStorage()', () => {
-
+  describe('initialiseFetchHardStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseFetchHardStorage).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseFetchSoftStorage()', () => {
-
+  describe('initialiseFetchSoftStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseFetchSoftStorage).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseFetchMetaMap()', () => {
-
+  describe('initialiseFetchMetaMap()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseFetchMetaMap).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseStoreStorage()', () => {
-
+  describe('initialiseStoreStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseStoreStorage).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseStoreHardStorage()', () => {
-
+  describe('initialiseStoreHardStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseStoreHardStorage).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseStoreSoftStorage()', () => {
-
+  describe('initialiseStoreSoftStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseStoreSoftStorage).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseStoreNotFetchMap()', () => {
-
+  describe('initialiseStoreNotFetchMap()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseStoreNotFetchMap).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseStoreMetaMap()', () => {
-
+  describe('initialiseStoreMetaMap()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseStoreMetaMap).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('initialiseClearIsUniqueMap()', () => {
-
+  describe('initialiseClearIsUniqueMap()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(initialiseClearIsUniqueMap).to.be.a('function')
+      })
+    })
   })
 
   describe('min()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(min).to.be.a('function')
+      })
+    })
+
     describe('With values', () => {
       describe('A range of values', () => {
         it('returns the smallest number', () => {
@@ -1401,6 +1463,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('max()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(max).to.be.a('function')
+      })
+    })
+
     describe('With values', () => {
       describe('A range of values', () => {
         it('returns the largest number', () => {
@@ -1423,6 +1491,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('isStale()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(isStale).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       describe('The state is stale', () => {
         it('returns true', () => {
@@ -1451,6 +1525,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('isHardStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(isHardStorage).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       const cacheFor = TIME_ONE_DAY
 
@@ -1481,6 +1561,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('isSoftStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(isSoftStorage).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       const cacheFor = TIME_ONE_HOUR
 
@@ -1511,6 +1597,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('hasComparator()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(hasComparator).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       describe('The configuration has a comparator function', () => {
         it('returns true', () => {
@@ -1534,6 +1626,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('filterFor()', () => {
     describe('Always', () => {
+      it('is a function', () => {
+        expect(filterFor).to.be.a('function')
+      })
+
       it('returns a function', () => {
         expect(filterFor()).to.be.a('function')
       })
@@ -1564,6 +1660,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('filterMetaFor()', () => {
     describe('Always', () => {
+      it('is a function', () => {
+        expect(filterMetaFor).to.be.a('function')
+      })
+
       it('returns a function', () => {
         expect(filterMetaFor()).to.be.a('function')
       })
@@ -1593,6 +1693,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('mapType()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(mapType).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       describe('The configuration has a "type" value', () => {
         it('returns the value', () => {
@@ -1615,6 +1721,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('mapMetaType()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(mapMetaType).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       describe('The configuration has a meta "type" value', () => {
         it('returns the value', () => {
@@ -1637,11 +1749,17 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('mapCacheFor()', () => {
-    const cacheFor = CACHE_FOR
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(mapCacheFor).to.be.a('function')
+      })
+    })
 
     describe('With configuration', () => {
       describe('The configuration has a "cacheFor" value', () => {
         it('returns the value', () => {
+          const cacheFor = CACHE_FOR
+
           expect(mapCacheFor({ meta: { cacheFor } })).to.equal(CACHE_FOR)
         })
       })
@@ -1661,11 +1779,17 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('mapCachedAt()', () => {
-    const cachedAt = CACHED_AT
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(mapCachedAt).to.be.a('function')
+      })
+    })
 
     describe('With configuration', () => {
       describe('The configuration has a "cachedAt" value', () => {
         it('returns the value', () => {
+          const cachedAt = CACHED_AT
+
           expect(mapCachedAt({ meta: { cachedAt } })).to.equal(CACHED_AT)
         })
       })
@@ -1685,6 +1809,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('createIsHardStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(createIsHardStorage).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       const cacheFor = TIME_ONE_DAY
 
@@ -1718,6 +1848,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('createIsSoftStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(createIsSoftStorage).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       const cacheFor = TIME_ONE_HOUR
 
@@ -1752,6 +1888,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('createComparator()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(createComparator).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       describe('The state has a "comparator" function', () => {
         it('returns an object', () => {
@@ -1777,6 +1919,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('createAccessedAt()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(createAccessedAt).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       describe('The state has an "accessedAt" value', () => {
         it('returns an object', () => {
@@ -1802,6 +1950,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('createCachedAt()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(createCachedAt).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       describe('The state has a "cachedAt" value', () => {
         it('returns an object', () => {
@@ -1827,6 +1981,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('createCacheFor()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(createCacheFor).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       describe('The state has a "cacheFor" value', () => {
         it('returns an object', () => {
@@ -1852,6 +2012,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('createMeta()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(createMeta).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       describe('The state has a "comparator" function', () => {
         it('returns an object', () => {
@@ -2031,6 +2197,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('hasCacheFor()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(hasCacheFor).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       it('is a positive number', () => {
         expect(hasCacheFor(+1)).to.be.true
@@ -2083,6 +2255,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
   })
 
   describe('notCacheFor()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(notCacheFor).to.be.a('function')
+      })
+    })
+
     describe('With configuration', () => {
       it('is zero or a negative number', () => {
         expect(notCacheFor(0)).to.be.true
@@ -2134,16 +2312,28 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  xdescribe('filterFetch()', () => {
-
+  describe('filterFetch()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(filterFetch).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('filterStore()', () => {
-
+  describe('filterStore()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(filterStore).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('filterClear()', () => {
-
+  describe('filterClear()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(filterClear).to.be.a('function')
+      })
+    })
   })
 
   xdescribe('reduceFetch()', () => {
@@ -2169,6 +2359,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
     afterEach(() => {
       array.map.restore()
       array.includes.restore()
+    })
+
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(dedupeFetch).to.be.a('function')
+      })
     })
 
     describe('With parameters', () => {
@@ -2311,6 +2507,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
       array.includes.restore()
     })
 
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(dedupeStore).to.be.a('function')
+      })
+    })
+
     describe('With parameters', () => {
       describe('Always', () => {
         beforeEach(() => {
@@ -2451,6 +2653,12 @@ describe('Redux Storage Middleware - Storage Map', () => {
       array.includes.restore()
     })
 
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(dedupeClear).to.be.a('function')
+      })
+    })
+
     describe('With parameters', () => {
       describe('Always', () => {
         beforeEach(() => {
@@ -2578,22 +2786,38 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  xdescribe('filterHardStorage()', () => {
-
+  describe('filterHardStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(filterHardStorage).to.be.a('function')
+      })
+    })
   })
-  xdescribe('filterSoftStorage()', () => {
 
+  describe('filterSoftStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(filterSoftStorage).to.be.a('function')
+      })
+    })
   })
-  xdescribe('filterStorage()', () => {
 
+  describe('filterStorage()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(filterStorage).to.be.a('function')
+      })
+    })
   })
 
   xdescribe('filterNotFetchMap()', () => {
 
   })
+
   xdescribe('filterNotStoreMap()', () => {
 
   })
+
   xdescribe('filterIsUniqueMap()', () => {
 
   })
@@ -2601,9 +2825,11 @@ describe('Redux Storage Middleware - Storage Map', () => {
   xdescribe('putIntoFetchMap()', () => {
 
   })
+
   xdescribe('putIntoStoreMap()', () => {
 
   })
+
   xdescribe('putIntoClearMap()', () => {
 
   })
@@ -2611,12 +2837,17 @@ describe('Redux Storage Middleware - Storage Map', () => {
   xdescribe('putIntoFetchMetaMap()', () => {
 
   })
+
   xdescribe('putIntoStoreMetaMap()', () => {
 
   })
 
   describe('filterStoreHardStorageArray()', () => {
     describe('Always', () => {
+      it('is a function', () => {
+        expect(filterStoreHardStorageArray).to.be.a('function')
+      })
+
       describe('With parameters', () => {
         it('returns an array', () => {
           expect(filterStoreHardStorageArray([]))
@@ -2652,6 +2883,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('filterStoreSoftStorageArray()', () => {
     describe('Always', () => {
+      it('is a function', () => {
+        expect(filterStoreSoftStorageArray).to.be.a('function')
+      })
+
       describe('With parameters', () => {
         it('returns an array', () => {
           expect(filterStoreSoftStorageArray([]))
@@ -2687,6 +2922,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('filterStoreStorageArray()', () => {
     describe('Always', () => {
+      it('is a function', () => {
+        expect(filterStoreStorageArray).to.be.a('function')
+      })
+
       describe('With parameters', () => {
         it('returns an array', () => {
           expect(filterStoreStorageArray([]))
@@ -2722,6 +2961,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('filterFetchArray()', () => {
     describe('Always', () => {
+      it('is a function', () => {
+        expect(filterFetchArray).to.be.a('function')
+      })
+
       describe('With parameters', () => {
         it('returns an array', () => {
           expect(filterFetchArray([]))
@@ -2757,6 +3000,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('filterStoreArray()', () => {
     describe('Always', () => {
+      it('is a function', () => {
+        expect(filterStoreArray).to.be.a('function')
+      })
+
       describe('With parameters', () => {
         it('returns an array', () => {
           expect(filterStoreArray([]))
@@ -2792,6 +3039,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('filterClearArray()', () => {
     describe('Always', () => {
+      it('is a function', () => {
+        expect(filterClearArray).to.be.a('function')
+      })
+
       describe('With parameters', () => {
         it('returns an array', () => {
           expect(filterClearArray([]))
@@ -2827,6 +3078,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('filterNotFetchMapArray()', () => {
     describe('Always', () => {
+      it('is a function', () => {
+        expect(filterNotFetchMapArray).to.be.a('function')
+      })
+
       describe('With parameters', () => {
         it('returns an array', () => {
           expect(filterNotFetchMapArray([], {}))
@@ -2862,6 +3117,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('filterIsUniqueMapArray()', () => {
     describe('Always', () => {
+      it('is a function', () => {
+        expect(filterIsUniqueMapArray).to.be.a('function')
+      })
+
       describe('With parameters', () => {
         it('returns an array', () => {
           expect(filterIsUniqueMapArray([], {}))
@@ -2897,6 +3156,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
   describe('createStoreMetaArray()', () => {
     describe('Always', () => {
+      it('is a function', () => {
+        expect(createStoreMetaArray).to.be.a('function')
+      })
+
       describe('An array is passed as an argument', () => {
         it('returns an array', () => {
           expect(createStoreMetaArray([])).to.be.an('array')
