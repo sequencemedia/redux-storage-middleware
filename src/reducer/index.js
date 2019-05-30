@@ -14,14 +14,15 @@ export function storageCompare (state = STATE, action = {}) {
     meta: {
       isSoftStorage = false,
       isHardStorage = false
-    }
+    } = {}
   } = action
 
   if (isSoftStorage || isHardStorage) {
     const {
+      meta = {},
       meta: {
         type
-      }
+      } = {}
     } = action
 
     const {
@@ -30,13 +31,13 @@ export function storageCompare (state = STATE, action = {}) {
       } = {}
     } = state
 
-    return { ...state, [type]: { meta: { ...stateMeta } } }
+    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type } } }
   } else {
     const {
       meta = {},
       meta: {
         type
-      },
+      } = {},
       data
     } = action
 
@@ -47,7 +48,7 @@ export function storageCompare (state = STATE, action = {}) {
       } = {}
     } = state
 
-    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(data ? { data: { ...data, type } } : (stateData ? { data: { ...stateData, type } } : {})) } }
+    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) } }
   }
 }
 
@@ -56,7 +57,7 @@ export function storageFetch (state = STATE, action = {}) {
     meta: {
       isSoftStorage = false,
       isHardStorage = false
-    }
+    } = {}
   } = action
 
   if (isSoftStorage || isHardStorage) {
@@ -64,7 +65,7 @@ export function storageFetch (state = STATE, action = {}) {
       meta = {},
       meta: {
         type
-      },
+      } = {},
       data
     } = action
 
@@ -81,7 +82,7 @@ export function storageFetch (state = STATE, action = {}) {
       meta = {},
       meta: {
         type
-      },
+      } = {},
       data
     } = action
 
@@ -101,7 +102,7 @@ export function storageStore (state = STATE, action = {}) {
     meta: {
       isSoftStorage = false,
       isHardStorage = false
-    }
+    } = {}
   } = action
 
   if (isSoftStorage || isHardStorage) {
@@ -109,7 +110,7 @@ export function storageStore (state = STATE, action = {}) {
       meta = {},
       meta: {
         type
-      },
+      } = {},
       data
     } = action
 
@@ -126,7 +127,7 @@ export function storageStore (state = STATE, action = {}) {
       meta = {},
       meta: {
         type
-      },
+      } = {},
       data
     } = action
 
