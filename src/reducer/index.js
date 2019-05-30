@@ -20,8 +20,7 @@ export function storageCompare (state = STATE, action = {}) {
   if (isSoftStorage || isHardStorage) {
     const {
       meta: {
-        type,
-        comparedAt = Date.now()
+        type
       }
     } = action
 
@@ -31,25 +30,24 @@ export function storageCompare (state = STATE, action = {}) {
       } = {}
     } = state
 
-    return { ...state, [type]: { meta: { ...stateMeta, comparedAt } } }
+    return { ...state, [type]: { meta: { ...stateMeta } } }
   } else {
     const {
       meta = {},
       meta: {
-        type,
-        comparedAt = Date.now()
+        type
       },
-      data // = {}
+      data
     } = action
 
     const {
       [type]: {
         meta: stateMeta = {},
-        data: stateData // = {}
+        data: stateData
       } = {}
     } = state
 
-    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type, comparedAt }, ...(data ? { data: { ...data, type } } : (stateData ? { data: { ...stateData, type } } : {})) } }
+    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(data ? { data: { ...data, type } } : (stateData ? { data: { ...stateData, type } } : {})) } }
   }
 }
 
@@ -63,37 +61,38 @@ export function storageFetch (state = STATE, action = {}) {
 
   if (isSoftStorage || isHardStorage) {
     const {
-      meta: {
-        type,
-        accessedAt = Date.now()
-      }
-    } = action
-
-    const {
-      [type]: {
-        meta: stateMeta = {}
-      } = {}
-    } = state
-
-    return { ...state, [type]: { meta: { ...stateMeta, accessedAt } } }
-  } else {
-    const {
       meta = {},
       meta: {
-        type,
-        accessedAt = Date.now()
+        type
       },
-      data // = {}
+      data
     } = action
 
     const {
       [type]: {
         meta: stateMeta = {},
-        data: stateData // = {}
+        data: stateData
       } = {}
     } = state
 
-    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type, accessedAt }, ...(data ? { data: { ...data, type } } : (stateData ? { data: { ...stateData, type } } : {})) } }
+    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) } }
+  } else {
+    const {
+      meta = {},
+      meta: {
+        type
+      },
+      data
+    } = action
+
+    const {
+      [type]: {
+        meta: stateMeta = {},
+        data: stateData
+      } = {}
+    } = state
+
+    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) } }
   }
 }
 
@@ -107,37 +106,38 @@ export function storageStore (state = STATE, action = {}) {
 
   if (isSoftStorage || isHardStorage) {
     const {
-      meta: {
-        type,
-        cachedAt = Date.now()
-      }
-    } = action
-
-    const {
-      [type]: {
-        meta: stateMeta = {}
-      } = {}
-    } = state
-
-    return { ...state, [type]: { meta: { ...stateMeta, cachedAt } } }
-  } else {
-    const {
       meta = {},
       meta: {
-        type,
-        cachedAt = Date.now()
+        type
       },
-      data // = {}
+      data
     } = action
 
     const {
       [type]: {
         meta: stateMeta = {},
-        data: stateData // = {}
+        data: stateData
       } = {}
     } = state
 
-    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type, cachedAt }, ...(data ? { data: { ...data, type } } : (stateData ? { data: { ...stateData, type } } : {})) } }
+    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) } }
+  } else {
+    const {
+      meta = {},
+      meta: {
+        type
+      },
+      data
+    } = action
+
+    const {
+      [type]: {
+        meta: stateMeta = {},
+        data: stateData
+      } = {}
+    } = state
+
+    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) } }
   }
 }
 

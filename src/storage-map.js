@@ -1,14 +1,16 @@
 import {
-  storageCompareAction,
   storageFetchAction,
-  storageStoreAction,
-  storageClearAction
+  storageStoreAction
 } from 'redux-storage-middleware/actions'
 
 export const min = (values = []) => Math.min(...values)
 export const max = (values = []) => Math.max(...values)
 
 export const isStale = ({ cachedAt = 0, cacheFor = 0 } = {}) => (cachedAt + cacheFor) < Date.now()
+export const isEqual = (alpha = {}, omega = {}) => (
+  getCachedAt(alpha) === getCachedAt(omega) &&
+  getCacheFor(alpha) === getCacheFor(omega)
+)
 export const isHardStorage = ({ cacheFor = 0 } = {}) => cacheFor >= (1000 * 60 * 60 * 24)
 export const isSoftStorage = ({ cacheFor = 0 } = {}) => cacheFor >= (1000 * 60 * 60) && cacheFor < (1000 * 60 * 60 * 24)
 export const hasComparator = ({ comparator = null } = {}) => comparator instanceof Function
@@ -165,6 +167,9 @@ export const createStoreMetaArray = (array = []) => (
     .reduce(dedupeStore, [])
 )
 
+export const getCachedAt = ({ cachedAt = 0 } = {}) => cachedAt
+export const getCacheFor = ({ cacheFor = 0 } = {}) => cacheFor
+
 export function initialiseFetchMetaMap (array = [], params = {}) {
   array
     .forEach((configuration) => putIntoFetchMetaMap(params, configuration))
@@ -275,6 +280,9 @@ export function initialise (array = [], params = {}) {
   initialiseClear(array, params)
 }
 
+const getReduxStorage = ({ reduxStorage = {} } = {}) => reduxStorage
+const getStateForType = (type, { [type]: state = {} } = {}) => state
+
 export default (array) => {
   if (Array.isArray(array)) {
     const fetchMap = new Map()
@@ -286,172 +294,91 @@ export default (array) => {
     initialise(array, { fetchMap, storeMap, fetchMetaMap, storeMetaMap, clearMap })
 
     return (store) => (next) => ({ type, ...action } = {}) => {
+      if (
+        type === 'STORAGE_FETCH' ||
+        type === 'STORAGE_STORE' ||
+        type === 'STORAGE_CLEAR' ||
+        type === 'STORAGE_COMPARE') {
+        return next({ ...action, type })
+      }
+
       if (fetchMap.has(type)) {
         const defaultMeta = fetchMap.get(type)
-        /*
-         *  'cachedAt' is kept in state
-         */
+
         const {
-          reduxStorage: {
-            [type]: {
-              meta = defaultMeta
-            } = {}
-          } = {}
-        } = store.getState()
+          meta = defaultMeta
+        } = getStateForType(type, getReduxStorage(store.getState()))
 
-        if (hasComparator(defaultMeta)) {
-          const {
-            cacheFor,
-            comparator
-          } = defaultMeta
+        const {
+          cacheFor
+        } = defaultMeta
 
-          const {
-            cachedAt
-          } = meta
+        const {
+          cachedAt
+        } = meta
 
-          const META = createMeta({
-            type,
-            cacheFor,
-            cachedAt,
-            comparator,
-            then: ({ type, ...action }) => {
-              const accessedAt = Date.now()
+        const accessedAt = Date.now()
 
-              if (fetchMetaMap.has(type)) {
-                const fetchMetaSet = fetchMetaMap.get(type)
+        const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
-                fetchMetaSet.forEach(({ type, cacheFor }) => {
-                  /*
-                   *  Store meta
-                   */
-                  const META = createMeta({ type, cacheFor, accessedAt })
-
-                  store.dispatch(storageFetchAction(META))
-                })
-              }
-
-              /*
-               *  Fetch meta
-               */
-              const META = createMeta({ type, cacheFor, accessedAt })
-
-              store.dispatch(storageFetchAction(META, { ...action, type }))
-
-              return { ...action, type }
-            }
-          })
-
-          store.dispatch(storageCompareAction(META, { ...action, type }))
-
-          return { ...action, type }
+        if (isStale(META)) {
+          return next({ ...action, type })
         } else {
-          const {
-            cacheFor
-          } = defaultMeta
+          store.dispatch(storageFetchAction(META))
 
-          const {
-            cachedAt
-          } = meta
+          /*
+           *  `fetchMetaMap` contains a list of actions to replay for this `type`
+           */
+          if (fetchMetaMap.has(type)) {
+            const fetchMetaSet = fetchMetaMap.get(type)
 
-          const META = createMeta({ type, cacheFor, cachedAt })
+            fetchMetaSet.forEach(({ type, cacheFor }) => {
+              const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
-          if (isStale(META)) {
-            return next({ ...action, type })
-          } else {
-            const accessedAt = Date.now()
+              store.dispatch(storageFetchAction(META))
 
-            if (fetchMetaMap.has(type)) {
-              const fetchMetaSet = fetchMetaMap.get(type)
+              const {
+                data
+              } = getStateForType(type, getReduxStorage(store.getState()))
 
-              fetchMetaSet.forEach(({ type, cacheFor }) => {
-                /*
-                 *  Store meta
-                 */
-                const META = createMeta({ type, cacheFor, accessedAt })
-
-                store.dispatch(storageFetchAction(META))
-              })
-            }
-
-            /*
-             *  Fetch meta
-             */
-            const META = createMeta({ type, cacheFor, accessedAt })
-
-            store.dispatch(storageFetchAction(META, { ...action, type }))
-
-            return { ...action, type }
+              if (data) store.dispatch(data)
+            })
           }
+
+          /*
+           *  Do not pass along to the next middleware
+           */
+          return { ...action, type }
         }
       } else {
         if (storeMap.has(type)) {
-          const cachedAt = Date.now()
+          const {
+            meta = {}
+          } = getStateForType(type, getReduxStorage(store.getState()))
+
+          const {
+            cachedAt = Date.now()
+          } = meta
+
+          const storeSet = storeMap.get(type)
+
+          storeSet.forEach(({ type, cacheFor }) => {
+            const META = createMeta({ type, cacheFor, cachedAt, accessedAt: cachedAt })
+
+            if (!isEqual(META, meta)) store.dispatch(storageStoreAction(META)) // META
+          })
 
           if (storeMetaMap.has(type)) {
             const storeMetaSet = storeMetaMap.get(type)
 
             storeMetaSet.forEach(({ type, cacheFor }) => {
-              /*
-               *  Store meta
-               */
-              const META = createMeta({ type, cacheFor, cachedAt })
+              const META = createMeta({ type, cacheFor, cachedAt, accessedAt: cachedAt })
 
-              store.dispatch(storageStoreAction(META, { ...action, type }))
+              if (!isEqual(META, meta)) store.dispatch(storageStoreAction(META, { ...action, type })) // META, DATA
             })
           }
-
-          const storeSet = storeMap.get(type)
-
-          storeSet.forEach(({ type, cacheFor }) => {
-            /*
-             *  Fetch meta
-             */
-            const META = createMeta({ type, cacheFor, cachedAt })
-
-            store.dispatch(storageStoreAction(META))
-          })
 
           return next({ ...action, type })
-        } else {
-          if (clearMap.has(type)) {
-            const clearSet = clearMap.get(type)
-
-            clearSet.forEach(({ type }) => {
-              if (fetchMetaMap.has(type)) {
-                const fetchMetaSet = fetchMetaMap.get(type)
-
-                fetchMetaSet.forEach(({ type }) => {
-                  if (storeMap.has(type)) {
-                    if (storeMetaMap.has(type)) {
-                      const storeMetaSet = storeMetaMap.get(type)
-
-                      storeMetaSet.forEach(({ type, cacheFor }) => {
-                        /*
-                         *  Store meta
-                         */
-                        const META = createMeta({ type, cacheFor })
-
-                        store.dispatch(storageClearAction(META, { ...action, type }))
-                      })
-                    }
-
-                    const storeSet = storeMap.get(type)
-
-                    storeSet.forEach(({ type, cacheFor }) => {
-                      /*
-                       *  Fetch meta
-                       */
-                      const META = createMeta({ type, cacheFor })
-
-                      store.dispatch(storageClearAction(META))
-                    })
-                  }
-                })
-              }
-            })
-
-            return next({ ...action, type })
-          }
         }
       }
 
