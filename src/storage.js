@@ -1,5 +1,4 @@
 import {
-  STORAGE_COMPARE,
   STORAGE_FETCH,
   STORAGE_STORE,
   STORAGE_CLEAR
@@ -72,58 +71,10 @@ export const mergeData = (alpha, omega) => ({
   ...(alpha ? { data: { ...alpha, ...(omega || {}) } } : (omega ? { data: omega } : {}))
 })
 
-function get (store, { meta: { isHardStorage = false, isSoftStorage = false, type } = {} }) {
-  if (isHardStorage) {
-    const {
-      data
-    } = getStateForType(type, getReduxStorage(store.getState()))
-
-    return data
-  } else {
-    if (isSoftStorage) {
-      const {
-        data
-      } = getStateForType(type, getReduxStorage(store.getState()))
-
-      return data
-    } else {
-      const {
-        data
-      } = getStateForType(type, getReduxStorage(store.getState()))
-
-      return data
-    }
-  }
-}
-
 const getReduxStorage = ({ reduxStorage = {} } = {}) => reduxStorage
 const getStateForType = (type, { [type]: state = {} } = {}) => state
 
-function put (store, { meta: META, meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, data }) {
-  if (isHardStorage) {
-    const {
-      meta: stateMeta = {},
-      data: stateData
-    } = getStateForType(type, getReduxStorage(store.getState()))
-
-    const ITEM = fromObjectToString({ meta: transformMeta({ ...stateMeta, ...meta }), ...(data ? { data } : { ...(stateData ? { data: stateData } : {}) }) })
-
-    hardStorage.setItem(type, ITEM)
-  } else {
-    if (isSoftStorage) {
-      const {
-        meta: stateMeta = {},
-        data: stateData
-      } = getStateForType(type, getReduxStorage(store.getState()))
-
-      const ITEM = fromObjectToString({ meta: transformMeta({ ...stateMeta, ...meta }), ...(data ? { data } : { ...(stateData ? { data: stateData } : {}) }) })
-
-      softStorage.setItem(type, ITEM)
-    }
-  }
-}
-
-function storageFetch (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, data }) {
+function storageWrite (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, data }) {
   if (isHardStorage) {
     const {
       meta: stateMeta = {},
@@ -147,31 +98,7 @@ function storageFetch (store, { meta: { isHardStorage = false, isSoftStorage = f
   }
 }
 
-function storageStore (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, data }) {
-  if (isHardStorage) {
-    const {
-      meta: stateMeta = {},
-      data: stateData
-    } = getStateForType(type, getReduxStorage(store.getState()))
-
-    const ITEM = fromObjectToString({ meta: transformMeta({ ...stateMeta, ...meta }), ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) })
-
-    hardStorage.setItem(type, ITEM)
-  } else {
-    if (isSoftStorage) {
-      const {
-        meta: stateMeta = {},
-        data: stateData
-      } = getStateForType(type, getReduxStorage(store.getState()))
-
-      const ITEM = fromObjectToString({ meta: transformMeta({ ...stateMeta, ...meta }), ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) })
-
-      softStorage.setItem(type, ITEM)
-    }
-  }
-}
-
-function storageClear (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, ...action }) {
+function storageClear (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {} }) {
   if (isHardStorage) {
     hardStorage.removeItem(type)
   } else {
@@ -185,29 +112,12 @@ export default (store) => (next) => (action) => {
   const { type } = action
 
   switch (type) {
-    case STORAGE_COMPARE:
-    {
-      const {
-        meta: {
-          cacheFor,
-          cachedAt,
-          comparator,
-          then
-        },
-        data: ACTION
-      } = action
-
-      return comparator(get(store, action) || {}, ACTION, { cacheFor, ...(cachedAt ? { cachedAt: new Date(cachedAt) } : {}) })
-        ? next(put(store, action) || ACTION)
-        : then(ACTION)
-    }
-
     case STORAGE_FETCH:
-      storageFetch(store, action)
+      storageWrite(store, action)
       return next(action)
 
     case STORAGE_STORE:
-      storageStore(store, action)
+      storageWrite(store, action)
       return next(action)
 
     case STORAGE_CLEAR:

@@ -297,8 +297,7 @@ export default (array) => {
       if (
         type === 'STORAGE_FETCH' ||
         type === 'STORAGE_STORE' ||
-        type === 'STORAGE_CLEAR' ||
-        type === 'STORAGE_COMPARE') {
+        type === 'STORAGE_CLEAR') {
         return next({ ...action, type })
       }
 
