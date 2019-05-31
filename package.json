@@ -1,6 +1,6 @@
 {
   "name": "redux-storage-middleware",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Redux Storage middleware",
   "main": "./index.js",
   "scripts": {
