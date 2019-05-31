@@ -1,5 +1,3 @@
-/* global localStorage */
-
 import Storage from 'redux-storage-middleware/components/storage'
 
 export default () => ('localStorage' in global)

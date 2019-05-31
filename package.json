@@ -4,10 +4,11 @@
   "description": "Redux Storage middleware",
   "main": "./index.js",
   "scripts": {
-    "prepublishOnly": "npm run clean; npm run babel",
+    "prepublishOnly": "npm run clean && npm run babel",
     "clean": "rm -rf lib",
     "babel": "babel src -d lib",
-    "babel:watch": "npm run babel -- -w",
+    "build": "npm run babel --",
+    "build:watch": "npm run build -- -w",
     "lint": "eslint *.js src config/mocha",
     "lint:fix": "npm run lint -- --fix",
     "test": "nyc mocha config/mocha --require @babel/register"

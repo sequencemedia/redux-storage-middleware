@@ -13,21 +13,6 @@ const softStorage = SoftStorage()
 export const fromObjectToString = (object) => JSON.stringify(object)
 export const fromStringToObject = (string) => JSON.parse(string)
 
-export const createType = ({ type, ...meta }) => ({
-  ...meta,
-  ...(type ? { type } : {})
-})
-
-export const createIsHardStorage = ({ isHardStorage = false, ...meta }) => ({
-  ...meta,
-  ...(isHardStorage ? { isHardStorage } : {})
-})
-
-export const createIsSoftStorage = ({ isSoftStorage = false, ...meta }) => ({
-  ...meta,
-  ...(isSoftStorage ? { isSoftStorage } : {})
-})
-
 export const createCachedAt = ({ cachedAt = 0, ...meta }) => ({
   ...meta,
   ...(cachedAt ? { cachedAt } : {})
@@ -43,17 +28,7 @@ export const createAccessedAt = ({ accessedAt = false, ...meta }) => ({
   ...(accessedAt ? { accessedAt } : {})
 })
 
-export const createMeta = (meta = {}) => (
-  createType(
-    createIsHardStorage(
-      createIsSoftStorage(
-        meta
-      )
-    )
-  )
-)
-
-export const transformMeta = ({ cachedAt = 0, cacheFor = 0, accessedAt = 0 } = {}) => (
+export const createMeta = ({ cachedAt = 0, cacheFor = 0, accessedAt = 0 } = {}) => (
   createCachedAt(
     createCacheFor(
       createAccessedAt(
@@ -71,17 +46,17 @@ export const mergeData = (alpha, omega) => ({
   ...(alpha ? { data: { ...alpha, ...(omega || {}) } } : (omega ? { data: omega } : {}))
 })
 
-const getReduxStorage = ({ reduxStorage = {} } = {}) => reduxStorage
-const getStateForType = (type, { [type]: state = {} } = {}) => state
+const getStateFromStore = ({ reduxStorage = {} } = {}) => reduxStorage
+const getStateForActionType = (type, { [type]: state = {} } = {}) => state
 
 function storageWrite (store, { meta: { isHardStorage = false, isSoftStorage = false, type, ...meta } = {}, data }) {
   if (isHardStorage) {
     const {
       meta: stateMeta = {},
       data: stateData
-    } = getStateForType(type, getReduxStorage(store.getState()))
+    } = getStateForActionType(type, getStateFromStore(store.getState()))
 
-    const ITEM = fromObjectToString({ meta: transformMeta({ ...stateMeta, ...meta }), ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) })
+    const ITEM = fromObjectToString({ meta: createMeta({ ...stateMeta, ...meta }), ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) })
 
     hardStorage.setItem(type, ITEM)
   } else {
@@ -89,9 +64,9 @@ function storageWrite (store, { meta: { isHardStorage = false, isSoftStorage = f
       const {
         meta: stateMeta = {},
         data: stateData
-      } = getStateForType(type, getReduxStorage(store.getState()))
+      } = getStateForActionType(type, getStateFromStore(store.getState()))
 
-      const ITEM = fromObjectToString({ meta: transformMeta({ ...stateMeta, ...meta }), ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) })
+      const ITEM = fromObjectToString({ meta: createMeta({ ...stateMeta, ...meta }), ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) })
 
       softStorage.setItem(type, ITEM)
     }

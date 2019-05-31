@@ -1,5 +1,4 @@
 import {
-  STORAGE_COMPARE,
   STORAGE_FETCH,
   STORAGE_STORE,
   STORAGE_CLEAR
@@ -8,49 +7,6 @@ import {
 import initialState from './initial-state'
 
 const STATE = initialState()
-
-export function storageCompare (state = STATE, action = {}) {
-  const {
-    meta: {
-      isSoftStorage = false,
-      isHardStorage = false
-    } = {}
-  } = action
-
-  if (isSoftStorage || isHardStorage) {
-    const {
-      meta = {},
-      meta: {
-        type
-      } = {}
-    } = action
-
-    const {
-      [type]: {
-        meta: stateMeta = {}
-      } = {}
-    } = state
-
-    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type } } }
-  } else {
-    const {
-      meta = {},
-      meta: {
-        type
-      } = {},
-      data
-    } = action
-
-    const {
-      [type]: {
-        meta: stateMeta = {},
-        data: stateData
-      } = {}
-    } = state
-
-    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) } }
-  }
-}
 
 export function storageFetch (state = STATE, action = {}) {
   const {
@@ -158,9 +114,6 @@ export default function storageReducer (state = STATE, action = {}) {
   const { type } = action
 
   switch (type) {
-    case STORAGE_COMPARE:
-      return storageCompare(state, action)
-
     case STORAGE_FETCH:
       return storageFetch(state, action)
 

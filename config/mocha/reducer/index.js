@@ -2,7 +2,6 @@ import { expect } from 'chai'
 import sinon from 'sinon'
 
 import {
-  STORAGE_COMPARE,
   STORAGE_FETCH,
   STORAGE_STORE,
   STORAGE_CLEAR
@@ -39,34 +38,6 @@ describe('Redux Storage Middleware - Reducer', () => {
     })
 
     describe('With state', () => {
-      describe('Compare', () => {
-        const meta = { cachedAt: 0, cacheFor: 0 }
-
-        describe('The action meta property has a "comparedAt" value', () => {
-          it('changes the state of the meta property type with the "comparedAt" value', () => {
-            const comparedAt = Date.now()
-
-            const was = { [type]: { meta: { ...meta, comparedAt: comparedAt - ONE_DAY } } }
-            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isHardStorage, comparedAt } })
-
-            expect(now)
-              .to.eql({ [type]: { meta: { ...meta, type, isHardStorage, comparedAt } } })
-          })
-        })
-
-        describe('The action meta property does not have a "comparedAt" value', () => {
-          it('does not change the state of the meta property type "comparedAt" value', () => {
-            const comparedAt = Date.now()
-
-            const was = { [type]: { meta: { ...meta, comparedAt: comparedAt - ONE_DAY } } }
-            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isHardStorage } })
-
-            expect(now)
-              .to.eql({ [type]: { meta: { ...meta, type, isHardStorage, comparedAt: comparedAt - ONE_DAY } } })
-          })
-        })
-      })
-
       describe('Fetch', () => {
         const meta = { cachedAt: 0, cacheFor: 0 }
 
@@ -135,30 +106,6 @@ describe('Redux Storage Middleware - Reducer', () => {
     })
 
     describe('Without state', () => {
-      describe('Compare', () => {
-        describe('The action meta property has a "comparedAt" value', () => {
-          it('creates the state of the meta property type "comparedAt" value', () => {
-            const comparedAt = Date.now()
-
-            const was = {}
-            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isHardStorage, comparedAt } })
-
-            expect(now)
-              .to.eql({ [type]: { meta: { type, isHardStorage, comparedAt } } })
-          })
-        })
-
-        describe('The action meta property does not have a "comparedAt" value', () => {
-          it('does not create a meta property type "comparedAt" value', () => {
-            const was = {}
-            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isHardStorage } })
-
-            expect(now)
-              .to.eql({ [type]: { meta: { type, isHardStorage } } })
-          })
-        })
-      })
-
       describe('Fetch', () => {
         describe('The action meta property has an "accessedAt" value', () => {
           it('creates the state of the meta property type "accessedAt" value', () => {
@@ -235,34 +182,6 @@ describe('Redux Storage Middleware - Reducer', () => {
     })
 
     describe('With state', () => {
-      describe('Compare', () => {
-        const meta = { cachedAt: 0, cacheFor: 0 }
-
-        describe('The action meta property has a "comparedAt" value', () => {
-          it('changes the state of the meta property type with the "comparedAt" value', () => {
-            const comparedAt = Date.now()
-
-            const was = { [type]: { meta: { ...meta, comparedAt: comparedAt - ONE_DAY } } }
-            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isSoftStorage, comparedAt } })
-
-            expect(now)
-              .to.eql({ [type]: { meta: { ...meta, type, isSoftStorage, comparedAt } } })
-          })
-        })
-
-        describe('The action meta property does not have a "comparedAt" value', () => {
-          it('does not change the state of the meta property type "comparedAt" value', () => {
-            const comparedAt = Date.now()
-
-            const was = { [type]: { meta: { ...meta, comparedAt: comparedAt - ONE_DAY } } }
-            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isSoftStorage } })
-
-            expect(now)
-              .to.eql({ [type]: { meta: { ...meta, type, isSoftStorage, comparedAt: comparedAt - ONE_DAY } } })
-          })
-        })
-      })
-
       describe('Fetch', () => {
         const meta = { cachedAt: 0, cacheFor: 0 }
 
@@ -331,30 +250,6 @@ describe('Redux Storage Middleware - Reducer', () => {
     })
 
     describe('Without state', () => {
-      describe('Compare', () => {
-        describe('The action meta property has a "comparedAt" value', () => {
-          it('changes the state of the meta property type with the "comparedAt" value', () => {
-            const comparedAt = Date.now()
-
-            const was = {}
-            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isSoftStorage, comparedAt } })
-
-            expect(now)
-              .to.eql({ [type]: { meta: { type, isSoftStorage, comparedAt } } })
-          })
-        })
-
-        describe('The action meta property does not have a "comparedAt" value', () => {
-          it('does not create a meta property type "comparedAt" value', () => {
-            const was = {}
-            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, isSoftStorage } })
-
-            expect(now)
-              .to.eql({ [type]: { meta: { type, isSoftStorage } } })
-          })
-        })
-      })
-
       describe('Fetch', () => {
         describe('The action meta property has an "accessedAt" value', () => {
           it('creates the state of the meta property type "accessedAt" value', () => {
@@ -430,34 +325,6 @@ describe('Redux Storage Middleware - Reducer', () => {
     })
 
     describe('With state', () => {
-      describe('Compare', () => {
-        const meta = { cachedAt: 0, cacheFor: 0 }
-
-        describe('The action meta property has a "comparedAt" value', () => {
-          it('changes the state of the meta property type with the "comparedAt" value', () => {
-            const comparedAt = Date.now()
-
-            const was = { [type]: { meta: { ...meta, comparedAt: comparedAt - ONE_DAY }, data: { type } } }
-            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, comparedAt } })
-
-            expect(now)
-              .to.eql({ [type]: { meta: { ...meta, type, comparedAt }, data: { type } } })
-          })
-        })
-
-        describe('The action meta property does not have a "comparedAt" value', () => {
-          it('does not change the state of the meta property type "comparedAt" value', () => {
-            const comparedAt = Date.now()
-
-            const was = { [type]: { meta: { ...meta, comparedAt: comparedAt - ONE_DAY }, data: { type } } }
-            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type } })
-
-            expect(now)
-              .to.eql({ [type]: { meta: { ...meta, type, comparedAt: comparedAt - ONE_DAY }, data: { type } } })
-          })
-        })
-      })
-
       describe('Fetch', () => {
         const meta = { cachedAt: 0, cacheFor: 0 }
 
@@ -526,30 +393,6 @@ describe('Redux Storage Middleware - Reducer', () => {
     })
 
     describe('Without state', () => {
-      describe('Compare', () => {
-        describe('The action meta property has a "comparedAt" value', () => {
-          it('creates the state of the meta property type "comparedAt" value', () => {
-            const comparedAt = Date.now()
-
-            const was = {}
-            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type, comparedAt }, data: { type } })
-
-            expect(now)
-              .to.eql({ [type]: { meta: { type, comparedAt }, data: { type } } })
-          })
-        })
-
-        describe('The action meta property does not have a "comparedAt" value', () => {
-          it('does not create a meta property type "comparedAt" value', () => {
-            const was = {}
-            const now = reducer(was, { type: STORAGE_COMPARE, meta: { type }, data: { type } })
-
-            expect(now)
-              .to.eql({ [type]: { meta: { type }, data: { type } } })
-          })
-        })
-      })
-
       describe('Fetch', () => {
         describe('The action meta property has an "accessedAt" value', () => {
           it('changes the state of the meta property type with the "accessedAt" value', () => {

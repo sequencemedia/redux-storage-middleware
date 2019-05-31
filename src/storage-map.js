@@ -1,6 +1,7 @@
 import {
   storageFetchAction,
-  storageStoreAction
+  storageStoreAction,
+  storageClearAction
 } from 'redux-storage-middleware/actions'
 
 export const min = (values = []) => Math.min(...values)
@@ -280,8 +281,8 @@ export function initialise (array = [], params = {}) {
   initialiseClear(array, params)
 }
 
-const getReduxStorage = ({ reduxStorage = {} } = {}) => reduxStorage
-const getStateForType = (type, { [type]: state = {} } = {}) => state
+const getStateFromStore = ({ reduxStorage = {} } = {}) => reduxStorage
+const getStateForActionType = (type, { [type]: state = {} } = {}) => state
 
 export default (array) => {
   if (Array.isArray(array)) {
@@ -294,19 +295,12 @@ export default (array) => {
     initialise(array, { fetchMap, storeMap, fetchMetaMap, storeMetaMap, clearMap })
 
     return (store) => (next) => ({ type, ...action } = {}) => {
-      if (
-        type === 'STORAGE_FETCH' ||
-        type === 'STORAGE_STORE' ||
-        type === 'STORAGE_CLEAR') {
-        return next({ ...action, type })
-      }
-
       if (fetchMap.has(type)) {
         const defaultMeta = fetchMap.get(type)
 
         const {
           meta = defaultMeta
-        } = getStateForType(type, getReduxStorage(store.getState()))
+        } = getStateForActionType(type, getStateFromStore(store.getState()))
 
         const {
           cacheFor
@@ -321,6 +315,18 @@ export default (array) => {
         const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
         if (isStale(META)) {
+          store.dispatch(storageClearAction(META))
+
+          if (fetchMetaMap.has(type)) {
+            const fetchMetaSet = fetchMetaMap.get(type)
+
+            fetchMetaSet.forEach(({ type }) => {
+              const META = { type }
+
+              store.dispatch(storageClearAction(META))
+            })
+          }
+
           return next({ ...action, type })
         } else {
           store.dispatch(storageFetchAction(META))
@@ -338,7 +344,7 @@ export default (array) => {
 
               const {
                 data
-              } = getStateForType(type, getReduxStorage(store.getState()))
+              } = getStateForActionType(type, getStateFromStore(store.getState()))
 
               if (data) store.dispatch(data)
             })
@@ -353,7 +359,7 @@ export default (array) => {
         if (storeMap.has(type)) {
           const {
             meta = {}
-          } = getStateForType(type, getReduxStorage(store.getState()))
+          } = getStateForActionType(type, getStateFromStore(store.getState()))
 
           const {
             cachedAt = Date.now()
