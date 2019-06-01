@@ -55,32 +55,40 @@ export const filterFetch = ({ meta: { type, cacheFor = 0 } = {} } = {}) => hasCa
 export const filterStore = ({ meta: { type, cacheFor = 0 } = {} } = {}) => hasCacheFor(cacheFor)
 export const filterClear = ({ meta: { type, cacheFor = 0 } = {} } = {}) => notCacheFor(cacheFor)
 
-export const reduceFetch = (a = [], { type, meta, meta: { cacheFor = 0 } = {} } = {}, i, array) => (
+export const reduce = (a = [], { type, meta, meta: { cacheFor = 0 } = {} } = {}, i, array) => (
   a.map(mapType).includes(type)
-    ? a
+    ? array.filter(filterFor(type)).reduce(dedupeMeta, [])
     : min(array.filter(filterFor(type)).map(mapCacheFor)) !== cacheFor
       ? a
       : a.concat({ type, ...(meta ? { meta } : {}) })
 )
 
-export const reduceStore = (a = [], { type, meta, meta: { cacheFor = 0 } = {} } = {}, i, array) => (
-  a.map(mapType).includes(type)
+export const dedupeMeta = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
+  a.map(mapMetaType).includes(t)
     ? a
-    : min(array.filter(filterFor(type)).map(mapCacheFor)) !== cacheFor
+    : min(array.filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor
       ? a
       : a.concat({ type, ...(meta ? { meta } : {}) })
 )
 
-export const reduceClear = (a = [], { type, meta, meta: { cacheFor = 0 } = {} } = {}, i, array) => (
+export const reduceFetch = (...args) => reduce(...args)
+
+export const reduceStore = (...args) => reduce(...args)
+
+export const reduceClear = (...args) => reduce(...args)
+
+export const reduceMetaFetch = (...args) => reduceFetch(...args)
+
+export const reduceMetaStore = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
   a.map(mapType).includes(type)
-    ? a
-    : min(array.filter(filterFor(type)).map(mapCacheFor)) !== cacheFor
+    ? array.filter(filterFor(type)).reduce(dedupeMeta, [])
+    : min(array.filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor
       ? a
       : a.concat({ type, ...(meta ? { meta } : {}) })
 )
 
 export const dedupeFetch = (a = [], { type, meta } = {}) => (
-  a.map(mapType).includes(type)
+  a.map(mapMetaType).includes(type)
     ? a
     : a.concat({ type, ...(meta ? { meta } : {}) })
 )
@@ -96,6 +104,10 @@ export const dedupeClear = (a = [], { type, meta, meta: { type: t } = {} } = {})
     ? a
     : a.concat({ type, ...(meta ? { meta } : {}) })
 )
+
+export const dedupeMetaFetch = (...args) => dedupeFetch(...args)
+
+export const dedupeMetaStore = (...args) => dedupeMeta(...args)
 
 export const filterHardStorage = ({ meta } = {}) => isHardStorage(meta)
 export const filterSoftStorage = ({ meta } = {}) => isSoftStorage(meta)
@@ -133,7 +145,7 @@ export const putIntoClearMap = ({ clearMap = new Map() } = {}, { type, meta: { t
   )
 }
 
-export const putIntoFetchMetaMap = ({ fetchMetaMap = new Map() } = {}, { type, meta: { cacheFor, ...meta } }) => {
+export const putIntoFetchMetaMap = ({ fetchMetaMap = new Map() } = {}, { type, meta: { cacheFor, ...meta } = {} } = {}) => {
   const fetchMetaSet = fetchMetaMap.get(type) || new Set()
 
   fetchMetaMap.set(
@@ -142,18 +154,13 @@ export const putIntoFetchMetaMap = ({ fetchMetaMap = new Map() } = {}, { type, m
   )
 }
 
-export const putIntoStoreMetaMap = ({ storeMetaMap = new Map() } = {}, { meta: { type, cacheFor } }) => {
-  const storeMetaSet = storeMetaMap.get(type) || new Set()
-
-  storeMetaMap.set(
-    type,
-    storeMetaSet.add({ type, cacheFor })
-  )
+export const putIntoStoreMetaMap = ({ storeMetaMap = new Map() } = {}, { meta: { type, cacheFor } = {} } = {}) => {
+  storeMetaMap.set(type, { type, cacheFor })
 }
 
-export const filterStoreHardStorageArray = (array = []) => array.filter(filterHardStorage)
-export const filterStoreSoftStorageArray = (array = []) => array.filter(filterSoftStorage)
-export const filterStoreStorageArray = (array = []) => array.filter(filterStorage)
+export const filterHardStorageArray = (array = []) => array.filter(filterHardStorage)
+export const filterSoftStorageArray = (array = []) => array.filter(filterSoftStorage)
+export const filterStorageArray = (array = []) => array.filter(filterStorage)
 
 export const filterFetchArray = (array = []) => array.filter(filterFetch)
 export const filterStoreArray = (array = []) => array.filter(filterStore)
@@ -162,10 +169,16 @@ export const filterClearArray = (array = []) => array.filter(filterClear)
 export const filterNotFetchMapArray = (array = [], params = {}) => array.filter((configuration) => filterNotFetchMap(params, configuration))
 export const filterIsUniqueMapArray = (array = [], params = {}) => array.filter((configuration) => filterIsUniqueMap(params, configuration))
 
+export const createFetchMetaArray = (array = []) => (
+  array
+    .reduce(reduceMetaFetch, [])
+    .reduce(dedupeMetaFetch, [])
+)
+
 export const createStoreMetaArray = (array = []) => (
   array
-    .reduce(reduceStore, [])
-    .reduce(dedupeStore, [])
+    .reduce(reduceMetaStore, [])
+    .reduce(dedupeMetaStore, [])
 )
 
 export const getCachedAt = ({ cachedAt = 0 } = {}) => cachedAt
@@ -173,25 +186,25 @@ export const getCacheFor = ({ cacheFor = 0 } = {}) => cacheFor
 
 export function initialiseFetchMetaMap (array = [], params = {}) {
   array
-    .forEach((configuration) => putIntoFetchMetaMap(params, configuration))
+    .forEach((configuration) => { putIntoFetchMetaMap(params, configuration) })
 }
 
 export function initialiseFetchHardStorage (array = [], params = {}) {
-  filterStoreHardStorageArray(array)
+  filterHardStorageArray(array)
     .reduce(reduceFetch, [])
-    .forEach((configuration) => putIntoFetchMap(params, configuration))
+    .forEach((configuration) => { putIntoFetchMap(params, configuration) })
 }
 
 export function initialiseFetchSoftStorage (array = [], params = {}) {
-  filterStoreSoftStorageArray(array)
+  filterSoftStorageArray(array)
     .reduce(reduceFetch, [])
-    .forEach((configuration) => putIntoFetchMap(params, configuration))
+    .forEach((configuration) => { putIntoFetchMap(params, configuration) })
 }
 
 export function initialiseFetchStorage (array = [], params = {}) {
-  filterStoreStorageArray(array)
+  filterStorageArray(array)
     .reduce(reduceFetch, [])
-    .forEach((configuration) => putIntoFetchMap(params, configuration))
+    .forEach((configuration) => { putIntoFetchMap(params, configuration) })
 }
 
 export function initialiseFetch (array = [], params = {}) {
@@ -206,7 +219,7 @@ export function initialiseFetch (array = [], params = {}) {
 
 export function initialiseStoreMetaMap (array = [], params = {}) {
   array
-    .forEach((configuration) => putIntoStoreMetaMap(params, configuration))
+    .forEach((configuration) => { putIntoStoreMetaMap(params, configuration) })
 }
 
 export function initialiseStoreNotFetchMap (array = [], params = {}) {
@@ -216,39 +229,33 @@ export function initialiseStoreNotFetchMap (array = [], params = {}) {
 }
 
 export function initialiseStoreHardStorage (array = [], params = {}) {
-  const hardStorageArray = filterStoreHardStorageArray(array)
+  const hardStorageArray = filterHardStorageArray(array)
 
   initialiseStoreNotFetchMap(hardStorageArray, params)
 
-  const hardStorageMetaArray = createStoreMetaArray(hardStorageArray)
+  initialiseFetchMetaMap(createFetchMetaArray(hardStorageArray), params)
 
-  initialiseFetchMetaMap(hardStorageMetaArray, params)
-
-  initialiseStoreMetaMap(hardStorageMetaArray, params)
+  initialiseStoreMetaMap(createStoreMetaArray(hardStorageArray), params)
 }
 
 export function initialiseStoreSoftStorage (array = [], params = {}) {
-  const softStorageArray = filterStoreSoftStorageArray(array)
+  const softStorageArray = filterSoftStorageArray(array)
 
   initialiseStoreNotFetchMap(softStorageArray, params)
 
-  const softStorageMetaArray = createStoreMetaArray(softStorageArray)
+  initialiseFetchMetaMap(createFetchMetaArray(softStorageArray), params)
 
-  initialiseFetchMetaMap(softStorageMetaArray, params)
-
-  initialiseStoreMetaMap(softStorageMetaArray, params)
+  initialiseStoreMetaMap(createStoreMetaArray(softStorageArray), params)
 }
 
 export function initialiseStoreStorage (array = [], params = {}) {
-  const storageArray = filterStoreStorageArray(array)
+  const storageArray = filterStorageArray(array)
 
   initialiseStoreNotFetchMap(storageArray, params)
 
-  const storageMetaArray = createStoreMetaArray(storageArray)
+  initialiseFetchMetaMap(createFetchMetaArray(storageArray), params)
 
-  initialiseFetchMetaMap(storageMetaArray, params)
-
-  initialiseStoreMetaMap(storageMetaArray, params)
+  initialiseStoreMetaMap(createStoreMetaArray(storageArray), params)
 }
 
 export function initialiseStore (array = [], params = {}) {
@@ -284,13 +291,15 @@ export function initialise (array = [], params = {}) {
 const getStateFromStore = ({ reduxStorage = {} } = {}) => reduxStorage
 const getStateForActionType = (type, { [type]: state = {} } = {}) => state
 
-export default (array) => {
+export default (array, configuration = {}) => {
   if (Array.isArray(array)) {
-    const fetchMap = new Map()
-    const storeMap = new Map()
-    const fetchMetaMap = new Map()
-    const storeMetaMap = new Map()
-    const clearMap = new Map()
+    const {
+      fetchMap = new Map(),
+      storeMap = new Map(),
+      fetchMetaMap = new Map(),
+      storeMetaMap = new Map(),
+      clearMap = new Map()
+    } = configuration
 
     initialise(array, { fetchMap, storeMap, fetchMetaMap, storeMetaMap, clearMap })
 
@@ -321,9 +330,20 @@ export default (array) => {
             const fetchMetaSet = fetchMetaMap.get(type)
 
             fetchMetaSet.forEach(({ type }) => {
-              const META = { type }
+              const {
+                meta
+              } = getStateForActionType(type, getStateFromStore(store.getState()))
 
-              store.dispatch(storageClearAction(META))
+              if (meta) {
+                const {
+                  cacheFor,
+                  cachedAt
+                } = meta
+
+                const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
+
+                store.dispatch(storageClearAction(META))
+              }
             })
           }
 
@@ -337,16 +357,29 @@ export default (array) => {
           if (fetchMetaMap.has(type)) {
             const fetchMetaSet = fetchMetaMap.get(type)
 
-            fetchMetaSet.forEach(({ type, cacheFor }) => {
-              const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
-
-              store.dispatch(storageFetchAction(META))
+            fetchMetaSet.forEach(({ type }) => {
+              const state = getStateForActionType(type, getStateFromStore(store.getState()))
 
               const {
-                data
-              } = getStateForActionType(type, getStateFromStore(store.getState()))
+                meta
+              } = state
 
-              if (data) store.dispatch(data)
+              if (meta) {
+                const {
+                  cacheFor,
+                  cachedAt
+                } = meta
+
+                const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
+
+                store.dispatch(storageFetchAction(META))
+
+                const {
+                  data
+                } = state
+
+                if (data) store.dispatch(data)
+              }
             })
           }
 
@@ -374,13 +407,13 @@ export default (array) => {
           })
 
           if (storeMetaMap.has(type)) {
-            const storeMetaSet = storeMetaMap.get(type)
+            const {
+              cacheFor
+            } = storeMetaMap.get(type)
 
-            storeMetaSet.forEach(({ type, cacheFor }) => {
-              const META = createMeta({ type, cacheFor, cachedAt, accessedAt: cachedAt })
+            const META = createMeta({ type, cacheFor, cachedAt, accessedAt: cachedAt })
 
-              if (!isEqual(META, meta)) store.dispatch(storageStoreAction(META, { ...action, type })) // META, DATA
-            })
+            if (!isEqual(META, meta)) store.dispatch(storageStoreAction(META, { ...action, type })) // META, DATA
           }
 
           return next({ ...action, type })
