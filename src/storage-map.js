@@ -305,21 +305,14 @@ export default (array, configuration = {}) => {
 
     return (store) => (next) => ({ type, ...action } = {}) => {
       if (fetchMap.has(type)) {
-        const defaultMeta = fetchMap.get(type)
-
-        const {
-          meta = defaultMeta
-        } = getStateForActionType(type, getStateFromStore(store.getState()))
-
-        const {
-          cacheFor
-        } = defaultMeta
-
-        const {
-          cachedAt
-        } = meta
-
         const accessedAt = Date.now()
+
+        const {
+          meta: {
+            cacheFor, // read from state or fetchMap
+            cachedAt // read from state - without default - ONLY
+          } = fetchMap.get(type)
+        } = getStateForActionType(type, getStateFromStore(store.getState()))
 
         const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
@@ -347,6 +340,9 @@ export default (array, configuration = {}) => {
             })
           }
 
+          /*
+           *  Pass along to the next middleware
+           */
           return next({ ...action, type })
         } else {
           store.dispatch(storageFetchAction(META))
@@ -390,20 +386,20 @@ export default (array, configuration = {}) => {
         }
       } else {
         if (storeMap.has(type)) {
-          const {
-            meta = {}
-          } = getStateForActionType(type, getStateFromStore(store.getState()))
+          const accessedAt = Date.now()
 
           const {
-            cachedAt = Date.now()
-          } = meta
+            meta: {
+              cachedAt = accessedAt
+            } = {}
+          } = getStateForActionType(type, getStateFromStore(store.getState()))
 
           const storeSet = storeMap.get(type)
 
           storeSet.forEach(({ type, cacheFor }) => {
-            const META = createMeta({ type, cacheFor, cachedAt, accessedAt: cachedAt })
+            const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
-            if (!isEqual(META, meta)) store.dispatch(storageStoreAction(META)) // META
+            store.dispatch(storageStoreAction(META)) // META
           })
 
           if (storeMetaMap.has(type)) {
@@ -411,9 +407,9 @@ export default (array, configuration = {}) => {
               cacheFor
             } = storeMetaMap.get(type)
 
-            const META = createMeta({ type, cacheFor, cachedAt, accessedAt: cachedAt })
+            const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
-            if (!isEqual(META, meta)) store.dispatch(storageStoreAction(META, { ...action, type })) // META, DATA
+            store.dispatch(storageStoreAction(META, { ...action, type })) // META, DATA
           }
 
           return next({ ...action, type })
