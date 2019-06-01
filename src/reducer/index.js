@@ -1,6 +1,7 @@
 import {
   STORAGE_FETCH,
   STORAGE_STORE,
+  STORAGE_WRITE,
   STORAGE_CLEAR
 } from 'redux-storage-middleware/actions'
 
@@ -8,52 +9,7 @@ import initialState from './initial-state'
 
 const STATE = initialState()
 
-export function storageFetch (state = STATE, action = {}) {
-  const {
-    meta: {
-      isSoftStorage = false,
-      isHardStorage = false
-    } = {}
-  } = action
-
-  if (isSoftStorage || isHardStorage) {
-    const {
-      meta = {},
-      meta: {
-        type
-      } = {},
-      data
-    } = action
-
-    const {
-      [type]: {
-        meta: stateMeta = {},
-        data: stateData
-      } = {}
-    } = state
-
-    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) } }
-  } else {
-    const {
-      meta = {},
-      meta: {
-        type
-      } = {},
-      data
-    } = action
-
-    const {
-      [type]: {
-        meta: stateMeta = {},
-        data: stateData
-      } = {}
-    } = state
-
-    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) } }
-  }
-}
-
-export function storageStore (state = STATE, action = {}) {
+export function storageWrite (state = STATE, action = {}) {
   const {
     meta: {
       isSoftStorage = false,
@@ -115,10 +71,13 @@ export default function storageReducer (state = STATE, action = {}) {
 
   switch (type) {
     case STORAGE_FETCH:
-      return storageFetch(state, action)
+      return storageWrite(state, action)
 
     case STORAGE_STORE:
-      return storageStore(state, action)
+      return storageWrite(state, action)
+
+    case STORAGE_WRITE:
+      return storageWrite(state, action)
 
     case STORAGE_CLEAR:
       return storageClear(state, action)

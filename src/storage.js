@@ -1,6 +1,7 @@
 import {
   STORAGE_FETCH,
   STORAGE_STORE,
+  STORAGE_WRITE,
   STORAGE_CLEAR
 } from 'redux-storage-middleware/actions'
 
@@ -92,6 +93,10 @@ export default (store) => (next) => (action) => {
       return next(action)
 
     case STORAGE_STORE:
+      storageWrite(store, action)
+      return next(action)
+
+    case STORAGE_WRITE:
       storageWrite(store, action)
       return next(action)
 

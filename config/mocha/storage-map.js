@@ -6,6 +6,7 @@ import configureStore from 'redux-mock-store'
 import {
   STORAGE_FETCH,
   STORAGE_STORE,
+  STORAGE_WRITE,
   STORAGE_CLEAR
 } from 'redux-storage-middleware/actions'
 
@@ -227,9 +228,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
               sinon.stub(Date, 'now')
                 .returns(DATE_NOW)
 
-              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [HARD_FETCH]: { meta: { cacheFor: HARD_CACHE_FOR, cachedAt, accessedAt } } } })
+              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [HARD_FETCH]: { meta: { cacheFor: HARD_CACHE_FOR, cachedAt, accessedAt } }, [HARD_STORE]: { meta: { cacheFor: HARD_CACHE_FOR, cachedAt, accessedAt } } } })
 
-              action = store.dispatch({ type: HARD_FETCH })
+              action = store.dispatch({ type: HARD_FETCH, payload: {} })
 
               actions = store.getActions()
 
@@ -243,22 +244,44 @@ describe('Redux Storage Middleware - Storage Map', () => {
             it('invokes the "next" middleware with the action', () => {
               actions.forEach((action) => console.table(action))
 
-              expect(actions.length).to.equal(2)
+              expect(actions.length).to.equal(3)
 
               expect(actions)
-                .to.deep.include({ type: HARD_FETCH })
+                .to.deep.include({ type: HARD_FETCH, payload: {} })
+            })
+
+            it('dispatches the `STORAGE_WRITE` action', () => {
+              actions.forEach((action) => console.table(action))
+
+              expect(actions.length).to.equal(3)
+
+              expect(actions)
+                .to.deep.include({
+                  type: STORAGE_WRITE,
+                  meta: {
+                    type: HARD_FETCH,
+                    accessedAt,
+                    cachedAt,
+                    cacheFor: HARD_CACHE_FOR,
+                    isHardStorage
+                  },
+                  data: {
+                    type: HARD_FETCH,
+                    payload: {}
+                  }
+                })
             })
 
             it('dispatches the `STORAGE_CLEAR` action', () => {
               actions.forEach((action) => console.table(action))
 
-              expect(actions.length).to.equal(2)
+              expect(actions.length).to.equal(3)
 
               expect(actions)
                 .to.deep.include({
                   type: STORAGE_CLEAR,
                   meta: {
-                    type: HARD_FETCH,
+                    type: HARD_STORE,
                     accessedAt,
                     cachedAt,
                     cacheFor: HARD_CACHE_FOR,
@@ -268,7 +291,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('returns the action', () => {
-              expect(action).to.deep.equal({ type: HARD_FETCH })
+              expect(action).to.deep.equal({ type: HARD_FETCH, payload: {} })
             })
           })
 
@@ -302,7 +325,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [HARD_FETCH]: { meta: { cacheFor: HARD_CACHE_FOR, cachedAt, accessedAt } } } })
 
-              action = store.dispatch({ type: HARD_FETCH })
+              action = store.dispatch({ type: HARD_FETCH, payload: {} })
 
               actions = store.getActions()
 
@@ -319,7 +342,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               expect(actions.length).to.equal(1)
 
               expect(actions)
-                .not.to.deep.include({ type: HARD_FETCH })
+                .not.to.deep.include({ type: HARD_FETCH, payload: {} })
             })
 
             it('dispatches the `STORAGE_FETCH` actions', () => {
@@ -336,12 +359,16 @@ describe('Redux Storage Middleware - Storage Map', () => {
                     cachedAt,
                     cacheFor: HARD_CACHE_FOR,
                     isHardStorage
+                  },
+                  data: {
+                    type: HARD_FETCH,
+                    payload: {}
                   }
                 })
             })
 
             it('returns the action', () => {
-              expect(action).to.deep.equal({ type: HARD_FETCH })
+              expect(action).to.deep.equal({ type: HARD_FETCH, payload: {} })
             })
           })
         })
@@ -375,7 +402,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             store = configureStore([ storageMap(configuration, maps) ])({})
 
-            action = store.dispatch({ type: HARD_FETCH })
+            action = store.dispatch({ type: HARD_FETCH, payload: {} })
 
             actions = store.getActions()
 
@@ -392,28 +419,32 @@ describe('Redux Storage Middleware - Storage Map', () => {
             expect(actions.length).to.equal(2)
 
             expect(actions)
-              .to.deep.include({ type: HARD_FETCH })
+              .to.deep.include({ type: HARD_FETCH, payload: {} })
           })
 
-          it('dispatches the `STORAGE_CLEAR` action', () => {
+          it('dispatches the `STORAGE_WRITE` action', () => {
             actions.forEach((action) => console.table(action))
 
             expect(actions.length).to.equal(2)
 
             expect(actions)
               .to.deep.include({
-                type: STORAGE_CLEAR,
+                type: STORAGE_WRITE,
                 meta: {
                   type: HARD_FETCH,
                   accessedAt,
                   cacheFor: HARD_CACHE_FOR,
                   isHardStorage
+                },
+                data: {
+                  type: HARD_FETCH,
+                  payload: {}
                 }
               })
           })
 
           it('returns the action', () => {
-            expect(action).to.deep.equal({ type: HARD_FETCH })
+            expect(action).to.deep.equal({ type: HARD_FETCH, payload: {} })
           })
         })
       })
@@ -477,24 +508,25 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({
               type: STORAGE_STORE,
               meta: {
-                type: HARD_STORE,
+                type: HARD_FETCH,
                 accessedAt,
                 cachedAt,
                 cacheFor: HARD_CACHE_FOR,
                 isHardStorage
-              },
-              data: { type: HARD_STORE }
+              }
             })
 
           expect(actions)
             .to.deep.include({
               type: STORAGE_STORE,
               meta: {
-                type: HARD_FETCH,
+                type: HARD_STORE,
                 accessedAt,
-                cachedAt,
                 cacheFor: HARD_CACHE_FOR,
                 isHardStorage
+              },
+              data: {
+                type: HARD_STORE
               }
             })
         })
@@ -536,9 +568,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
               sinon.stub(Date, 'now')
                 .returns(DATE_NOW)
 
-              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [SOFT_FETCH]: { meta: { cacheFor: SOFT_CACHE_FOR, cachedAt, accessedAt } } } })
+              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [SOFT_FETCH]: { meta: { cacheFor: SOFT_CACHE_FOR, cachedAt, accessedAt } }, [SOFT_STORE]: { meta: { cacheFor: SOFT_CACHE_FOR, cachedAt, accessedAt } } } })
 
-              action = store.dispatch({ type: SOFT_FETCH })
+              action = store.dispatch({ type: SOFT_FETCH, payload: {} })
 
               actions = store.getActions()
 
@@ -552,22 +584,44 @@ describe('Redux Storage Middleware - Storage Map', () => {
             it('invokes the "next" middleware with the action', () => {
               actions.forEach((action) => console.table(action))
 
-              expect(actions.length).to.equal(2)
+              expect(actions.length).to.equal(3)
 
               expect(actions)
-                .to.deep.include({ type: SOFT_FETCH })
+                .to.deep.include({ type: SOFT_FETCH, payload: {} })
+            })
+
+            it('dispatches the `STORAGE_WRITE` action', () => {
+              actions.forEach((action) => console.table(action))
+
+              expect(actions.length).to.equal(3)
+
+              expect(actions)
+                .to.deep.include({
+                  type: STORAGE_WRITE,
+                  meta: {
+                    type: SOFT_FETCH,
+                    accessedAt,
+                    cachedAt,
+                    cacheFor: SOFT_CACHE_FOR,
+                    isSoftStorage
+                  },
+                  data: {
+                    type: SOFT_FETCH,
+                    payload: {}
+                  }
+                })
             })
 
             it('dispatches the `STORAGE_CLEAR` action', () => {
               actions.forEach((action) => console.table(action))
 
-              expect(actions.length).to.equal(2)
+              expect(actions.length).to.equal(3)
 
               expect(actions)
                 .to.deep.include({
                   type: STORAGE_CLEAR,
                   meta: {
-                    type: SOFT_FETCH,
+                    type: SOFT_STORE,
                     accessedAt,
                     cachedAt,
                     cacheFor: SOFT_CACHE_FOR,
@@ -577,7 +631,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('returns the action', () => {
-              expect(action).to.deep.equal({ type: SOFT_FETCH })
+              expect(action).to.deep.equal({ type: SOFT_FETCH, payload: {} })
             })
           })
 
@@ -611,7 +665,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [SOFT_FETCH]: { meta: { cacheFor: SOFT_CACHE_FOR, cachedAt, accessedAt } } } })
 
-              action = store.dispatch({ type: SOFT_FETCH })
+              action = store.dispatch({ type: SOFT_FETCH, payload: {} })
 
               actions = store.getActions()
 
@@ -628,7 +682,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               expect(actions.length).to.equal(1)
 
               expect(actions)
-                .not.to.deep.include({ type: SOFT_FETCH })
+                .not.to.deep.include({ type: SOFT_FETCH, payload: {} })
             })
 
             it('dispatches the `STORAGE_FETCH` action', () => {
@@ -645,12 +699,16 @@ describe('Redux Storage Middleware - Storage Map', () => {
                     cachedAt,
                     cacheFor: SOFT_CACHE_FOR,
                     isSoftStorage
+                  },
+                  data: {
+                    type: SOFT_FETCH,
+                    payload: {}
                   }
                 })
             })
 
             it('returns the action', () => {
-              expect(action).to.deep.equal({ type: SOFT_FETCH })
+              expect(action).to.deep.equal({ type: SOFT_FETCH, payload: {} })
             })
           })
         })
@@ -684,7 +742,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             store = configureStore([ storageMap(configuration, maps) ])({})
 
-            action = store.dispatch({ type: SOFT_FETCH })
+            action = store.dispatch({ type: SOFT_FETCH, payload: {} })
 
             actions = store.getActions()
 
@@ -701,28 +759,32 @@ describe('Redux Storage Middleware - Storage Map', () => {
             expect(actions.length).to.equal(2)
 
             expect(actions)
-              .to.deep.include({ type: SOFT_FETCH })
+              .to.deep.include({ type: SOFT_FETCH, payload: {} })
           })
 
-          it('dispatches the `STORAGE_CLEAR` action', () => {
+          it('dispatches the `STORAGE_WRITE` action', () => {
             actions.forEach((action) => console.table(action))
 
             expect(actions.length).to.equal(2)
 
             expect(actions)
               .to.deep.include({
-                type: STORAGE_CLEAR,
+                type: STORAGE_WRITE,
                 meta: {
                   type: SOFT_FETCH,
                   accessedAt,
                   cacheFor: SOFT_CACHE_FOR,
                   isSoftStorage
+                },
+                data: {
+                  type: SOFT_FETCH,
+                  payload: {}
                 }
               })
           })
 
           it('returns the action', () => {
-            expect(action).to.deep.equal({ type: SOFT_FETCH })
+            expect(action).to.deep.equal({ type: SOFT_FETCH, payload: {} })
           })
         })
       })
@@ -786,24 +848,25 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({
               type: STORAGE_STORE,
               meta: {
-                type: SOFT_STORE,
+                type: SOFT_FETCH,
                 accessedAt,
                 cachedAt,
                 cacheFor: SOFT_CACHE_FOR,
                 isSoftStorage
-              },
-              data: { type: SOFT_STORE }
+              }
             })
 
           expect(actions)
             .to.deep.include({
               type: STORAGE_STORE,
               meta: {
-                type: SOFT_FETCH,
+                type: SOFT_STORE,
                 accessedAt,
-                cachedAt,
                 cacheFor: SOFT_CACHE_FOR,
                 isSoftStorage
+              },
+              data: {
+                type: SOFT_STORE
               }
             })
         })
@@ -844,9 +907,9 @@ describe('Redux Storage Middleware - Storage Map', () => {
               sinon.stub(Date, 'now')
                 .returns(DATE_NOW)
 
-              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [STATE_FETCH]: { meta: { cacheFor: STATE_CACHE_FOR, cachedAt, accessedAt } } } })
+              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [STATE_FETCH]: { meta: { cacheFor: STATE_CACHE_FOR, cachedAt, accessedAt } }, [STATE_STORE]: { meta: { cacheFor: STATE_CACHE_FOR, cachedAt, accessedAt } } } })
 
-              action = store.dispatch({ type: STATE_FETCH })
+              action = store.dispatch({ type: STATE_FETCH, payload: {} })
 
               actions = store.getActions()
 
@@ -860,22 +923,43 @@ describe('Redux Storage Middleware - Storage Map', () => {
             it('invokes the "next" middleware with the action', () => {
               actions.forEach((action) => console.table(action))
 
-              expect(actions.length).to.equal(2)
+              expect(actions.length).to.equal(3)
 
               expect(actions)
-                .to.deep.include({ type: STATE_FETCH })
+                .to.deep.include({ type: STATE_FETCH, payload: {} })
+            })
+
+            it('dispatches the `STORAGE_WRITE` action', () => {
+              actions.forEach((action) => console.table(action))
+
+              expect(actions.length).to.equal(3)
+
+              expect(actions)
+                .to.deep.include({
+                  type: STORAGE_WRITE,
+                  meta: {
+                    type: STATE_FETCH,
+                    accessedAt,
+                    cachedAt,
+                    cacheFor: STATE_CACHE_FOR
+                  },
+                  data: {
+                    type: STATE_FETCH,
+                    payload: {}
+                  }
+                })
             })
 
             it('dispatches the `STORAGE_CLEAR` action', () => {
               actions.forEach((action) => console.table(action))
 
-              expect(actions.length).to.equal(2)
+              expect(actions.length).to.equal(3)
 
               expect(actions)
                 .to.deep.include({
                   type: STORAGE_CLEAR,
                   meta: {
-                    type: STATE_FETCH,
+                    type: STATE_STORE,
                     accessedAt,
                     cachedAt,
                     cacheFor: STATE_CACHE_FOR
@@ -884,7 +968,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             })
 
             it('returns the action', () => {
-              expect(action).to.deep.equal({ type: STATE_FETCH })
+              expect(action).to.deep.equal({ type: STATE_FETCH, payload: {} })
             })
           })
 
@@ -917,7 +1001,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
               store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [STATE_FETCH]: { meta: { cacheFor: STATE_CACHE_FOR, cachedAt, accessedAt } } } })
 
-              action = store.dispatch({ type: STATE_FETCH })
+              action = store.dispatch({ type: STATE_FETCH, payload: {} })
 
               actions = store.getActions()
 
@@ -928,7 +1012,14 @@ describe('Redux Storage Middleware - Storage Map', () => {
               Date.now.restore()
             })
 
-            it('invokes the "next" middleware with the `STORAGE_FETCH` action', () => {
+            it('does not invoke the "next" middleware with the action', () => {
+              expect(actions.length).to.equal(1)
+
+              expect(actions)
+                .not.to.deep.include({ type: STATE_FETCH, payload: {} })
+            })
+
+            it('dispatches the `STORAGE_FETCH` action', () => {
               actions.forEach((action) => console.table(action))
 
               expect(actions.length).to.equal(1)
@@ -941,29 +1032,16 @@ describe('Redux Storage Middleware - Storage Map', () => {
                     accessedAt,
                     cachedAt,
                     cacheFor: STATE_CACHE_FOR
-                  }
-                })
-            })
-
-            it('does not dispatch the `STORAGE_CLEAR` action', () => {
-              actions.forEach((action) => console.table(action))
-
-              expect(actions.length).to.equal(1)
-
-              expect(actions)
-                .not.to.deep.include({
-                  type: STORAGE_CLEAR,
-                  meta: {
+                  },
+                  data: {
                     type: STATE_FETCH,
-                    accessedAt,
-                    cachedAt,
-                    cacheFor: STATE_CACHE_FOR
+                    payload: {}
                   }
                 })
             })
 
             it('returns the action', () => {
-              expect(action).to.deep.equal({ type: STATE_FETCH })
+              expect(action).to.deep.equal({ type: STATE_FETCH, payload: {} })
             })
           })
         })
@@ -996,7 +1074,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
             store = configureStore([ storageMap(configuration, maps) ])({})
 
-            action = store.dispatch({ type: STATE_FETCH })
+            action = store.dispatch({ type: STATE_FETCH, payload: {} })
 
             actions = store.getActions()
 
@@ -1013,27 +1091,31 @@ describe('Redux Storage Middleware - Storage Map', () => {
             expect(actions.length).to.equal(2)
 
             expect(actions)
-              .to.deep.include({ type: STATE_FETCH })
+              .to.deep.include({ type: STATE_FETCH, payload: {} })
           })
 
-          it('dispatches the `STORAGE_CLEAR` action', () => {
+          it('dispatches the `STORAGE_WRITE` action', () => {
             actions.forEach((action) => console.table(action))
 
             expect(actions.length).to.equal(2)
 
             expect(actions)
               .to.deep.include({
-                type: STORAGE_CLEAR,
+                type: STORAGE_WRITE,
                 meta: {
                   type: STATE_FETCH,
                   accessedAt,
                   cacheFor: STATE_CACHE_FOR
+                },
+                data: {
+                  type: STATE_FETCH,
+                  payload: {}
                 }
               })
           })
 
           it('returns the action', () => {
-            expect(action).to.deep.equal({ type: STATE_FETCH })
+            expect(action).to.deep.equal({ type: STATE_FETCH, payload: {} })
           })
         })
       })
@@ -1096,23 +1178,22 @@ describe('Redux Storage Middleware - Storage Map', () => {
             .to.deep.include({
               type: STORAGE_STORE,
               meta: {
-                type: STATE_STORE,
+                type: STATE_FETCH,
                 accessedAt,
                 cachedAt,
                 cacheFor: STATE_CACHE_FOR
-              },
-              data: { type: STATE_STORE }
+              }
             })
 
           expect(actions)
             .to.deep.include({
               type: STORAGE_STORE,
               meta: {
-                type: STATE_FETCH,
+                type: STATE_STORE,
                 accessedAt,
-                cachedAt,
                 cacheFor: STATE_CACHE_FOR
-              }
+              },
+              data: { type: STATE_STORE }
             })
         })
 

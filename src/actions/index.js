@@ -1,5 +1,6 @@
 export const STORAGE_FETCH = 'STORAGE_FETCH'
 export const STORAGE_STORE = 'STORAGE_STORE'
+export const STORAGE_WRITE = 'STORAGE_WRITE'
 export const STORAGE_CLEAR = 'STORAGE_CLEAR'
 
 export const storageFetchAction = (meta, data) => ({
@@ -14,7 +15,14 @@ export const storageStoreAction = (meta, data) => ({
   ...(data ? { data } : {})
 })
 
-export const storageClearAction = (meta) => ({
+export const storageWriteAction = (meta, data) => ({
+  type: STORAGE_WRITE,
+  ...(meta ? { meta } : {}),
+  ...(data ? { data } : {})
+})
+
+export const storageClearAction = (meta, data) => ({
   type: STORAGE_CLEAR,
-  meta
+  ...(meta ? { meta } : {}),
+  ...(data ? { data } : {})
 })
