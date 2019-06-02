@@ -9,52 +9,26 @@ import initialState from './initial-state'
 
 const STATE = initialState()
 
-export function storageWrite (state = STATE, action = {}) {
+export function storageWrite (state = {}, action = {}) {
   const {
+    meta = {},
     meta: {
-      isSoftStorage = false,
-      isHardStorage = false
-    } = {}
+      type
+    } = {},
+    data
   } = action
 
-  if (isSoftStorage || isHardStorage) {
-    const {
-      meta = {},
-      meta: {
-        type
-      } = {},
-      data
-    } = action
+  const {
+    [type]: {
+      meta: stateMeta = {},
+      data: stateData
+    } = {}
+  } = state
 
-    const {
-      [type]: {
-        meta: stateMeta = {},
-        data: stateData
-      } = {}
-    } = state
-
-    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) } }
-  } else {
-    const {
-      meta = {},
-      meta: {
-        type
-      } = {},
-      data
-    } = action
-
-    const {
-      [type]: {
-        meta: stateMeta = {},
-        data: stateData
-      } = {}
-    } = state
-
-    return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) } }
-  }
+  return { ...state, [type]: { meta: { ...stateMeta, ...meta, type }, ...(stateData ? { data: { ...stateData, ...(data || {}) } } : (data ? { data } : {})) } }
 }
 
-export function storageClear (state = STATE, { meta: { type } = {} } = {}) {
+export function storageClear (state = {}, { meta: { type } = {} } = {}) {
   if (type) delete state[type]
 
   return { ...state }
