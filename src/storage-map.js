@@ -234,6 +234,7 @@ export function initialise (array = [], params = {}) {
 
 const getStateFromStore = ({ reduxStorage = {} } = {}) => reduxStorage
 const getStateForActionType = (type, { [type]: state = {} } = {}) => state
+const hasStateForActionType = (type, state = {}) => type in state
 
 export default (array, configuration = {}) => {
   if (Array.isArray(array)) {
@@ -248,44 +249,70 @@ export default (array, configuration = {}) => {
     initialise(array, { fetchMap, storeMap, fetchMetaMap, storeMetaMap, clearMap })
 
     return (store) => (next) => ({ type, ...action } = {}) => {
+      /**
+       *  Is this action a FETCH `type`?
+       */
       if (fetchMap.has(type)) {
+        /**
+         *  Yes, it is!
+         *
+         *  Capture a timestamp
+         */
         const accessedAt = Date.now()
 
         const {
           meta: {
-            cacheFor, // read from state or fetchMap
-            cachedAt // read from state - without default - ONLY
+            cacheFor, // read from state or the default from `fetchMap`
+            cachedAt // read from state BUT DO NOT PROVIDE A DEFAULT
           } = fetchMap.get(type)
         } = getStateForActionType(type, getStateFromStore(store.getState()))
 
         const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
         if (isStale(META)) {
-          store.dispatch(storageWriteAction({ ...META, cachedAt: accessedAt }, { ...action, type }))
+          /**
+           *  This FETCH type is stale:
+           *
+           *    Either because it has no `cachedAt` timestamp (so has never been cached)
+           *    or because it has a `cachedAt` timestamp but exceeds its `cacheFor` duration
+           *
+           *  Dispatch an action to put this FETCH `type` into the cache
+           *
+           *  ALWAYS USE `createMeta`. ALWAYS! ALWAYS! ALWAYS!
+           */
+          store.dispatch(storageWriteAction(createMeta({ type, cacheFor, cachedAt: accessedAt, accessedAt }), { ...action, type }))
 
+          /**
+           *  Any configuration `meta` objects for this FETCH `type` have been transformed
+           *  into a Set in the `fetchMetaMap` Map
+           */
           if (fetchMetaMap.has(type)) {
             const fetchMetaSet = fetchMetaMap.get(type)
 
+            /**
+             *  Iterate through the configuration `meta` objects
+             */
             fetchMetaSet.forEach(({ type }) => {
-              const state = getStateForActionType(type, getStateFromStore(store.getState()))
+              console.warn(1, type, hasStateForActionType(type, getStateFromStore(store.getState())))
 
-              const {
-                meta
-              } = state
-
-              if (meta) {
+              /**
+               *  This action has been cached if it exists in the store ...
+               */
+              if (hasStateForActionType(type, getStateFromStore(store.getState()))) {
                 const {
-                  cacheFor,
-                  cachedAt
-                } = meta
-
-                const {
+                  meta: {
+                    cacheFor,
+                    cachedAt
+                  } = {},
                   data
-                } = state
+                } = getStateForActionType(type, getStateFromStore(store.getState()))
 
                 const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
-                store.dispatch(storageClearAction(META, data))
+                /**
+                 *  Dispatch an action to remove this `type` from the store
+                 */
+                store.dispatch(storageClearAction(META, data)) // META, data
               }
             })
           }
@@ -295,37 +322,49 @@ export default (array, configuration = {}) => {
            */
           return next({ ...action, type })
         } else {
-          store.dispatch(storageFetchAction(META, { ...action, type }))
+          /**
+           *  Dispatch an action to update this FETCH `type` in the cache
+           *
+           *  ALWAYS USE `createMeta`. ALWAYS! ALWAYS! ALWAYS!
+           */
+          store.dispatch(storageFetchAction(createMeta({ type, cacheFor, cachedAt, accessedAt }), { ...action, type })) // META, data
 
-          /*
-           *  `fetchMetaMap` contains a list of actions to replay for this `type`
+          /**
+           *  Any configuration `meta` objects for this FETCH `type` have been transformed
+           *  into a Set in the `fetchMetaMap` Map
            */
           if (fetchMetaMap.has(type)) {
             const fetchMetaSet = fetchMetaMap.get(type)
 
+            /**
+             *  Iterate through the configuration `meta` objects
+             */
             fetchMetaSet.forEach(({ type }) => {
-              const state = getStateForActionType(type, getStateFromStore(store.getState()))
+              console.warn(2, type, hasStateForActionType(type, getStateFromStore(store.getState())))
 
-              const {
-                meta
-              } = state
-
-              if (meta) {
+              /**
+               *  This action has been cached if it exists in the store ...
+               */
+              if (hasStateForActionType(type, getStateFromStore(store.getState()))) {
                 const {
-                  cacheFor,
-                  cachedAt
-                } = meta
-
-                const {
+                  meta: {
+                    cacheFor,
+                    cachedAt
+                  } = {},
                   data
-                } = state
+                } = getStateForActionType(type, getStateFromStore(store.getState()))
 
                 const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
-                store.dispatch(storageFetchAction(META, data))
+                /**
+                 *  Dispatch an action to update the `meta` attribute in the cache
+                 */
+                store.dispatch(storageFetchAction(META, data)) // META, data
 
                 /**
-                 *  REPLAY
+                 *  The `data` attribute is the cached action
+                 *
+                 *  Replay that action by dispatching the `data` attribute of this FETCH `type` object
                  */
                 if (data) store.dispatch(data)
               }
@@ -334,38 +373,60 @@ export default (array, configuration = {}) => {
 
           /*
            *  Do not pass along to the next middleware
+           *
+           *  This action has been intercepted and should not proceed through the
+           *  middleware chain
            */
           return { ...action, type }
         }
       } else {
+        /**
+        *  No, it is not a FETCH `type`
+        *
+        *  Is this action a STORE `type`?
+        */
         if (storeMap.has(type)) {
+          /**
+           *  Yes, it is!
+           *
+           *  Capture a timestamp
+           */
           const accessedAt = Date.now()
 
           const storeSet = storeMap.get(type)
 
+          /**
+           *  Each STORE `type` is a transformed configuration `meta` object belonging to a FETCH
+           *
+           *  But! A STORE might belong to several FETCH `type` objects, so `storeSet` is a Set
+           *
+           *  Iterate through the FETCH objects this STORE `type` might belong to (one to many)
+           */
           storeSet.forEach(({ type, cacheFor }) => {
-            const state = getStateForActionType(type, getStateFromStore(store.getState()))
+            console.warn(3, type, hasStateForActionType(type, getStateFromStore(store.getState())))
 
-            const {
-              meta
-            } = state
-
-            if (hasCachedAt(meta)) {
+            /**
+             *  This action has been cached if it exists in the store ...
+             */
+            if (hasStateForActionType(type, getStateFromStore(store.getState()))) {
               const {
-                cacheFor,
-                cachedAt
-              } = meta
-
-              const {
+                meta: {
+                  cacheFor,
+                  cachedAt
+                },
                 data
-              } = state
+              } = getStateForActionType(type, getStateFromStore(store.getState()))
 
               const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
-              store.dispatch(storageStoreAction(META, data)) // META
+              store.dispatch(storageStoreAction(META, data)) // META, data
             }
           })
 
+          /**
+           *  The configuration `meta` object of the FETCH `type` this STORE `type` belongs
+           *  to has been transformed and put into the `storeMetaMap` Map (many to one)
+           */
           if (storeMetaMap.has(type)) {
             const {
               meta: {
@@ -376,7 +437,11 @@ export default (array, configuration = {}) => {
 
             const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
-            store.dispatch(storageStoreAction(META, { ...action, type })) // META, DATA
+            /**
+             *  Dispatch an action to update the `meta` attribute in the cache
+             *  and make the `data` attribute the cached action
+             */
+            store.dispatch(storageStoreAction(META, { ...action, type })) // META, data
           }
 
           return next({ ...action, type })
