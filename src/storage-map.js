@@ -49,66 +49,49 @@ export const createMeta = (meta = {}) => (
   )
 )
 
-export const hasCacheFor = (value) => Math.floor(Number(value)) > 0
-export const notCacheFor = (value) => isNaN(Number(value)) || Math.floor(Number(value)) < 1
+export const hasCachedAt = ({ cachedAt = 0 } = {}) => Math.floor(Number(cachedAt)) > 0
+export const hasCacheFor = ({ cacheFor = 0 } = {}) => Math.floor(Number(cacheFor)) > 0
+export const notCachedAt = ({ cachedAt = 0 } = {}) => isNaN(Number(cachedAt)) || Math.floor(Number(cachedAt)) < 1
+export const notCacheFor = ({ cacheFor = 0 } = {}) => isNaN(Number(cacheFor)) || Math.floor(Number(cacheFor)) < 1
 
-export const filterFetch = ({ meta: { type, cacheFor = 0 } = {} } = {}) => hasCacheFor(cacheFor)
-export const filterStore = ({ meta: { type, cacheFor = 0 } = {} } = {}) => hasCacheFor(cacheFor)
-export const filterClear = ({ meta: { type, cacheFor = 0 } = {} } = {}) => notCacheFor(cacheFor)
+export const filterFetch = ({ meta = {} } = {}) => hasCacheFor(meta)
+export const filterStore = ({ meta = {} } = {}) => hasCacheFor(meta)
+export const filterClear = ({ meta = {} } = {}) => notCacheFor(meta)
 
-export const reduce = (a = [], { type, meta, meta: { cacheFor = 0 } = {} } = {}, i, array) => (
+export const getCachedAt = ({ cachedAt = 0 } = {}) => cachedAt
+export const getCacheFor = ({ cacheFor = 0 } = {}) => cacheFor
+
+export const reduceFetch = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
   a.map(mapType).includes(type)
-    ? array.filter(filterFor(type)).reduce(dedupeMeta, [])
-    : min(array.filter(filterFor(type)).map(mapCacheFor)) !== cacheFor
+    ? a
+    : min(array.filter(filterFor(type)).map(mapCacheFor)) !== cacheFor // min `cacheFor` among all metas for this FETCH type
+      ? a
+      : a.concat({ type, ...(meta ? { meta: { cacheFor } } : {}) }) // don't care about `type`
+)
+
+export const reduceFetchMeta = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
+  a.filter(filterFor(type)).map(mapMetaType).includes(t)
+    ? a
+    : min(array.filter(filterFor(type)).filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor
       ? a
       : a.concat({ type, ...(meta ? { meta } : {}) })
 )
 
-export const dedupeMeta = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
-  a.map(mapMetaType).includes(t)
+export const reduceStore = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
+  a.filter(filterFor(type)).map(mapMetaType).includes(t)
     ? a
-    : min(array.filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor
+    : min(array.filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor // smallest cacheFor among all metas of this STORE type
       ? a
       : a.concat({ type, ...(meta ? { meta } : {}) })
 )
 
-export const reduceFetch = (...args) => reduce(...args)
-
-export const reduceStore = (...args) => reduce(...args)
-
-export const reduceClear = (...args) => reduce(...args)
-
-export const reduceMetaFetch = (...args) => reduceFetch(...args)
-
-export const reduceMetaStore = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
-  a.map(mapType).includes(type)
-    ? array.filter(filterFor(type)).reduce(dedupeMeta, [])
-    : min(array.filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor
+export const reduceStoreMeta = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
+  a.filter(filterFor(type)).map(mapMetaType).includes(t)
+    ? a
+    : min(array.filter(filterFor(type)).filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor
       ? a
       : a.concat({ type, ...(meta ? { meta } : {}) })
 )
-
-export const dedupeFetch = (a = [], { type, meta } = {}) => (
-  a.map(mapMetaType).includes(type)
-    ? a
-    : a.concat({ type, ...(meta ? { meta } : {}) })
-)
-
-export const dedupeStore = (a = [], { type, meta, meta: { type: t } = {} } = {}) => (
-  a.map(mapMetaType).includes(t)
-    ? a
-    : a.concat({ type, ...(meta ? { meta } : {}) })
-)
-
-export const dedupeClear = (a = [], { type, meta, meta: { type: t } = {} } = {}) => (
-  a.map(mapMetaType).includes(t)
-    ? a
-    : a.concat({ type, ...(meta ? { meta } : {}) })
-)
-
-export const dedupeMetaFetch = (...args) => dedupeFetch(...args)
-
-export const dedupeMetaStore = (...args) => dedupeMeta(...args)
 
 export const filterHardStorage = ({ meta } = {}) => isHardStorage(meta)
 export const filterSoftStorage = ({ meta } = {}) => isSoftStorage(meta)
@@ -117,15 +100,17 @@ export const filterStorage = ({ meta } = {}) => !( // NOT
   isSoftStorage(meta)
 )
 
-export const filterNotFetchMap = ({ fetchMap = new Map() } = {}, { meta: { type } = {} } = {}) => !fetchMap.has(type)
-export const filterNotStoreMap = ({ storeMap = new Map() } = {}, { meta: { type } = {} } = {}) => !storeMap.has(type)
-export const filterIsUniqueMap = ({ fetchMap = new Map(), storeMap = new Map() } = {}, { meta: { type } = {} } = {}) => !( // NOT
-  fetchMap.has(type) ||
-  storeMap.has(type)
-)
+export const putIntoFetchMap = ({ fetchMap = new Map() } = {}, { type, meta = {} } = {}) => {
+  fetchMap.set(type, { ...meta, type })
+}
 
-export const putIntoFetchMap = ({ fetchMap = new Map() } = {}, { type, meta: { cacheFor, comparator } = {} } = {}) => {
-  fetchMap.set(type, { type, cacheFor, ...(comparator instanceof Function ? { comparator } : {}) })
+export const putIntoFetchMetaMap = ({ fetchMetaMap = new Map() } = {}, { type, meta = {} } = {}) => {
+  const fetchMetaSet = fetchMetaMap.get(type) || new Set()
+
+  fetchMetaMap.set(
+    type,
+    fetchMetaSet.add(meta)
+  )
 }
 
 export const putIntoStoreMap = ({ storeMap = new Map() } = {}, { type, meta: { type: TYPE, ...meta } = {} } = {}) => {
@@ -134,24 +119,6 @@ export const putIntoStoreMap = ({ storeMap = new Map() } = {}, { type, meta: { t
   storeMap.set(
     TYPE,
     storeSet.add({ ...meta, type })
-  )
-}
-
-export const putIntoClearMap = ({ clearMap = new Map() } = {}, { type, meta: { type: TYPE, cacheFor, ...meta } = {} } = {}) => {
-  const clearSet = clearMap.get(TYPE) || new Set()
-
-  clearMap.set(
-    TYPE,
-    clearSet.add({ ...meta, type, ...(cacheFor ? { cacheFor } : {}), isNaN: isNaN(cacheFor) })
-  )
-}
-
-export const putIntoFetchMetaMap = ({ fetchMetaMap = new Map() } = {}, { type, meta: { cacheFor, ...meta } = {} } = {}) => {
-  const fetchMetaSet = fetchMetaMap.get(type) || new Set()
-
-  fetchMetaMap.set(
-    type,
-    fetchMetaSet.add({ ...meta, cacheFor })
   )
 }
 
@@ -165,47 +132,54 @@ export const filterStorageArray = (array = []) => array.filter(filterStorage)
 
 export const filterFetchArray = (array = []) => array.filter(filterFetch)
 export const filterStoreArray = (array = []) => array.filter(filterStore)
-export const filterClearArray = (array = []) => array.filter(filterClear)
 
-export const filterNotFetchMapArray = (array = [], params = {}) => array.filter((configuration) => filterNotFetchMap(params, configuration))
-export const filterIsUniqueMapArray = (array = [], params = {}) => array.filter((configuration) => filterIsUniqueMap(params, configuration))
+export const reduceFetchArray = (array = []) => array.reduce(reduceFetch, [])
+export const reduceStoreArray = (array = []) => array.reduce(reduceStore, [])
+export const reduceFetchMetaArray = (array = []) => array.reduce(reduceFetchMeta, [])
+export const reduceStoreMetaArray = (array = []) => array.reduce(reduceStoreMeta, [])
 
-export const createFetchMetaArray = (array = []) => (
+export function initialiseFetchMap (array = [], params = {}) {
   array
-    .reduce(reduceMetaFetch, [])
-    .reduce(dedupeMetaFetch, [])
-)
-
-export const createStoreMetaArray = (array = []) => (
-  array
-    .reduce(reduceMetaStore, [])
-    .reduce(dedupeMetaStore, [])
-)
-
-export const getCachedAt = ({ cachedAt = 0 } = {}) => cachedAt
-export const getCacheFor = ({ cacheFor = 0 } = {}) => cacheFor
+    .forEach((configuration) => { putIntoFetchMap(params, configuration) })
+}
 
 export function initialiseFetchMetaMap (array = [], params = {}) {
   array
     .forEach((configuration) => { putIntoFetchMetaMap(params, configuration) })
 }
 
+export function initialiseStoreMap (array = [], params = {}) {
+  array
+    .forEach((configuration) => { putIntoStoreMap(params, configuration) })
+}
+
+export function initialiseStoreMetaMap (array = [], params = {}) {
+  array
+    .forEach((configuration) => { putIntoStoreMetaMap(params, configuration) })
+}
+
 export function initialiseFetchHardStorage (array = [], params = {}) {
-  filterHardStorageArray(array)
-    .reduce(reduceFetch, [])
-    .forEach((configuration) => { putIntoFetchMap(params, configuration) })
+  const fetchArray = filterHardStorageArray(array)
+
+  initialiseFetchMap(reduceFetchArray(fetchArray), params)
+
+  initialiseFetchMetaMap(reduceFetchMetaArray(fetchArray), params)
 }
 
 export function initialiseFetchSoftStorage (array = [], params = {}) {
-  filterSoftStorageArray(array)
-    .reduce(reduceFetch, [])
-    .forEach((configuration) => { putIntoFetchMap(params, configuration) })
+  const fetchArray = filterSoftStorageArray(array)
+
+  initialiseFetchMap(reduceFetchArray(fetchArray), params)
+
+  initialiseFetchMetaMap(reduceFetchMetaArray(fetchArray), params)
 }
 
 export function initialiseFetchStorage (array = [], params = {}) {
-  filterStorageArray(array)
-    .reduce(reduceFetch, [])
-    .forEach((configuration) => { putIntoFetchMap(params, configuration) })
+  const fetchArray = filterStorageArray(array)
+
+  initialiseFetchMap(reduceFetchArray(fetchArray), params)
+
+  initialiseFetchMetaMap(reduceFetchMetaArray(fetchArray), params)
 }
 
 export function initialiseFetch (array = [], params = {}) {
@@ -218,45 +192,28 @@ export function initialiseFetch (array = [], params = {}) {
   initialiseFetchStorage(fetchArray, params)
 }
 
-export function initialiseStoreMetaMap (array = [], params = {}) {
-  array
-    .forEach((configuration) => { putIntoStoreMetaMap(params, configuration) })
-}
-
-export function initialiseStoreNotFetchMap (array = [], params = {}) {
-  filterNotFetchMapArray(array, params)
-    .reduce(reduceStore, [])
-    .forEach((configuration) => putIntoStoreMap(params, configuration))
-}
-
 export function initialiseStoreHardStorage (array = [], params = {}) {
-  const hardStorageArray = filterHardStorageArray(array)
+  const storeArray = filterHardStorageArray(array)
 
-  initialiseStoreNotFetchMap(hardStorageArray, params)
+  initialiseStoreMap(reduceStoreArray(storeArray), params)
 
-  initialiseFetchMetaMap(createFetchMetaArray(hardStorageArray), params)
-
-  initialiseStoreMetaMap(createStoreMetaArray(hardStorageArray), params)
+  initialiseStoreMetaMap(reduceStoreMetaArray(storeArray), params)
 }
 
 export function initialiseStoreSoftStorage (array = [], params = {}) {
-  const softStorageArray = filterSoftStorageArray(array)
+  const storeArray = filterSoftStorageArray(array)
 
-  initialiseStoreNotFetchMap(softStorageArray, params)
+  initialiseStoreMap(reduceStoreArray(storeArray), params)
 
-  initialiseFetchMetaMap(createFetchMetaArray(softStorageArray), params)
-
-  initialiseStoreMetaMap(createStoreMetaArray(softStorageArray), params)
+  initialiseStoreMetaMap(reduceStoreMetaArray(storeArray), params)
 }
 
 export function initialiseStoreStorage (array = [], params = {}) {
-  const storageArray = filterStorageArray(array)
+  const storeArray = filterStorageArray(array)
 
-  initialiseStoreNotFetchMap(storageArray, params)
+  initialiseStoreMap(reduceStoreArray(storeArray), params)
 
-  initialiseFetchMetaMap(createFetchMetaArray(storageArray), params)
-
-  initialiseStoreMetaMap(createStoreMetaArray(storageArray), params)
+  initialiseStoreMetaMap(reduceStoreMetaArray(storeArray), params)
 }
 
 export function initialiseStore (array = [], params = {}) {
@@ -269,24 +226,10 @@ export function initialiseStore (array = [], params = {}) {
   initialiseStoreStorage(storeArray, params)
 }
 
-export function initialiseClearIsUniqueMap (array = [], params = {}) {
-  filterIsUniqueMapArray(array, params)
-    .reduce(reduceClear, [])
-    .forEach((configuration) => putIntoClearMap(params, configuration))
-}
-
-export function initialiseClear (array = [], params = {}) {
-  const clearArray = filterClearArray(array)
-
-  initialiseClearIsUniqueMap(clearArray, params)
-}
-
 export function initialise (array = [], params = {}) {
   initialiseFetch(array, params)
 
   initialiseStore(array, params)
-
-  initialiseClear(array, params)
 }
 
 const getStateFromStore = ({ reduxStorage = {} } = {}) => reduxStorage
@@ -318,7 +261,7 @@ export default (array, configuration = {}) => {
         const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
         if (isStale(META)) {
-          store.dispatch(storageWriteAction(META, { ...action, type }))
+          store.dispatch(storageWriteAction({ ...META, cachedAt: accessedAt }, { ...action, type }))
 
           if (fetchMetaMap.has(type)) {
             const fetchMetaSet = fetchMetaMap.get(type)
@@ -401,23 +344,33 @@ export default (array, configuration = {}) => {
           const storeSet = storeMap.get(type)
 
           storeSet.forEach(({ type, cacheFor }) => {
+            const state = getStateForActionType(type, getStateFromStore(store.getState()))
+
             const {
-              data,
-              meta: {
-                cachedAt = accessedAt
-              } = {}
-            } = getStateForActionType(type, getStateFromStore(store.getState()))
+              meta
+            } = state
 
-            const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
+            if (hasCachedAt(meta)) {
+              const {
+                cacheFor,
+                cachedAt
+              } = meta
 
-            store.dispatch(storageStoreAction(META, data)) // META
+              const {
+                data
+              } = state
+
+              const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
+
+              store.dispatch(storageStoreAction(META, data)) // META
+            }
           })
 
           if (storeMetaMap.has(type)) {
             const {
               meta: {
                 cacheFor,
-                cachedAt // read from state - without default - (it's optional here)
+                cachedAt = accessedAt // read from state if state is available. Supply default otherwise
               } = storeMetaMap.get(type)
             } = getStateForActionType(type, getStateFromStore(store.getState()))
 

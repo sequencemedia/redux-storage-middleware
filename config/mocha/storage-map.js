@@ -14,7 +14,6 @@ import storageMap, {
   initialise,
   initialiseFetch,
   initialiseStore,
-  initialiseClear,
   initialiseFetchStorage,
   initialiseFetchHardStorage,
   initialiseFetchSoftStorage,
@@ -22,9 +21,7 @@ import storageMap, {
   initialiseStoreStorage,
   initialiseStoreHardStorage,
   initialiseStoreSoftStorage,
-  initialiseStoreNotFetchMap,
   initialiseStoreMetaMap,
-  initialiseClearIsUniqueMap,
 
   isStale,
   isHardStorage,
@@ -49,37 +46,26 @@ import storageMap, {
 
   createMeta,
 
+  hasCachedAt,
   hasCacheFor,
+  notCachedAt,
   notCacheFor,
 
   filterFetch,
   filterStore,
-  filterClear,
 
   max,
   min,
 
-  // reduceFetch,
-  // reduceStore,
-  // reduceClear,
+  reduceFetch,
+  reduceFetchMeta,
 
-  reduceMetaFetch,
-  reduceMetaStore,
-
-  dedupeMetaFetch,
-  dedupeMetaStore,
-
-  dedupeFetch,
-  dedupeStore,
-  dedupeClear,
+  reduceStore,
+  reduceStoreMeta,
 
   filterHardStorage,
   filterSoftStorage,
   filterStorage, /*
-
-  filterNotFetchMap,
-  filterNotStoreMap,
-  filterIsUniqueMap,
 
   putIntoFetchMap,
   putIntoStoreMap,
@@ -94,13 +80,11 @@ import storageMap, {
 
   filterFetchArray,
   filterStoreArray,
-  filterClearArray,
 
-  filterNotFetchMapArray,
-  filterIsUniqueMapArray,
-
-  createFetchMetaArray,
-  createStoreMetaArray
+  reduceFetchArray,
+  reduceFetchMetaArray,
+  reduceStoreArray,
+  reduceStoreMetaArray
 } from 'redux-storage-middleware/storage-map'
 
 function log (configuration = [], {
@@ -166,7 +150,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
   const STATE_STORE = 'STATE_STORE'
 
   const TYPE = 'TYPE'
-  const META_TYPE = 'META_TYPE'
 
   const TIME_ONE_SECOND = 1000
   const TIME_ONE_MINUTE = TIME_ONE_SECOND * 60
@@ -209,7 +192,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let maps
 
             const accessedAt = DATE_NOW
-            const cachedAt = DATE_NOW - (HARD_CACHE_FOR + TIME_ONE_SECOND)
+            const cachedAt = DATE_NOW
             const isHardStorage = true
 
             beforeEach(() => {
@@ -228,7 +211,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               sinon.stub(Date, 'now')
                 .returns(DATE_NOW)
 
-              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [HARD_FETCH]: { meta: { cacheFor: HARD_CACHE_FOR, cachedAt, accessedAt } }, [HARD_STORE]: { meta: { cacheFor: HARD_CACHE_FOR, cachedAt, accessedAt } } } })
+              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [HARD_FETCH]: { meta: { cacheFor: HARD_CACHE_FOR } }, [HARD_STORE]: { meta: { cacheFor: HARD_CACHE_FOR } } } })
 
               action = store.dispatch({ type: HARD_FETCH, payload: {} })
 
@@ -283,7 +266,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   meta: {
                     type: HARD_STORE,
                     accessedAt,
-                    cachedAt,
                     cacheFor: HARD_CACHE_FOR,
                     isHardStorage
                   }
@@ -382,6 +364,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           let maps
 
           const accessedAt = DATE_NOW
+          const cachedAt = DATE_NOW
           const isHardStorage = true
 
           beforeEach(() => {
@@ -433,6 +416,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 meta: {
                   type: HARD_FETCH,
                   accessedAt,
+                  cachedAt,
                   cacheFor: HARD_CACHE_FOR,
                   isHardStorage
                 },
@@ -493,7 +477,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         it('invokes the "next" middleware with the action', () => {
           actions.forEach((action) => console.table(action))
 
-          expect(actions.length).to.equal(3)
+          expect(actions.length).to.equal(2)
 
           expect(actions)
             .to.deep.include({ type: HARD_STORE })
@@ -502,19 +486,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         it('dispatches the `STORAGE_STORE` actions', () => {
           actions.forEach((action) => console.table(action))
 
-          expect(actions.length).to.equal(3)
-
-          expect(actions)
-            .to.deep.include({
-              type: STORAGE_STORE,
-              meta: {
-                type: HARD_FETCH,
-                accessedAt,
-                cachedAt,
-                cacheFor: HARD_CACHE_FOR,
-                isHardStorage
-              }
-            })
+          expect(actions.length).to.equal(2)
 
           expect(actions)
             .to.deep.include({
@@ -522,6 +494,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               meta: {
                 type: HARD_STORE,
                 accessedAt,
+                cachedAt,
                 cacheFor: HARD_CACHE_FOR,
                 isHardStorage
               },
@@ -549,7 +522,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let maps
 
             const accessedAt = DATE_NOW
-            const cachedAt = DATE_NOW - (SOFT_CACHE_FOR + TIME_ONE_SECOND)
+            const cachedAt = DATE_NOW
             const isSoftStorage = true
 
             beforeEach(() => {
@@ -568,7 +541,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               sinon.stub(Date, 'now')
                 .returns(DATE_NOW)
 
-              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [SOFT_FETCH]: { meta: { cacheFor: SOFT_CACHE_FOR, cachedAt, accessedAt } }, [SOFT_STORE]: { meta: { cacheFor: SOFT_CACHE_FOR, cachedAt, accessedAt } } } })
+              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [SOFT_FETCH]: { meta: { cacheFor: SOFT_CACHE_FOR } }, [SOFT_STORE]: { meta: { cacheFor: SOFT_CACHE_FOR } } } })
 
               action = store.dispatch({ type: SOFT_FETCH, payload: {} })
 
@@ -623,7 +596,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   meta: {
                     type: SOFT_STORE,
                     accessedAt,
-                    cachedAt,
                     cacheFor: SOFT_CACHE_FOR,
                     isSoftStorage
                   }
@@ -722,6 +694,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           let maps
 
           const accessedAt = DATE_NOW
+          const cachedAt = DATE_NOW
           const isSoftStorage = true
 
           beforeEach(() => {
@@ -773,6 +746,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 meta: {
                   type: SOFT_FETCH,
                   accessedAt,
+                  cachedAt,
                   cacheFor: SOFT_CACHE_FOR,
                   isSoftStorage
                 },
@@ -833,7 +807,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         it('invokes the "next" middleware with the action', () => {
           actions.forEach((action) => console.table(action))
 
-          expect(actions.length).to.equal(3)
+          expect(actions.length).to.equal(2)
 
           expect(actions)
             .to.deep.include({ type: SOFT_STORE })
@@ -842,19 +816,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         it('dispatches the `STORAGE_STORE` actions', () => {
           actions.forEach((action) => console.table(action))
 
-          expect(actions.length).to.equal(3)
-
-          expect(actions)
-            .to.deep.include({
-              type: STORAGE_STORE,
-              meta: {
-                type: SOFT_FETCH,
-                accessedAt,
-                cachedAt,
-                cacheFor: SOFT_CACHE_FOR,
-                isSoftStorage
-              }
-            })
+          expect(actions.length).to.equal(2)
 
           expect(actions)
             .to.deep.include({
@@ -862,6 +824,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               meta: {
                 type: SOFT_STORE,
                 accessedAt,
+                cachedAt,
                 cacheFor: SOFT_CACHE_FOR,
                 isSoftStorage
               },
@@ -889,7 +852,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             let maps
 
             const accessedAt = DATE_NOW
-            const cachedAt = DATE_NOW - (STATE_CACHE_FOR + TIME_ONE_SECOND)
+            const cachedAt = DATE_NOW
 
             beforeEach(() => {
               configuration = [
@@ -907,7 +870,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               sinon.stub(Date, 'now')
                 .returns(DATE_NOW)
 
-              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [STATE_FETCH]: { meta: { cacheFor: STATE_CACHE_FOR, cachedAt, accessedAt } }, [STATE_STORE]: { meta: { cacheFor: STATE_CACHE_FOR, cachedAt, accessedAt } } } })
+              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [STATE_FETCH]: { meta: { cacheFor: STATE_CACHE_FOR } }, [STATE_STORE]: { meta: { cacheFor: STATE_CACHE_FOR } } } })
 
               action = store.dispatch({ type: STATE_FETCH, payload: {} })
 
@@ -961,7 +924,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
                   meta: {
                     type: STATE_STORE,
                     accessedAt,
-                    cachedAt,
                     cacheFor: STATE_CACHE_FOR
                   }
                 })
@@ -1055,6 +1017,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           let maps
 
           const accessedAt = DATE_NOW
+          const cachedAt = DATE_NOW
 
           beforeEach(() => {
             configuration = [
@@ -1105,6 +1068,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
                 meta: {
                   type: STATE_FETCH,
                   accessedAt,
+                  cachedAt,
                   cacheFor: STATE_CACHE_FOR
                 },
                 data: {
@@ -1163,7 +1127,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         it('invokes the "next" middleware with the action', () => {
           actions.forEach((action) => console.table(action))
 
-          expect(actions.length).to.equal(3)
+          expect(actions.length).to.equal(2)
 
           expect(actions)
             .to.deep.include({ type: STATE_STORE })
@@ -1172,18 +1136,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         it('dispatches the `STORAGE_STORE` actions', () => {
           actions.forEach((action) => console.table(action))
 
-          expect(actions.length).to.equal(3)
-
-          expect(actions)
-            .to.deep.include({
-              type: STORAGE_STORE,
-              meta: {
-                type: STATE_FETCH,
-                accessedAt,
-                cachedAt,
-                cacheFor: STATE_CACHE_FOR
-              }
-            })
+          expect(actions.length).to.equal(2)
 
           expect(actions)
             .to.deep.include({
@@ -1191,6 +1144,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               meta: {
                 type: STATE_STORE,
                 accessedAt,
+                cachedAt,
                 cacheFor: STATE_CACHE_FOR
               },
               data: { type: STATE_STORE }
@@ -1255,14 +1209,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  describe('initialiseClear()', () => {
-    describe('Always', () => {
-      it('is a function', () => {
-        expect(initialiseClear).to.be.a('function')
-      })
-    })
-  })
-
   describe('initialiseFetchStorage()', () => {
     describe('Always', () => {
       it('is a function', () => {
@@ -1319,26 +1265,10 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  describe('initialiseStoreNotFetchMap()', () => {
-    describe('Always', () => {
-      it('is a function', () => {
-        expect(initialiseStoreNotFetchMap).to.be.a('function')
-      })
-    })
-  })
-
   describe('initialiseStoreMetaMap()', () => {
     describe('Always', () => {
       it('is a function', () => {
         expect(initialiseStoreMetaMap).to.be.a('function')
-      })
-    })
-  })
-
-  describe('initialiseClearIsUniqueMap()', () => {
-    describe('Always', () => {
-      it('is a function', () => {
-        expect(initialiseClearIsUniqueMap).to.be.a('function')
       })
     })
   })
@@ -1994,7 +1924,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
       describe('The state does not have an "accessedAt" value', () => {
         it('returns an object', () => {
           const configuration = {
-            comparator: COMPARATOR,
             cachedAt: CACHED_AT,
             cacheFor: CACHE_FOR,
             isSoftStorage: true,
@@ -2003,7 +1932,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
           expect(createMeta(configuration))
             .to.deep.equal({
-              comparator: COMPARATOR,
               cachedAt: CACHED_AT,
               cacheFor: CACHE_FOR,
               isSoftStorage: true,
@@ -2015,7 +1943,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
       describe('The state does not have a "cachedAt" value', () => {
         it('returns an object', () => {
           const configuration = {
-            comparator: COMPARATOR,
             accessedAt: ACCESSED_AT,
             cacheFor: CACHE_FOR,
             isSoftStorage: true,
@@ -2024,7 +1951,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
           expect(createMeta(configuration))
             .to.deep.equal({
-              comparator: COMPARATOR,
               accessedAt: ACCESSED_AT,
               cacheFor: CACHE_FOR,
               isSoftStorage: true,
@@ -2036,7 +1962,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
       describe('The state does not have a "cacheFor" value', () => {
         it('returns an object', () => {
           const configuration = {
-            comparator: COMPARATOR,
             accessedAt: ACCESSED_AT,
             cachedAt: CACHED_AT,
             isSoftStorage: true,
@@ -2045,7 +1970,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
           expect(createMeta(configuration))
             .to.deep.equal({
-              comparator: COMPARATOR,
               accessedAt: ACCESSED_AT,
               cachedAt: CACHED_AT,
               isSoftStorage: true,
@@ -2057,7 +1981,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
       describe('The state does not have an "isSoftStorage" value', () => {
         it('returns an object', () => {
           const configuration = {
-            comparator: COMPARATOR,
             accessedAt: ACCESSED_AT,
             cachedAt: CACHED_AT,
             cacheFor: CACHE_FOR,
@@ -2066,7 +1989,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
           expect(createMeta(configuration))
             .to.deep.equal({
-              comparator: COMPARATOR,
               accessedAt: ACCESSED_AT,
               cachedAt: CACHED_AT,
               cacheFor: CACHE_FOR,
@@ -2078,7 +2000,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
       describe('The state does not have an "isHardStorage" value', () => {
         it('returns an object', () => {
           const configuration = {
-            comparator: COMPARATOR,
             accessedAt: ACCESSED_AT,
             cachedAt: CACHED_AT,
             cacheFor: CACHE_FOR,
@@ -2087,7 +2008,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
           expect(createMeta(configuration))
             .to.deep.equal({
-              comparator: COMPARATOR,
               accessedAt: ACCESSED_AT,
               cachedAt: CACHED_AT,
               cacheFor: CACHE_FOR,
@@ -2105,6 +2025,64 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
+  describe('hasCachedAt()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(hasCachedAt).to.be.a('function')
+      })
+    })
+
+    describe('With configuration', () => {
+      it('is a positive number', () => {
+        expect(hasCachedAt({ cachedAt: +1 })).to.be.true
+      })
+
+      it('is not a positive number', () => {
+        expect(hasCachedAt({ cachedAt: 0 })).to.be.false
+
+        expect(hasCachedAt({ cachedAt: -1 })).to.be.false
+      })
+
+      it('is a positive number as a string', () => {
+        expect(hasCachedAt({ cachedAt: '+1' })).to.be.true
+      })
+
+      it('is not a positive number as a string', () => {
+        expect(hasCachedAt({ cachedAt: '0' })).to.be.false
+
+        expect(hasCachedAt({ cachedAt: '-1' })).to.be.false
+      })
+
+      it('can coerce to a positive number', () => {
+        expect(hasCachedAt({ cachedAt: true })).to.be.true
+      })
+
+      it('cannot coerce to a positive number', () => {
+        expect(hasCachedAt({ cachedAt: false })).to.be.false
+
+        expect(hasCachedAt({ cachedAt: undefined })).to.be.false
+
+        expect(hasCachedAt({ cachedAt: null })).to.be.false
+      })
+
+      it('coerces to NaN', () => {
+        expect(hasCachedAt({ cachedAt: 'x' })).to.be.false
+
+        expect(hasCachedAt({ cachedAt: {} })).to.be.false
+
+        expect(hasCachedAt({ cachedAt: [] })).to.be.false
+
+        expect(hasCachedAt({ cachedAt: NaN })).to.be.false
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns false', () => {
+        expect(hasCachedAt()).to.be.false
+      })
+    })
+  })
+
   describe('hasCacheFor()', () => {
     describe('Always', () => {
       it('is a function', () => {
@@ -2114,51 +2092,109 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
     describe('With configuration', () => {
       it('is a positive number', () => {
-        expect(hasCacheFor(+1)).to.be.true
+        expect(hasCacheFor({ cacheFor: +1 })).to.be.true
       })
 
       it('is not a positive number', () => {
-        expect(hasCacheFor(0)).to.be.false
+        expect(hasCacheFor({ cacheFor: 0 })).to.be.false
 
-        expect(hasCacheFor(-1)).to.be.false
+        expect(hasCacheFor({ cacheFor: -1 })).to.be.false
       })
 
       it('is a positive number as a string', () => {
-        expect(hasCacheFor('+1')).to.be.true
+        expect(hasCacheFor({ cacheFor: '+1' })).to.be.true
       })
 
       it('is not a positive number as a string', () => {
-        expect(hasCacheFor('0')).to.be.false
+        expect(hasCacheFor({ cacheFor: '0' })).to.be.false
 
-        expect(hasCacheFor('-1')).to.be.false
+        expect(hasCacheFor({ cacheFor: '-1' })).to.be.false
       })
 
       it('can coerce to a positive number', () => {
-        expect(hasCacheFor(true)).to.be.true
+        expect(hasCacheFor({ cacheFor: true })).to.be.true
       })
 
       it('cannot coerce to a positive number', () => {
-        expect(hasCacheFor(false)).to.be.false
+        expect(hasCacheFor({ cacheFor: false })).to.be.false
 
-        expect(hasCacheFor(undefined)).to.be.false
+        expect(hasCacheFor({ cacheFor: undefined })).to.be.false
 
-        expect(hasCacheFor(null)).to.be.false
+        expect(hasCacheFor({ cacheFor: null })).to.be.false
       })
 
       it('coerces to NaN', () => {
-        expect(hasCacheFor('x')).to.be.false
+        expect(hasCacheFor({ cacheFor: 'x' })).to.be.false
 
-        expect(hasCacheFor({})).to.be.false
+        expect(hasCacheFor({ cacheFor: {} })).to.be.false
 
-        expect(hasCacheFor([])).to.be.false
+        expect(hasCacheFor({ cacheFor: [] })).to.be.false
 
-        expect(hasCacheFor(NaN)).to.be.false
+        expect(hasCacheFor({ cacheFor: NaN })).to.be.false
       })
     })
 
     describe('Without configuration', () => {
       it('returns false', () => {
         expect(hasCacheFor()).to.be.false
+      })
+    })
+  })
+
+  describe('notCachedAt()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(notCachedAt).to.be.a('function')
+      })
+    })
+
+    describe('With configuration', () => {
+      it('is zero or a negative number', () => {
+        expect(notCachedAt({ cachedAt: 0 })).to.be.true
+
+        expect(notCachedAt({ cachedAt: -1 })).to.be.true
+      })
+
+      it('is not zero or a negative number', () => {
+        expect(notCachedAt({ cachedAt: +1 })).to.be.false
+      })
+
+      it('is zero or a negative number as a string', () => {
+        expect(notCachedAt({ cachedAt: '0' })).to.be.true
+
+        expect(notCachedAt({ cachedAt: '-1' })).to.be.true
+      })
+
+      it('is not zero or a negative number as a string', () => {
+        expect(notCachedAt({ cachedAt: '+1' })).to.be.false
+      })
+
+      it('can coerce to zero or a negative number', () => {
+        expect(notCachedAt({ cachedAt: false })).to.be.true
+
+        expect(notCachedAt({ cachedAt: undefined })).to.be.true
+
+        expect(notCachedAt({ cachedAt: null })).to.be.true
+      })
+
+      it('cannot coerce to zero or a negative number', () => {
+        expect(notCachedAt({ cachedAt: true })).to.be.false
+      })
+
+      it('coerces to NaN', () => {
+        expect(notCachedAt({ cachedAt: 'x' })).to.be.true
+
+        expect(notCachedAt({ cachedAt: {} })).to.be.true
+
+        expect(notCachedAt({ cachedAt: [] })).to.be.true
+
+        expect(notCachedAt({ cachedAt: NaN })).to.be.true
+      })
+    })
+
+    describe('Without configuration', () => {
+      it('returns false', () => {
+        expect(notCachedAt()).to.be.true
       })
     })
   })
@@ -2172,45 +2208,45 @@ describe('Redux Storage Middleware - Storage Map', () => {
 
     describe('With configuration', () => {
       it('is zero or a negative number', () => {
-        expect(notCacheFor(0)).to.be.true
+        expect(notCacheFor({ cacheFor: 0 })).to.be.true
 
-        expect(notCacheFor(-1)).to.be.true
+        expect(notCacheFor({ cacheFor: -1 })).to.be.true
       })
 
       it('is not zero or a negative number', () => {
-        expect(notCacheFor(+1)).to.be.false
+        expect(notCacheFor({ cacheFor: +1 })).to.be.false
       })
 
       it('is zero or a negative number as a string', () => {
-        expect(notCacheFor('0')).to.be.true
+        expect(notCacheFor({ cacheFor: '0' })).to.be.true
 
-        expect(notCacheFor('-1')).to.be.true
+        expect(notCacheFor({ cacheFor: '-1' })).to.be.true
       })
 
       it('is not zero or a negative number as a string', () => {
-        expect(notCacheFor('+1')).to.be.false
+        expect(notCacheFor({ cacheFor: '+1' })).to.be.false
       })
 
       it('can coerce to zero or a negative number', () => {
-        expect(notCacheFor(false)).to.be.true
+        expect(notCacheFor({ cacheFor: false })).to.be.true
 
-        expect(notCacheFor(undefined)).to.be.true
+        expect(notCacheFor({ cacheFor: undefined })).to.be.true
 
-        expect(notCacheFor(null)).to.be.true
+        expect(notCacheFor({ cacheFor: null })).to.be.true
       })
 
       it('cannot coerce to zero or a negative number', () => {
-        expect(notCacheFor(true)).to.be.false
+        expect(notCacheFor({ cacheFor: true })).to.be.false
       })
 
       it('coerces to NaN', () => {
-        expect(notCacheFor('x')).to.be.true
+        expect(notCacheFor({ cacheFor: 'x' })).to.be.true
 
-        expect(notCacheFor({})).to.be.true
+        expect(notCacheFor({ cacheFor: {} })).to.be.true
 
-        expect(notCacheFor([])).to.be.true
+        expect(notCacheFor({ cacheFor: [] })).to.be.true
 
-        expect(notCacheFor(NaN)).to.be.true
+        expect(notCacheFor({ cacheFor: NaN })).to.be.true
       })
     })
 
@@ -2233,464 +2269,6 @@ describe('Redux Storage Middleware - Storage Map', () => {
     describe('Always', () => {
       it('is a function', () => {
         expect(filterStore).to.be.a('function')
-      })
-    })
-  })
-
-  describe('filterClear()', () => {
-    describe('Always', () => {
-      it('is a function', () => {
-        expect(filterClear).to.be.a('function')
-      })
-    })
-  })
-
-  xdescribe('reduceFetch()', () => {
-
-  })
-
-  xdescribe('reduceStore()', () => {
-
-  })
-
-  xdescribe('reduceClear()', () => {
-
-  })
-
-  describe('dedupeFetch()', () => {
-    const array = []
-
-    beforeEach(() => {
-      sinon.stub(array, 'map').returns(array)
-      sinon.stub(array, 'includes')
-    })
-
-    afterEach(() => {
-      array.map.restore()
-      array.includes.restore()
-    })
-
-    describe('Always', () => {
-      it('is a function', () => {
-        expect(dedupeFetch).to.be.a('function')
-      })
-    })
-
-    describe('With parameters', () => {
-      describe('Always', () => {
-        beforeEach(() => {
-          dedupeFetch(array, { type: TYPE, meta: {} })
-        })
-
-        it('invokes the "map" function', () => {
-          const {
-            map: {
-              firstCall: {
-                args: [ map ]
-              }
-            }
-          } = array
-
-          expect(map).to.equal(mapMetaType)
-        })
-
-        it('invokes the "includes" function with the "type" value', () => {
-          const {
-            includes: {
-              firstCall: {
-                args: [ type ]
-              }
-            }
-          } = array
-
-          expect(type).to.equal(TYPE)
-        })
-      })
-
-      describe('The mapped array includes the "type" value', () => {
-        beforeEach(() => {
-          sinon.stub(array, 'concat').returns([])
-
-          array.includes.returns(true)
-        })
-
-        afterEach(() => {
-          array.concat.restore()
-        })
-
-        it('returns an array', () => {
-          expect(dedupeFetch(array, { type: TYPE, meta: {} })).to.deep.equal([])
-        })
-
-        it('does not call concat', () => {
-          dedupeFetch(array, { type: TYPE, meta: {} })
-
-          expect(array.concat).not.to.have.been.called
-        })
-      })
-
-      describe('The mapped array does not include the "type" value', () => {
-        beforeEach(() => {
-          sinon.stub(array, 'concat').returns([])
-
-          array.includes.returns(false)
-        })
-
-        afterEach(() => {
-          array.concat.restore()
-        })
-
-        it('returns an array', () => {
-          expect(dedupeFetch(array, { type: TYPE, meta: {} })).to.deep.equal([])
-        })
-
-        it('calls concat with an object', () => {
-          dedupeFetch(array, { type: TYPE, meta: {} })
-
-          const {
-            concat: {
-              firstCall: {
-                args: [ object ]
-              }
-            }
-          } = array
-
-          expect(object).to.deep.equal({ type: TYPE, meta: {} })
-        })
-      })
-    })
-
-    describe('Without parameters', () => {
-      const array = []
-
-      beforeEach(() => {
-        sinon.stub(Array.prototype, 'map').returns(array)
-        sinon.stub(array, 'includes')
-      })
-
-      afterEach(() => {
-        Array.prototype.map.restore()
-        array.includes.restore()
-      })
-
-      beforeEach(() => {
-        dedupeFetch()
-      })
-
-      it('invokes the "map" function', () => {
-        const {
-          map: {
-            firstCall: {
-              args: [ map ]
-            }
-          }
-        } = Array.prototype
-
-        expect(map).to.equal(mapMetaType)
-      })
-
-      it('invokes the "includes" function with the "type" value', () => {
-        const {
-          includes: {
-            firstCall: {
-              args: [ type ]
-            }
-          }
-        } = array
-
-        expect(type).to.be.undefined
-      })
-    })
-  })
-
-  describe('dedupeStore()', () => {
-    const array = []
-
-    beforeEach(() => {
-      sinon.stub(array, 'map').returns(array)
-      sinon.stub(array, 'includes')
-    })
-
-    afterEach(() => {
-      array.map.restore()
-      array.includes.restore()
-    })
-
-    describe('Always', () => {
-      it('is a function', () => {
-        expect(dedupeStore).to.be.a('function')
-      })
-    })
-
-    describe('With parameters', () => {
-      describe('Always', () => {
-        beforeEach(() => {
-          dedupeStore(array, { type: TYPE, meta: { type: META_TYPE } })
-        })
-
-        it('invokes the "map" function', () => {
-          const {
-            map: {
-              firstCall: {
-                args: [ map ]
-              }
-            }
-          } = array
-
-          expect(map).to.equal(mapMetaType)
-        })
-
-        it('invokes the "includes" function with the meta "type" value', () => {
-          const {
-            includes: {
-              firstCall: {
-                args: [ metaType ]
-              }
-            }
-          } = array
-
-          expect(metaType).to.equal(META_TYPE)
-        })
-      })
-
-      describe('The mapped array includes the meta "type" value', () => {
-        beforeEach(() => {
-          sinon.stub(array, 'concat').returns([])
-
-          array.includes.returns(true)
-        })
-
-        afterEach(() => {
-          array.concat.restore()
-        })
-
-        it('returns an array', () => {
-          expect(dedupeStore(array, { type: TYPE, meta: { type: META_TYPE } })).to.deep.equal([])
-        })
-
-        it('does not call concat', () => {
-          dedupeStore(array, { type: TYPE, meta: { type: META_TYPE } })
-
-          expect(array.concat).not.to.have.been.called
-        })
-      })
-
-      describe('The mapped array does not include the meta "type" value', () => {
-        beforeEach(() => {
-          sinon.stub(array, 'concat').returns([])
-
-          array.includes.returns(false)
-        })
-
-        afterEach(() => {
-          array.concat.restore()
-        })
-
-        it('returns an array', () => {
-          expect(dedupeStore(array, { type: TYPE, meta: { type: META_TYPE } })).to.deep.equal([])
-        })
-
-        it('calls concat with an object', () => {
-          dedupeStore(array, { type: TYPE, meta: { type: META_TYPE } })
-
-          const {
-            concat: {
-              firstCall: {
-                args: [ object ]
-              }
-            }
-          } = array
-
-          expect(object).to.deep.equal({ type: TYPE, meta: { type: META_TYPE } })
-        })
-      })
-    })
-
-    describe('Without parameters', () => {
-      const array = []
-
-      beforeEach(() => {
-        sinon.stub(Array.prototype, 'map').returns(array)
-        sinon.stub(array, 'includes')
-      })
-
-      afterEach(() => {
-        Array.prototype.map.restore()
-        array.includes.restore()
-      })
-
-      beforeEach(() => {
-        dedupeStore()
-      })
-
-      it('invokes the "map" function', () => {
-        const {
-          map: {
-            firstCall: {
-              args: [ map ]
-            }
-          }
-        } = Array.prototype
-
-        expect(map).to.equal(mapMetaType)
-      })
-
-      it('invokes the "includes" function with the meta "type" value', () => {
-        const {
-          includes: {
-            firstCall: {
-              args: [ metaType ]
-            }
-          }
-        } = array
-
-        expect(metaType).to.be.undefined
-      })
-    })
-  })
-
-  describe('dedupeClear()', () => {
-    const array = []
-
-    beforeEach(() => {
-      sinon.stub(array, 'map').returns(array)
-      sinon.stub(array, 'includes')
-    })
-
-    afterEach(() => {
-      array.map.restore()
-      array.includes.restore()
-    })
-
-    describe('Always', () => {
-      it('is a function', () => {
-        expect(dedupeClear).to.be.a('function')
-      })
-    })
-
-    describe('With parameters', () => {
-      describe('Always', () => {
-        beforeEach(() => {
-          dedupeClear(array, { type: TYPE, meta: { type: META_TYPE } })
-        })
-
-        it('invokes the "map" function', () => {
-          const {
-            map: {
-              firstCall: {
-                args: [ map ]
-              }
-            }
-          } = array
-
-          expect(map).to.equal(mapMetaType)
-        })
-
-        it('invokes the "includes" function with the meta "type" value', () => {
-          const {
-            includes: {
-              firstCall: {
-                args: [ metaType ]
-              }
-            }
-          } = array
-
-          expect(metaType).to.equal(META_TYPE)
-        })
-      })
-
-      describe('The mapped array includes the meta "type" value', () => {
-        beforeEach(() => {
-          sinon.stub(array, 'concat').returns([])
-
-          array.includes.returns(true)
-        })
-
-        afterEach(() => {
-          array.concat.restore()
-        })
-
-        it('returns an array', () => {
-          expect(dedupeClear(array, { type: TYPE, meta: { type: META_TYPE } })).to.deep.equal([])
-        })
-
-        it('does not call concat', () => {
-          dedupeClear(array, { type: TYPE, meta: { type: META_TYPE } })
-
-          expect(array.concat).not.to.have.been.called
-        })
-      })
-
-      describe('The mapped array does not include the meta "type" value', () => {
-        beforeEach(() => {
-          sinon.stub(array, 'concat').returns([])
-
-          array.includes.returns(false)
-        })
-
-        afterEach(() => {
-          array.concat.restore()
-        })
-
-        it('returns an array', () => {
-          expect(dedupeClear(array, { type: TYPE, meta: { type: META_TYPE } })).to.deep.equal([])
-        })
-
-        it('calls concat with an object', () => {
-          dedupeClear(array, { type: TYPE, meta: { type: META_TYPE } })
-
-          const {
-            concat: {
-              firstCall: {
-                args: [ object ]
-              }
-            }
-          } = array
-
-          expect(object).to.deep.equal({ type: TYPE, meta: { type: META_TYPE } })
-        })
-      })
-    })
-
-    describe('Without parameters', () => {
-      const array = []
-
-      beforeEach(() => {
-        sinon.stub(Array.prototype, 'map').returns(array)
-        sinon.stub(array, 'includes')
-      })
-
-      afterEach(() => {
-        Array.prototype.map.restore()
-        array.includes.restore()
-      })
-
-      beforeEach(() => {
-        dedupeClear()
-      })
-
-      it('invokes the "map" function', () => {
-        const {
-          map: {
-            firstCall: {
-              args: [ map ]
-            }
-          }
-        } = Array.prototype
-
-        expect(map).to.equal(mapMetaType)
-      })
-
-      it('invokes the "includes" function with the meta "type" value', () => {
-        const {
-          includes: {
-            firstCall: {
-              args: [ metaType ]
-            }
-          }
-        } = array
-
-        expect(metaType).to.be.undefined
       })
     })
   })
@@ -2719,27 +2297,11 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  xdescribe('filterNotFetchMap()', () => {
-
-  })
-
-  xdescribe('filterNotStoreMap()', () => {
-
-  })
-
-  xdescribe('filterIsUniqueMap()', () => {
-
-  })
-
   xdescribe('putIntoFetchMap()', () => {
 
   })
 
   xdescribe('putIntoStoreMap()', () => {
-
-  })
-
-  xdescribe('putIntoClearMap()', () => {
 
   })
 
@@ -2946,138 +2508,21 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  describe('filterClearArray()', () => {
+  describe('reduceFetchArray()', () => {
     describe('Always', () => {
       it('is a function', () => {
-        expect(filterClearArray).to.be.a('function')
-      })
-
-      describe('With parameters', () => {
-        it('returns an array', () => {
-          expect(filterClearArray([]))
-        })
-      })
-
-      describe('Without parameters', () => {
-        it('returns an array', () => {
-          expect(filterClearArray())
-        })
-      })
-    })
-
-    describe('An array is passed as an argument', () => {
-      it('Filters the array', () => {
-        const array = []
-        sinon.stub(array, 'filter')
-
-        filterClearArray(array)
-
-        const {
-          filter: {
-            firstCall: {
-              args: [ filter ]
-            }
-          }
-        } = array
-
-        expect(filter).to.equal(filterClear)
-      })
-    })
-  })
-
-  describe('filterNotFetchMapArray()', () => {
-    describe('Always', () => {
-      it('is a function', () => {
-        expect(filterNotFetchMapArray).to.be.a('function')
-      })
-
-      describe('With parameters', () => {
-        it('returns an array', () => {
-          expect(filterNotFetchMapArray([], {}))
-        })
-      })
-
-      describe('Without parameters', () => {
-        it('returns an array', () => {
-          expect(filterNotFetchMapArray())
-        })
-      })
-    })
-
-    describe('An array is passed as an argument', () => {
-      it('Filters the array', () => {
-        const array = []
-        sinon.stub(array, 'filter')
-
-        filterNotFetchMapArray(array, {})
-
-        const {
-          filter: {
-            firstCall: {
-              args: [ filter ]
-            }
-          }
-        } = array
-
-        expect(filter).to.be.a('function')
-      })
-    })
-  })
-
-  describe('filterIsUniqueMapArray()', () => {
-    describe('Always', () => {
-      it('is a function', () => {
-        expect(filterIsUniqueMapArray).to.be.a('function')
-      })
-
-      describe('With parameters', () => {
-        it('returns an array', () => {
-          expect(filterIsUniqueMapArray([], {}))
-        })
-      })
-
-      describe('Without parameters', () => {
-        it('returns an array', () => {
-          expect(filterIsUniqueMapArray())
-        })
-      })
-    })
-
-    describe('An array is passed as an argument', () => {
-      it('Filters the array', () => {
-        const array = []
-        sinon.stub(array, 'filter')
-
-        filterIsUniqueMapArray(array, {})
-
-        const {
-          filter: {
-            firstCall: {
-              args: [ filter ]
-            }
-          }
-        } = array
-
-        expect(filter).to.be.a('function')
-      })
-    })
-  })
-
-  describe('createFetchMetaArray()', () => {
-    describe('Always', () => {
-      it('is a function', () => {
-        expect(createFetchMetaArray).to.be.a('function')
+        expect(reduceFetchArray).to.be.a('function')
       })
 
       describe('An array is passed as an argument', () => {
         it('returns an array', () => {
-          expect(createFetchMetaArray([])).to.be.an('array')
+          expect(reduceFetchArray([])).to.be.an('array')
         })
       })
 
       describe('An array is not passed as an argument', () => {
         it('returns an array', () => {
-          expect(createFetchMetaArray()).to.be.an('array')
+          expect(reduceFetchArray()).to.be.an('array')
         })
       })
     })
@@ -3088,15 +2533,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
       beforeEach(() => {
         sinon.stub(one, 'reduce')
 
-        one.reduce.onCall(0).returns(one)
+        one.reduce.onFirstCall().returns(one)
       })
 
       afterEach(() => {
         one.reduce.restore()
       })
 
-      it('calls reduce with "reduceMetaFetch" and an array', () => {
-        createFetchMetaArray(one)
+      it('calls reduce with "reduceFetch" and an array', () => {
+        reduceFetchArray(one)
 
         const {
           reduce: {
@@ -3106,42 +2551,27 @@ describe('Redux Storage Middleware - Storage Map', () => {
           }
         } = one
 
-        expect(ONE).to.equal(reduceMetaFetch)
-        expect(TWO).to.be.an('array')
-      })
-
-      it('calls reduce with "dedupeMetaFetch" and an array', () => {
-        createFetchMetaArray(one)
-
-        const {
-          reduce: {
-            secondCall: {
-              args: [ ONE, TWO ]
-            }
-          }
-        } = one
-
-        expect(ONE).to.equal(dedupeMetaFetch)
+        expect(ONE).to.equal(reduceFetch)
         expect(TWO).to.be.an('array')
       })
     })
   })
 
-  describe('createStoreMetaArray()', () => {
+  describe('reduceFetchMetaArray()', () => {
     describe('Always', () => {
       it('is a function', () => {
-        expect(createStoreMetaArray).to.be.a('function')
+        expect(reduceFetchMetaArray).to.be.a('function')
       })
 
       describe('An array is passed as an argument', () => {
         it('returns an array', () => {
-          expect(createStoreMetaArray([])).to.be.an('array')
+          expect(reduceFetchMetaArray([])).to.be.an('array')
         })
       })
 
       describe('An array is not passed as an argument', () => {
         it('returns an array', () => {
-          expect(createStoreMetaArray()).to.be.an('array')
+          expect(reduceFetchMetaArray()).to.be.an('array')
         })
       })
     })
@@ -3152,15 +2582,15 @@ describe('Redux Storage Middleware - Storage Map', () => {
       beforeEach(() => {
         sinon.stub(one, 'reduce')
 
-        one.reduce.onCall(0).returns(one)
+        one.reduce.onFirstCall().returns(one)
       })
 
       afterEach(() => {
         one.reduce.restore()
       })
 
-      it('calls reduce with "reduceMetaStore" and an array', () => {
-        createStoreMetaArray(one)
+      it('calls reduce with "reduceFetchMeta" and an array', () => {
+        reduceFetchMetaArray(one)
 
         const {
           reduce: {
@@ -3170,22 +2600,105 @@ describe('Redux Storage Middleware - Storage Map', () => {
           }
         } = one
 
-        expect(ONE).to.equal(reduceMetaStore)
+        expect(ONE).to.equal(reduceFetchMeta)
         expect(TWO).to.be.an('array')
       })
+    })
+  })
 
-      it('calls reduce with "dedupeMetaStore" and an array', () => {
-        createStoreMetaArray(one)
+  describe('reduceStoreArray()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(reduceStoreArray).to.be.a('function')
+      })
+
+      describe('An array is passed as an argument', () => {
+        it('returns an array', () => {
+          expect(reduceStoreArray([])).to.be.an('array')
+        })
+      })
+
+      describe('An array is not passed as an argument', () => {
+        it('returns an array', () => {
+          expect(reduceStoreArray()).to.be.an('array')
+        })
+      })
+    })
+
+    describe('An array is passed as an argument', () => {
+      const one = []
+
+      beforeEach(() => {
+        sinon.stub(one, 'reduce')
+
+        one.reduce.onFirstCall().returns(one)
+      })
+
+      afterEach(() => {
+        one.reduce.restore()
+      })
+
+      it('calls reduce with "reduceStore" and an array', () => {
+        reduceStoreArray(one)
 
         const {
           reduce: {
-            secondCall: {
+            firstCall: {
               args: [ ONE, TWO ]
             }
           }
         } = one
 
-        expect(ONE).to.equal(dedupeMetaStore)
+        expect(ONE).to.equal(reduceStore)
+        expect(TWO).to.be.an('array')
+      })
+    })
+  })
+
+  describe('reduceStoreMetaArray()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(reduceStoreMetaArray).to.be.a('function')
+      })
+
+      describe('An array is passed as an argument', () => {
+        it('returns an array', () => {
+          expect(reduceStoreMetaArray([])).to.be.an('array')
+        })
+      })
+
+      describe('An array is not passed as an argument', () => {
+        it('returns an array', () => {
+          expect(reduceStoreMetaArray()).to.be.an('array')
+        })
+      })
+    })
+
+    describe('An array is passed as an argument', () => {
+      const one = []
+
+      beforeEach(() => {
+        sinon.stub(one, 'reduce')
+
+        one.reduce.onFirstCall().returns(one)
+      })
+
+      afterEach(() => {
+        one.reduce.restore()
+      })
+
+      it('calls reduce with "reduceStoreMeta" and an array', () => {
+        reduceStoreMetaArray(one)
+
+        const {
+          reduce: {
+            firstCall: {
+              args: [ ONE, TWO ]
+            }
+          }
+        } = one
+
+        expect(ONE).to.equal(reduceStoreMeta)
         expect(TWO).to.be.an('array')
       })
     })
