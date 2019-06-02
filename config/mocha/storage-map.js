@@ -65,14 +65,13 @@ import storageMap, {
 
   filterHardStorage,
   filterSoftStorage,
-  filterStorage, /*
+  filterStorage,
 
   putIntoFetchMap,
   putIntoStoreMap,
-  putIntoClearMap,
 
   putIntoFetchMetaMap,
-  putIntoStoreMetaMap, */
+  putIntoStoreMetaMap,
 
   filterHardStorageArray,
   filterSoftStorageArray,
@@ -2297,20 +2296,36 @@ describe('Redux Storage Middleware - Storage Map', () => {
     })
   })
 
-  xdescribe('putIntoFetchMap()', () => {
-
+  describe('putIntoFetchMap()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(putIntoFetchMap).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('putIntoStoreMap()', () => {
-
+  describe('putIntoStoreMap()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(putIntoStoreMap).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('putIntoFetchMetaMap()', () => {
-
+  describe('putIntoFetchMetaMap()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(putIntoFetchMetaMap).to.be.a('function')
+      })
+    })
   })
 
-  xdescribe('putIntoStoreMetaMap()', () => {
-
+  describe('putIntoStoreMetaMap()', () => {
+    describe('Always', () => {
+      it('is a function', () => {
+        expect(putIntoStoreMetaMap).to.be.a('function')
+      })
+    })
   })
 
   describe('filterHardStorageArray()', () => {
