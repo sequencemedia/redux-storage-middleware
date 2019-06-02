@@ -39,9 +39,7 @@ export const createMeta = (meta = {}) => (
       createCacheFor(
         createCachedAt(
           createAccessedAt(
-            createComparator(
-              meta
-            )
+            meta
           )
         )
       )
