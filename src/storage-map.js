@@ -64,7 +64,7 @@ export const getCacheFor = ({ cacheFor = 0 } = {}) => cacheFor
 export const reduceFetch = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
   a.map(mapType).includes(type)
     ? a
-    : min(array.filter(filterFor(type)).map(mapCacheFor)) !== cacheFor // min `cacheFor` among all metas for this FETCH type
+    : min(array.filter(filterFor(type)).map(mapCacheFor)) !== cacheFor // min `cacheFor` among all metas for this FETCH `type`
       ? a
       : a.concat({ type, ...(meta ? { meta: { cacheFor } } : {}) }) // don't care about `type`
 )
@@ -72,7 +72,7 @@ export const reduceFetch = (a = [], { type, meta, meta: { cacheFor = 0, type: t 
 export const reduceFetchMeta = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
   a.filter(filterFor(type)).map(mapMetaType).includes(t)
     ? a
-    : min(array.filter(filterFor(type)).filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor
+    : min(array.filter(filterFor(type)).filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor // ditto `reduceStoreMeta`
       ? a
       : a.concat({ type, ...(meta ? { meta } : {}) })
 )
@@ -80,7 +80,7 @@ export const reduceFetchMeta = (a = [], { type, meta, meta: { cacheFor = 0, type
 export const reduceStore = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
   a.filter(filterFor(type)).map(mapMetaType).includes(t)
     ? a
-    : min(array.filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor // smallest cacheFor among all metas of this STORE type
+    : min(array.filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor // min `cacheFor` among all metas for this STORE `type`
       ? a
       : a.concat({ type, ...(meta ? { meta } : {}) })
 )
@@ -88,7 +88,7 @@ export const reduceStore = (a = [], { type, meta, meta: { cacheFor = 0, type: t 
 export const reduceStoreMeta = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
   a.filter(filterFor(type)).map(mapMetaType).includes(t)
     ? a
-    : min(array.filter(filterFor(type)).filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor
+    : min(array.filter(filterFor(type)).filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor // ditto `reduceFetchMeta`
       ? a
       : a.concat({ type, ...(meta ? { meta } : {}) })
 )
@@ -232,9 +232,10 @@ export function initialise (array = [], params = {}) {
   initialiseStore(array, params)
 }
 
-const getStateFromStore = ({ reduxStorage = {} } = {}) => reduxStorage
+const getReduxStorage = ({ reduxStorage = {} } = {}) => reduxStorage
+const getStateFromStore = (store) => getReduxStorage(store.getState())
 const getStateForActionType = (type, { [type]: state = {} } = {}) => state
-const hasStateForActionType = (type, state = {}) => type in state
+const hasStateForActionType = (type, state = {}) => state.hasOwnProperty(type) // type in state disliked by linter
 
 export default (array, configuration = {}) => {
   if (Array.isArray(array)) {
@@ -260,27 +261,30 @@ export default (array, configuration = {}) => {
          */
         const accessedAt = Date.now()
 
+        const state = getStateFromStore(store)
+
         const {
           meta: {
             cacheFor, // read from state or the default from `fetchMap`
             cachedAt // read from state BUT DO NOT PROVIDE A DEFAULT
           } = fetchMap.get(type)
-        } = getStateForActionType(type, getStateFromStore(store.getState()))
+        } = getStateForActionType(type, state)
 
-        const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
-
-        if (isStale(META)) {
+        if (isStale({ cacheFor, cachedAt })) {
           /**
            *  This FETCH type is stale:
            *
            *    Either because it has no `cachedAt` timestamp (so has never been cached)
            *    or because it has a `cachedAt` timestamp but exceeds its `cacheFor` duration
            *
-           *  Dispatch an action to put this FETCH `type` into the cache
-           *
            *  ALWAYS USE `createMeta`. ALWAYS! ALWAYS! ALWAYS!
            */
-          store.dispatch(storageWriteAction(createMeta({ type, cacheFor, cachedAt: accessedAt, accessedAt }), { ...action, type }))
+          const META = createMeta({ type, cacheFor, cachedAt: accessedAt, accessedAt })
+
+          /**
+           *  Dispatch an action to put this FETCH `type` into the cache
+           */
+          store.dispatch(storageWriteAction(META, { ...action, type }))
 
           /**
            *  Any configuration `meta` objects for this FETCH `type` have been transformed
@@ -296,14 +300,14 @@ export default (array, configuration = {}) => {
               /**
                *  This action has been cached if it exists in the store ...
                */
-              if (hasStateForActionType(type, getStateFromStore(store.getState()))) {
+              if (hasStateForActionType(type, state)) {
                 const {
                   meta: {
                     cacheFor,
                     cachedAt
                   } = {},
                   data
-                } = getStateForActionType(type, getStateFromStore(store.getState()))
+                } = getStateForActionType(type, state)
 
                 const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
@@ -321,11 +325,14 @@ export default (array, configuration = {}) => {
           return next({ ...action, type })
         } else {
           /**
-           *  Dispatch an action to update this FETCH `type` in the cache
-           *
            *  ALWAYS USE `createMeta`. ALWAYS! ALWAYS! ALWAYS!
            */
-          store.dispatch(storageFetchAction(createMeta({ type, cacheFor, cachedAt, accessedAt }), { ...action, type })) // META, data
+          const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
+
+          /**
+           *  Dispatch an action to update this FETCH `type` in the cache
+           */
+          store.dispatch(storageFetchAction(META, { ...action, type })) // META, data
 
           /**
            *  Any configuration `meta` objects for this FETCH `type` have been transformed
@@ -341,15 +348,18 @@ export default (array, configuration = {}) => {
               /**
                *  This action has been cached if it exists in the store ...
                */
-              if (hasStateForActionType(type, getStateFromStore(store.getState()))) {
+              if (hasStateForActionType(type, state)) {
                 const {
                   meta: {
                     cacheFor,
                     cachedAt
                   } = {},
                   data
-                } = getStateForActionType(type, getStateFromStore(store.getState()))
+                } = getStateForActionType(type, state)
 
+                /**
+                 *  ALWAYS USE `createMeta`. ALWAYS! ALWAYS! ALWAYS!
+                 */
                 const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
                 /**
@@ -360,7 +370,7 @@ export default (array, configuration = {}) => {
                 /**
                  *  The `data` attribute is the cached action
                  *
-                 *  Replay that action by dispatching the `data` attribute of this FETCH `type` object
+                 *  Replay that action!
                  */
                 if (data) store.dispatch(data)
               }
@@ -389,6 +399,8 @@ export default (array, configuration = {}) => {
            */
           const accessedAt = Date.now()
 
+          const state = getStateFromStore(store)
+
           const storeSet = storeMap.get(type)
 
           /**
@@ -402,17 +414,23 @@ export default (array, configuration = {}) => {
             /**
              *  This action has been cached if it exists in the store ...
              */
-            if (hasStateForActionType(type, getStateFromStore(store.getState()))) {
+            if (hasStateForActionType(type, state)) {
               const {
                 meta: {
                   cacheFor,
                   cachedAt
                 },
                 data
-              } = getStateForActionType(type, getStateFromStore(store.getState()))
+              } = getStateForActionType(type, state)
 
+              /**
+               *  ALWAYS USE `createMeta`. ALWAYS! ALWAYS! ALWAYS!
+               */
               const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
+              /**
+               *  Dispatch an action to update the `meta` attribute in the cache
+               */
               store.dispatch(storageStoreAction(META, data)) // META, data
             }
           })
@@ -427,8 +445,11 @@ export default (array, configuration = {}) => {
                 cacheFor,
                 cachedAt = accessedAt // read from state if state is available. Supply default otherwise
               } = storeMetaMap.get(type)
-            } = getStateForActionType(type, getStateFromStore(store.getState()))
+            } = getStateForActionType(type, state)
 
+            /**
+             *  ALWAYS USE `createMeta`. ALWAYS! ALWAYS! ALWAYS!
+             */
             const META = createMeta({ type, cacheFor, cachedAt, accessedAt })
 
             /**
@@ -438,10 +459,18 @@ export default (array, configuration = {}) => {
             store.dispatch(storageStoreAction(META, { ...action, type })) // META, data
           }
 
+          /*
+           *  Pass along to the next middleware
+           */
           return next({ ...action, type })
         }
       }
 
+      /**
+       *  It is neither a FETCH `type` nor a STORE `type`
+       *
+       *  ... so pass along to the next middleware
+       */
       return next({ ...action, type })
     }
   }
