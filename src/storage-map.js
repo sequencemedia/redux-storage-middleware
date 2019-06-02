@@ -293,8 +293,6 @@ export default (array, configuration = {}) => {
              *  Iterate through the configuration `meta` objects
              */
             fetchMetaSet.forEach(({ type }) => {
-              console.warn(1, type, hasStateForActionType(type, getStateFromStore(store.getState())))
-
               /**
                *  This action has been cached if it exists in the store ...
                */
@@ -340,8 +338,6 @@ export default (array, configuration = {}) => {
              *  Iterate through the configuration `meta` objects
              */
             fetchMetaSet.forEach(({ type }) => {
-              console.warn(2, type, hasStateForActionType(type, getStateFromStore(store.getState())))
-
               /**
                *  This action has been cached if it exists in the store ...
                */
@@ -403,8 +399,6 @@ export default (array, configuration = {}) => {
            *  Iterate through the FETCH objects this STORE `type` might belong to (one to many)
            */
           storeSet.forEach(({ type, cacheFor }) => {
-            console.warn(3, type, hasStateForActionType(type, getStateFromStore(store.getState())))
-
             /**
              *  This action has been cached if it exists in the store ...
              */
