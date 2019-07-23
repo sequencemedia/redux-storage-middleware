@@ -69,7 +69,7 @@ describe('Redux Storage Middleware - Storage', () => {
         beforeEach(() => {
           Storage.prototype.getItem.returns(`{"meta":{"cacheFor":${HARD_CACHE_FOR},"cachedAt":${cachedAt - ONE_DAY}},"data":{"type":"HARD_FETCH"}}`)
 
-          store = configureStore([ storage ])({})
+          store = configureStore([storage])({})
 
           action = { type: STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_FETCH, data: {} } }
 
@@ -99,7 +99,7 @@ describe('Redux Storage Middleware - Storage', () => {
         beforeEach(() => {
           Storage.prototype.getItem.returns(null)
 
-          store = configureStore([ storage ])({})
+          store = configureStore([storage])({})
 
           action = { type: STORAGE_FETCH, meta: { type: HARD_FETCH, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_FETCH, data: {} } }
 
@@ -134,7 +134,7 @@ describe('Redux Storage Middleware - Storage', () => {
         beforeEach(() => {
           Storage.prototype.getItem.returns(`{"meta":{"cacheFor":${HARD_CACHE_FOR},"cachedAt":${cachedAt - ONE_DAY}},"data":{"type":"HARD_STORE"}}`)
 
-          store = configureStore([ storage ])({})
+          store = configureStore([storage])({})
 
           action = { type: STORAGE_STORE, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_STORE, data: {} } }
 
@@ -164,7 +164,7 @@ describe('Redux Storage Middleware - Storage', () => {
         beforeEach(() => {
           Storage.prototype.getItem.returns(null)
 
-          store = configureStore([ storage ])({})
+          store = configureStore([storage])({})
 
           action = { type: STORAGE_STORE, meta: { type: HARD_STORE, cacheFor: HARD_CACHE_FOR, cachedAt, isHardStorage }, data: { type: HARD_STORE, data: {} } }
 
@@ -195,7 +195,7 @@ describe('Redux Storage Middleware - Storage', () => {
       let actions
 
       beforeEach(() => {
-        store = configureStore([ storage ])({})
+        store = configureStore([storage])({})
 
         action = { type: STORAGE_CLEAR, meta: { type: HARD_CLEAR, isHardStorage } }
 
@@ -226,7 +226,7 @@ describe('Redux Storage Middleware - Storage', () => {
         beforeEach(() => {
           Storage.prototype.getItem.returns(`{"meta":{"cacheFor":${SOFT_CACHE_FOR},"cachedAt":${cachedAt - ONE_DAY}},"data":{"type":"SOFT_FETCH"}}`)
 
-          store = configureStore([ storage ])({})
+          store = configureStore([storage])({})
 
           action = { type: STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_FETCH, data: {} } }
 
@@ -256,7 +256,7 @@ describe('Redux Storage Middleware - Storage', () => {
         beforeEach(() => {
           Storage.prototype.getItem.returns(null)
 
-          store = configureStore([ storage ])({})
+          store = configureStore([storage])({})
 
           action = { type: STORAGE_FETCH, meta: { type: SOFT_FETCH, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_FETCH, data: {} } }
 
@@ -291,7 +291,7 @@ describe('Redux Storage Middleware - Storage', () => {
         beforeEach(() => {
           Storage.prototype.getItem.returns(`{"meta":{"cacheFor":${SOFT_CACHE_FOR},"cachedAt":${cachedAt - ONE_DAY}},"data":{"type":"SOFT_STORE"}}`)
 
-          store = configureStore([ storage ])({})
+          store = configureStore([storage])({})
 
           action = { type: STORAGE_STORE, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_STORE, data: {} } }
 
@@ -321,7 +321,7 @@ describe('Redux Storage Middleware - Storage', () => {
         beforeEach(() => {
           Storage.prototype.getItem.returns(null)
 
-          store = configureStore([ storage ])({})
+          store = configureStore([storage])({})
 
           action = { type: STORAGE_STORE, meta: { type: SOFT_STORE, cacheFor: SOFT_CACHE_FOR, cachedAt, isSoftStorage }, data: { type: SOFT_STORE, data: {} } }
 
@@ -352,7 +352,7 @@ describe('Redux Storage Middleware - Storage', () => {
       let actions
 
       beforeEach(() => {
-        store = configureStore([ storage ])({})
+        store = configureStore([storage])({})
 
         action = { type: STORAGE_CLEAR, meta: { type: SOFT_CLEAR, isSoftStorage } }
 
@@ -385,7 +385,7 @@ describe('Redux Storage Middleware - Storage', () => {
         let actions
 
         beforeEach(() => {
-          store = configureStore([ storage ])({ reduxStorage: { STATE_FETCH: { meta: { type: STATE_FETCH }, data: { type: STATE_FETCH } } } })
+          store = configureStore([storage])({ reduxStorage: { STATE_FETCH: { meta: { type: STATE_FETCH }, data: { type: STATE_FETCH } } } })
 
           action = { type: STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_FETCH, data: {} } }
 
@@ -413,7 +413,7 @@ describe('Redux Storage Middleware - Storage', () => {
         let actions
 
         beforeEach(() => {
-          store = configureStore([ storage ])({})
+          store = configureStore([storage])({})
 
           action = { type: STORAGE_FETCH, meta: { type: STATE_FETCH, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_FETCH, data: {} } }
 
@@ -445,7 +445,7 @@ describe('Redux Storage Middleware - Storage', () => {
         let actions
 
         beforeEach(() => {
-          store = configureStore([ storage ])({})
+          store = configureStore([storage])({})
 
           action = { type: STORAGE_STORE, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_STORE, data: {} } }
 
@@ -473,7 +473,7 @@ describe('Redux Storage Middleware - Storage', () => {
         let actions
 
         beforeEach(() => {
-          store = configureStore([ storage ])({})
+          store = configureStore([storage])({})
 
           action = { type: STORAGE_STORE, meta: { type: STATE_STORE, cacheFor: STATE_CACHE_FOR, cachedAt }, data: { type: STATE_STORE, data: {} } }
 
@@ -502,7 +502,7 @@ describe('Redux Storage Middleware - Storage', () => {
       let actions
 
       beforeEach(() => {
-        store = configureStore([ storage ])({})
+        store = configureStore([storage])({})
 
         action = { type: STORAGE_CLEAR, meta: { type: STATE_CLEAR } }
 

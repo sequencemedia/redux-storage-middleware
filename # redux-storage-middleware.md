@@ -2,7 +2,7 @@
 
 *Redux Storage Middleware* implements a client-side caching mechanism for _React Redux_ applications with _Sagas_.
 
-It intercepts _Actions_ and replays others to reduce requests to the server.
+It intercepts some _Actions_ and reproduces others to reduce server requests.
 
 ## Start simply
 
@@ -14,26 +14,26 @@ import createStorageMap from 'redux-storage-middleware/lib/storage-map'
 import storage from 'redux-storage-middleware/lib/storage'
 ```
 
-- Invoke `createStorageMap` with an array of configuration objects
+- Invoke `createStorageMap` with an array of configuration objects to create the `storageMap` middleware function
 
 ```javascript
 const storageMap = createStorageMapMiddleware([
   {
     type: 'REQUEST_PRODUCTS',
     meta: {
-      type: 'REQUEST_PRODUCTS_SUCCEEDED'
+      type: 'REQUEST_PRODUCTS_SUCCEEDED',
       cacheFor: (1000 * 60) * 60
     }
   }
 ])
 ```
 
-- Populate the state, mount the store and compose the middleware
+- Populate the state, mount the store and compose the `storageMap` and `storage` middleware functions into your Redux application
 
 ```javascript
   const store = createStore(
     reducers,
-    state: { 
+    state: {
       reduxStorage: initialState()
     },
     compose(
@@ -48,42 +48,40 @@ const storageMap = createStorageMapMiddleware([
 
 ### `initialState`
 
-*Redux Storage Middleware* serialises the _Actions_ it observes into browser storage, if it's available. This function deserialises those _Actions_ from browser storage to hydrate the _Store_ when the application starts.
+*Redux Storage Middleware* serialises the _Actions_ it observes into browser storage, if it's available. `initialState` deserialises those _Actions_ from browser storage to hydrate the _Redux Store_.
 
 ### `storageMap`
 
-This middleware function observes _Actions_ and decides which to intercept, and what to replay. In the second step, above, it was created by passing an array of configuration objects to `createStorageMapMiddleware`.
+This middleware function observes _Actions_ and decides which to intercept, and what to reproduce. (In the second step, above, it was created by passing an array of configuration objects to `createStorageMapMiddleware`.)
 
 `storageMap` is essential to *Redux Storage Middleware*.
 
 There's more information about configuration objects below, but for now it's enough to understand that the middleware observes the _Actions_ identified by the `type` attribute and in their place replays the _Actions_ identified by the `{ meta: { type } }`, until the `{ meta: { cacheFor } }` duration has expired.
 
-In other words: when you see _this_, replay _that_, until _such_ time has passed.
+In other words: when you see _this_, do _that_, until _such_ time has passed.
 
 ### `storage`
 
-In Redux, all application state is kept in the _Store_, and that is the case with *Redux Storage Middleware*. But *Redux Storage Middleware* also serialises the _Actions_ it observes into browser storage, if it's available. Which mechanism an _Action_ is serialised to is determined by the `{ meta: { cacheFor } }` duration.
+In Redux, all application state is kept in the _Store_, and that is the case with *Redux Storage Middleware*.
 
-This middleware function decides which mechanism to use, and performs the serialisation.
+*Redux Storage Middleware* also determines which _Actions_ to serialise into browser storage, and what browser storage mechanism to use.
 
-- A duration of less than one hour means that the _Action_ need not be serialised to browser storage
-- A duration of one hour or more but less than a day means that the _Action_ can be serialised to browser _Session Storage_
-- A duration of one day or more means that the _Action_ can be serialised to browser _Local Storage_
+- A duration of less than one hour means that the _Action_ need not be serialised at all
+- A duration of one hour or more but less than a day means that the _Action_ can be serialised to _Session Storage_
+- A duration of one day or more means that the _Action_ can be serialised to _Local Storage_
 
-`initialState` hydrates the Store from browser storage when the application starts. 
-
-`storage` updates browser storage while the application is operating.
+(As `initialState` hydrates the _Store_ from browser storage when the application starts, so `storage` updates browser storage from the _Store_ while the application is operating.)
 
 ## Configuration objects
 
-Configuration is an array of objects. 
+Configuration is an array of plain objects.
 
-Each object is a _map_ from one _Action_ to another:
+Each object describes a relationship between one _Action_ another:
 
-- The _Action_ to observe is identified by the configuration object's `type` attribute
-- The _Action_ to replay is described on the configuration object's `meta` attribute
+- The _Action_ to intercept is identified by the configuration object's `type` attribute
+- The _Action_ to reproduce is described on the configuration object's `meta` attribute
 
-But it also describes a _duration_ of time: when you see _this_, replay _that_, until _such_ time has passed.
+It also describes a _duration_ of time: when you see _this_, do _that_, until _such_ time has passed.
 
 ```javascript
 {
@@ -107,7 +105,7 @@ Where several configuration objects refer to the same `{ meta: { type } }` the s
 
 ## With Sagas
 
-Ensure that your `storageMap` middleware is composed into the middleware chain _before_ your `sagaMiddleware`. 
+Ensure that your `storageMap` middleware is composed into the middleware chain _before_ your `sagaMiddleware`.
 
 ```javascript
   const store = createStore(
@@ -123,9 +121,9 @@ Ensure that your `storageMap` middleware is composed into the middleware chain _
   )
 ```
 
-*Sagas* observe _Actions_ of the first `type` and dispatch _Actions_ of the second `type` (after a request to the server has successfully resolved). 
+*Sagas* observe _Actions_ of the first `type` and dispatch _Actions_ of the second `type` (after a request to the server has successfully resolved).
 
-*Redux Storage Middleware* intercepts _Actions_ of the first `type` and replays _Actions_ of the second `type`. 
+*Redux Storage Middleware* intercepts _Actions_ of the first `type` and replays _Actions_ of the second `type`.
 
 *Redux Storage Middleware* bypasses *Sagas*, but dispatches additional actions to ensure that your application (which no doubt depends on all of its _Actions_).
 
@@ -154,7 +152,7 @@ If it has no _Actions_ of the second `type` in state, or if it does but the dura
 
 
 
-If it doesn't have any _Actions_ of the second type in its cache 
+If it doesn't have any _Actions_ of the second type in its cache
 
 The _Action_ is replay is ide
 

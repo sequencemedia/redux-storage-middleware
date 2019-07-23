@@ -230,10 +230,16 @@ export function initialise (array = [], params = {}) {
   initialiseStore(array, params)
 }
 
+const {
+  prototype: {
+    hasOwnProperty: HASOWNPROPERTY
+  }
+} = Object
+
 const getReduxStorage = ({ reduxStorage = {} } = {}) => reduxStorage
 const getStateFromStore = (store) => getReduxStorage(store.getState())
 const getStateForActionType = (type, { [type]: state = {} } = {}) => state
-const hasStateForActionType = (type, state = {}) => state.hasOwnProperty(type) // type in state disliked by linter
+const hasStateForActionType = (type, state = {}) => HASOWNPROPERTY.call(state, type) // (type in state) // Object.prototype.hasOwnProperty.call(state, type) // state.hasOwnProperty(type) // type in state disliked by linter
 
 export default (array, configuration = {}) => {
   if (Array.isArray(array)) {

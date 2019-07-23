@@ -210,7 +210,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               sinon.stub(Date, 'now')
                 .returns(DATE_NOW)
 
-              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [HARD_FETCH]: { meta: { cacheFor: HARD_CACHE_FOR } }, [HARD_STORE]: { meta: { cacheFor: HARD_CACHE_FOR } } } })
+              store = configureStore([storageMap(configuration, maps)])({ reduxStorage: { [HARD_FETCH]: { meta: { cacheFor: HARD_CACHE_FOR } }, [HARD_STORE]: { meta: { cacheFor: HARD_CACHE_FOR } } } })
 
               action = store.dispatch({ type: HARD_FETCH, payload: {} })
 
@@ -304,7 +304,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               sinon.stub(Date, 'now')
                 .returns(DATE_NOW)
 
-              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [HARD_FETCH]: { meta: { cacheFor: HARD_CACHE_FOR, cachedAt, accessedAt } } } })
+              store = configureStore([storageMap(configuration, maps)])({ reduxStorage: { [HARD_FETCH]: { meta: { cacheFor: HARD_CACHE_FOR, cachedAt, accessedAt } } } })
 
               action = store.dispatch({ type: HARD_FETCH, payload: {} })
 
@@ -382,7 +382,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             sinon.stub(Date, 'now')
               .returns(DATE_NOW)
 
-            store = configureStore([ storageMap(configuration, maps) ])({})
+            store = configureStore([storageMap(configuration, maps)])({})
 
             action = store.dispatch({ type: HARD_FETCH, payload: {} })
 
@@ -460,7 +460,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           sinon.stub(Date, 'now')
             .returns(DATE_NOW)
 
-          store = configureStore([ storageMap(configuration, maps) ])({})
+          store = configureStore([storageMap(configuration, maps)])({})
 
           action = store.dispatch({ type: HARD_STORE })
 
@@ -540,7 +540,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               sinon.stub(Date, 'now')
                 .returns(DATE_NOW)
 
-              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [SOFT_FETCH]: { meta: { cacheFor: SOFT_CACHE_FOR } }, [SOFT_STORE]: { meta: { cacheFor: SOFT_CACHE_FOR } } } })
+              store = configureStore([storageMap(configuration, maps)])({ reduxStorage: { [SOFT_FETCH]: { meta: { cacheFor: SOFT_CACHE_FOR } }, [SOFT_STORE]: { meta: { cacheFor: SOFT_CACHE_FOR } } } })
 
               action = store.dispatch({ type: SOFT_FETCH, payload: {} })
 
@@ -634,7 +634,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               sinon.stub(Date, 'now')
                 .returns(DATE_NOW)
 
-              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [SOFT_FETCH]: { meta: { cacheFor: SOFT_CACHE_FOR, cachedAt, accessedAt } } } })
+              store = configureStore([storageMap(configuration, maps)])({ reduxStorage: { [SOFT_FETCH]: { meta: { cacheFor: SOFT_CACHE_FOR, cachedAt, accessedAt } } } })
 
               action = store.dispatch({ type: SOFT_FETCH, payload: {} })
 
@@ -712,7 +712,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             sinon.stub(Date, 'now')
               .returns(DATE_NOW)
 
-            store = configureStore([ storageMap(configuration, maps) ])({})
+            store = configureStore([storageMap(configuration, maps)])({})
 
             action = store.dispatch({ type: SOFT_FETCH, payload: {} })
 
@@ -790,7 +790,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           sinon.stub(Date, 'now')
             .returns(DATE_NOW)
 
-          store = configureStore([ storageMap(configuration, maps) ])({})
+          store = configureStore([storageMap(configuration, maps)])({})
 
           action = store.dispatch({ type: SOFT_STORE })
 
@@ -869,7 +869,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               sinon.stub(Date, 'now')
                 .returns(DATE_NOW)
 
-              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [STATE_FETCH]: { meta: { cacheFor: STATE_CACHE_FOR } }, [STATE_STORE]: { meta: { cacheFor: STATE_CACHE_FOR } } } })
+              store = configureStore([storageMap(configuration, maps)])({ reduxStorage: { [STATE_FETCH]: { meta: { cacheFor: STATE_CACHE_FOR } }, [STATE_STORE]: { meta: { cacheFor: STATE_CACHE_FOR } } } })
 
               action = store.dispatch({ type: STATE_FETCH, payload: {} })
 
@@ -960,7 +960,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
               sinon.stub(Date, 'now')
                 .returns(DATE_NOW)
 
-              store = configureStore([ storageMap(configuration, maps) ])({ reduxStorage: { [STATE_FETCH]: { meta: { cacheFor: STATE_CACHE_FOR, cachedAt, accessedAt } } } })
+              store = configureStore([storageMap(configuration, maps)])({ reduxStorage: { [STATE_FETCH]: { meta: { cacheFor: STATE_CACHE_FOR, cachedAt, accessedAt } } } })
 
               action = store.dispatch({ type: STATE_FETCH, payload: {} })
 
@@ -1034,7 +1034,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
             sinon.stub(Date, 'now')
               .returns(DATE_NOW)
 
-            store = configureStore([ storageMap(configuration, maps) ])({})
+            store = configureStore([storageMap(configuration, maps)])({})
 
             action = store.dispatch({ type: STATE_FETCH, payload: {} })
 
@@ -1110,7 +1110,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
           sinon.stub(Date, 'now')
             .returns(DATE_NOW)
 
-          store = configureStore([ storageMap(configuration, maps) ])({})
+          store = configureStore([storageMap(configuration, maps)])({})
 
           action = store.dispatch({ type: STATE_STORE })
 
@@ -1163,7 +1163,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
     let actions
 
     beforeEach(() => {
-      store = configureStore([ storageMap() ])({})
+      store = configureStore([storageMap()])({})
 
       action = store.dispatch({ type: TYPE })
 
@@ -2357,7 +2357,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         const {
           filter: {
             firstCall: {
-              args: [ filter ]
+              args: [filter]
             }
           }
         } = array
@@ -2396,7 +2396,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         const {
           filter: {
             firstCall: {
-              args: [ filter ]
+              args: [filter]
             }
           }
         } = array
@@ -2435,7 +2435,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         const {
           filter: {
             firstCall: {
-              args: [ filter ]
+              args: [filter]
             }
           }
         } = array
@@ -2474,7 +2474,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         const {
           filter: {
             firstCall: {
-              args: [ filter ]
+              args: [filter]
             }
           }
         } = array
@@ -2513,7 +2513,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         const {
           filter: {
             firstCall: {
-              args: [ filter ]
+              args: [filter]
             }
           }
         } = array
@@ -2561,7 +2561,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         const {
           reduce: {
             firstCall: {
-              args: [ ONE, TWO ]
+              args: [ONE, TWO]
             }
           }
         } = one
@@ -2610,7 +2610,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         const {
           reduce: {
             firstCall: {
-              args: [ ONE, TWO ]
+              args: [ONE, TWO]
             }
           }
         } = one
@@ -2659,7 +2659,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         const {
           reduce: {
             firstCall: {
-              args: [ ONE, TWO ]
+              args: [ONE, TWO]
             }
           }
         } = one
@@ -2708,7 +2708,7 @@ describe('Redux Storage Middleware - Storage Map', () => {
         const {
           reduce: {
             firstCall: {
-              args: [ ONE, TWO ]
+              args: [ONE, TWO]
             }
           }
         } = one

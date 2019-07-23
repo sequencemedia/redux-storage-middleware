@@ -1,13 +1,13 @@
 module.exports = {
-  'compact': true,
-  'comments': false,
-  'presets': [
+  compact: true,
+  comments: false,
+  presets: [
     [
       '@babel/env', {
         useBuiltIns: 'entry',
         targets: {
           node: 'current',
-          'browsers': [
+          browsers: [
             'last 2 versions'
           ]
         },
@@ -15,13 +15,13 @@ module.exports = {
       }
     ]
   ],
-  'plugins': [
+  plugins: [
     '@babel/proposal-export-default-from',
     [
       'module-resolver', {
         root: ['./src'],
         cwd: 'babelrc',
-        'alias': {
+        alias: {
           'redux-storage-middleware': './src'
         }
       }
