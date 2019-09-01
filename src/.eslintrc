@@ -1,5 +1,13 @@
 {
   "env": {
     "browser": true
-  }
+  },
+  "overrides": [
+    {
+      "files": ["reducer/initial-state/index.js"],
+      "rules": {
+        "no-void": "off"
+      }
+    }
+  ]
 }
