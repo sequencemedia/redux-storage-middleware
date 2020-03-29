@@ -43,3 +43,9 @@ coverage/
 npm-debug.log*
 
 .redux-storage-middleware.md
+
+# User-defined NPM configuration
+.npmrc
+
+# User-defined NVM configuration
+.nvmrc
