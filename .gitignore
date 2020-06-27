@@ -39,7 +39,7 @@ pids
 
 # Build Folders
 .nyc_output
-coverage/
+.coverage
 npm-debug.log*
 
 .redux-storage-middleware.md
