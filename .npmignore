@@ -3,6 +3,9 @@
 **/node_modules/**/*
 **/npm-debug.log
 
+# CircleCI
+.circleci
+
 # ESLint
 .eslintrc
 .eslintignore
@@ -12,7 +15,7 @@
 
 # NYC
 .nyc_output
-config/coverage
+.coverage
 
 # NPM
 .npmignore

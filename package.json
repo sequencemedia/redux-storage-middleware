@@ -3,60 +3,58 @@
   "version": "0.0.26",
   "description": "Redux Storage middleware",
   "main": "./index.js",
-  "scripts": {
-    "prepublishOnly": "npm run clean && npm run babel",
-    "clean": "rm -rf lib",
-    "babel": "babel src -d lib",
-    "build": "npm run babel --",
-    "build:watch": "npm run build -- -w",
-    "lint": "eslint *.js src config/mocha",
-    "lint:fix": "npm run lint -- --fix",
-    "test": "nyc mocha config/mocha --require @babel/register"
+  "author": "Jonathan Perry for Sequence Media Limited <sequencemedia@sequencemedia.net>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=12.18.1"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/sequencemedia/redux-storage-middleware.git"
   },
-  "license": "MIT",
-  "author": "Jonathan Perry for Sequence Media Limited",
-  "nyc": {
-    "include": [
-      "src/**/*.js"
-    ],
-    "reporter": [
-      "html"
-    ],
-    "report-dir": "config/coverage"
+  "scripts": {
+    "build": "npm run babel",
+    "build:watch": "npm run babel:watch",
+    "babel": "babel src -d lib",
+    "babel:watch": "npm run babel -- -w",
+    "clean": "rimraf lib",
+    "prepublishOnly": "npm run build",
+    "prebuild": "npm run clean",
+    "lint": "eslint *.js src config/mocha",
+    "lint:fix": "npm run lint -- --fix",
+    "test": "cross-env NODE_ENV=test nyc mocha test --recursive --r @babel/register"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.6",
-    "@babel/plugin-proposal-export-default-from": "^7.8.3",
-    "@babel/preset-env": "^7.9.6",
-    "@babel/register": "^7.9.0",
+    "@babel/cli": "^7.10.3",
+    "@babel/core": "^7.10.3",
+    "@babel/plugin-proposal-export-default-from": "^7.10.1",
+    "@babel/preset-env": "^7.10.3",
+    "@babel/register": "^7.10.3",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "chai": "^4.2.0",
     "core-js": "^3.6.5",
-    "eslint": "^7.0.0",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.3.1",
     "eslint-config-standard": "^14.1.1",
     "eslint-import-resolver-babel-module": "^5.1.2",
-    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "husky": "^4.2.5",
-    "mocha": "^7.1.2",
-    "nyc": "^15.0.1",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
     "redux": "^4.0.5",
     "redux-mock-store": "^1.5.4",
+    "rimraf": "^3.0.2",
     "sinon": "^9.0.2",
     "sinon-chai": "^3.5.0"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint:fix && npm run clean && npm run babel && git add lib"
+      "pre-commit": "npm run lint && npm run build && git add lib"
     }
   }
 }

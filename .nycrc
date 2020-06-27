@@ -1,0 +1,11 @@
+{
+  "nyc": {
+    "include": [
+      "src/**/*.js"
+    ],
+    "reporter": [
+      "html"
+    ],
+    "report-dir": ".coverage"
+  }
+}
