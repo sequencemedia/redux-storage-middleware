@@ -20,7 +20,7 @@
     "clean": "rimraf lib",
     "prepublishOnly": "npm run build",
     "prebuild": "npm run clean",
-    "lint": "eslint *.js src config/mocha",
+    "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "test": "cross-env NODE_ENV=test nyc mocha test --recursive --r @babel/register"
   },
