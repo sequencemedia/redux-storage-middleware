@@ -4,7 +4,9 @@
   },
   "overrides": [
     {
-      "files": ["reducer/initial-state/index.js"],
+      "files": [
+        "reducer/initial-state/index.js"
+      ],
       "rules": {
         "no-void": "off"
       }

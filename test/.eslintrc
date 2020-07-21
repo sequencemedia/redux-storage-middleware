@@ -4,7 +4,11 @@
   },
   "overrides": [
     {
-      "files": ["storage.js", "storage-map.js", "components/index.js"],
+      "files": [
+        "storage.js",
+        "storage-map.js",
+        "components/index.js"
+      ],
       "rules": {
         "no-unused-expressions": "off"
       }
