@@ -13,7 +13,15 @@ export const isEqual = (alpha = {}, omega = {}) => (
   getCachedAt(alpha) === getCachedAt(omega) &&
   getCacheFor(alpha) === getCacheFor(omega)
 )
+
+/*
+ * greater than or equal to one day
+ */
 export const isHardStorage = ({ cacheFor = 0 } = {}) => cacheFor >= (1000 * 60 * 60 * 24)
+
+/*
+ *  greater than or equal to one hour and less than one day
+ */
 export const isSoftStorage = ({ cacheFor = 0 } = {}) => cacheFor >= (1000 * 60 * 60) && cacheFor < (1000 * 60 * 60 * 24)
 export const hasComparator = ({ comparator = null } = {}) => comparator instanceof Function
 
@@ -59,7 +67,7 @@ export const filterClear = ({ meta = {} } = {}) => notCacheFor(meta)
 export const getCachedAt = ({ cachedAt = 0 } = {}) => cachedAt
 export const getCacheFor = ({ cacheFor = 0 } = {}) => cacheFor
 
-export const reduceFetch = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
+export const reduceFetch = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, index = 0, array = []) => (
   a.map(mapType).includes(type)
     ? a
     : min(array.filter(filterFor(type)).map(mapCacheFor)) !== cacheFor // min `cacheFor` among all metas for this FETCH `type`
@@ -67,7 +75,7 @@ export const reduceFetch = (a = [], { type, meta, meta: { cacheFor = 0, type: t 
       : a.concat({ type, ...(meta ? { meta: { cacheFor } } : {}) }) // don't care about `type`
 )
 
-export const reduceFetchMeta = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
+export const reduceFetchMeta = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, index = 0, array = []) => (
   a.filter(filterFor(type)).map(mapMetaType).includes(t)
     ? a
     : min(array.filter(filterFor(type)).filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor // ditto `reduceStoreMeta`
@@ -75,7 +83,7 @@ export const reduceFetchMeta = (a = [], { type, meta, meta: { cacheFor = 0, type
       : a.concat({ type, ...(meta ? { meta } : {}) })
 )
 
-export const reduceStore = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
+export const reduceStore = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, index = 0, array = []) => (
   a.filter(filterFor(type)).map(mapMetaType).includes(t)
     ? a
     : min(array.filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor // min `cacheFor` among all metas for this STORE `type`
@@ -83,7 +91,7 @@ export const reduceStore = (a = [], { type, meta, meta: { cacheFor = 0, type: t 
       : a.concat({ type, ...(meta ? { meta } : {}) })
 )
 
-export const reduceStoreMeta = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, i, array) => (
+export const reduceStoreMeta = (a = [], { type, meta, meta: { cacheFor = 0, type: t } = {} } = {}, index = 0, array = []) => (
   a.filter(filterFor(type)).map(mapMetaType).includes(t)
     ? a
     : min(array.filter(filterFor(type)).filter(filterMetaFor(t)).map(mapCacheFor)) !== cacheFor // ditto `reduceFetchMeta`
