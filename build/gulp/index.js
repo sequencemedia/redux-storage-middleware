@@ -4,9 +4,9 @@ import {
   exec
 } from 'child_process'
 
-const log = debug('redux-storage-middleware:build:gulp:pre-commit')
+const log = debug('@sequencemedia/redux-storage-middleware:build:gulp:pre-commit')
 
-log('`@modernpoacher/isomorphic` is awake')
+log('`@sequencemedia/redux-storage-middleware` is awake')
 
 const PACKAGE_VERSION_CHANGES = /-+\s+"version":\s"(\d+\.\d+\.\d+)",\s+\++\s+"version":\s"(\d+\.\d+\.\d+)",\s+/s
 
