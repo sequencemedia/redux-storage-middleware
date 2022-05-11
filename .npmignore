@@ -1,22 +1,22 @@
 .DS_Store
 
-**/node_modules/**/*
-**/npm-debug.log
-
-# CircleCI
 .circleci
+.husky
 
-# ESLint
-.eslintrc
-.eslintignore
-
-# EditorConfig
 .editorconfig
 
-# NYC
-.nyc_output
-.coverage
+.eslintignore
+.eslintrc
+
+.github
+.gitignore
 
 # NPM
 .npmignore
 .npmrc
+
+# NVM
+.nvmrc
+
+# Deps
+.depsrc

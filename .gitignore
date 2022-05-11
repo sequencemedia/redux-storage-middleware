@@ -49,3 +49,6 @@ npm-debug.log*
 
 # User-defined NVM configuration
 .nvmrc
+
+# Deps
+.depsrc
