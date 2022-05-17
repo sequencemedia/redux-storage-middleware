@@ -1,6 +1,6 @@
 {
   "name": "redux-storage-middleware",
-  "version": "1.0.173",
+  "version": "1.0.174",
   "description": "Redux Storage middleware",
   "main": "./index.js",
   "author": "Jonathan Perry for Sequence Media Limited <sequencemedia@sequencemedia.net>",
@@ -28,10 +28,10 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
-    "@babel/core": "^7.17.10",
+    "@babel/core": "^7.17.12",
     "@babel/eslint-parser": "^7.17.0",
-    "@babel/plugin-proposal-export-default-from": "^7.16.7",
-    "@babel/preset-env": "^7.17.10",
+    "@babel/plugin-proposal-export-default-from": "^7.17.12",
+    "@babel/preset-env": "^7.17.12",
     "@babel/register": "^7.17.7",
     "babel-loader": "^8.2.5",
     "babel-plugin-module-resolver": "^4.1.0",
