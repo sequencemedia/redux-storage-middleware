@@ -1,6 +1,6 @@
 {
   "name": "redux-storage-middleware",
-  "version": "1.0.219",
+  "version": "1.0.220",
   "description": "Redux Storage middleware",
   "main": "./index.js",
   "author": "Jonathan Perry for Sequence Media Limited <sequencemedia@sequencemedia.net>",
