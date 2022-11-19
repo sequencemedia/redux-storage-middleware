@@ -1,6 +1,6 @@
 {
   "name": "redux-storage-middleware",
-  "version": "1.0.284",
+  "version": "1.0.285",
   "description": "Redux Storage middleware",
   "main": "./index.js",
   "author": "Jonathan Perry for Sequence Media Limited <sequencemedia@sequencemedia.net>",
@@ -39,7 +39,7 @@
     "chai": "^4.3.7",
     "core-js": "^3.26.1",
     "cross-env": "^7.0.3",
-    "eslint": "^8.27.0",
+    "eslint": "^8.28.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-import-resolver-babel-module": "^5.3.1",
     "eslint-plugin-import": "^2.26.0",
