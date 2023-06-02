@@ -19,8 +19,6 @@ module.exports = {
     '@babel/proposal-export-default-from',
     [
       'module-resolver', {
-        root: ['./src'],
-        cwd: 'babelrc',
         alias: {
           'redux-storage-middleware': './src'
         }
