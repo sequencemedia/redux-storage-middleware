@@ -3,9 +3,9 @@ import {
   STORAGE_STORE,
   STORAGE_WRITE,
   STORAGE_CLEAR
-} from 'redux-storage-middleware/actions'
+} from '#actions'
 
-import initialState from './initial-state'
+import initialState from './initial-state/index.mjs'
 
 const STATE = initialState()
 

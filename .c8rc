@@ -1,0 +1,9 @@
+{
+  "include": [
+    "src/**/*.mjs"
+  ],
+  "reporter": [
+    "html"
+  ],
+  "report-dir": ".coverage"
+}

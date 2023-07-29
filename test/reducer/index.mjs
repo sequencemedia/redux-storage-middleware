@@ -1,13 +1,16 @@
-import { expect } from 'chai'
+import { use, expect } from 'chai'
 import sinon from 'sinon'
+import sinonChai from 'sinon-chai'
 
 import {
   STORAGE_FETCH,
   STORAGE_STORE,
   STORAGE_CLEAR
-} from 'redux-storage-middleware/actions'
+} from '#actions'
 
-import reducer from 'redux-storage-middleware/reducer'
+import reducer from '#reducer'
+
+use(sinonChai)
 
 describe('Redux Storage Middleware - Reducer', () => {
   const ONE_DAY = (1000 * 60 * 60 * 24)

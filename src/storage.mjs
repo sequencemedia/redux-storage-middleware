@@ -3,10 +3,10 @@ import {
   STORAGE_STORE,
   STORAGE_WRITE,
   STORAGE_CLEAR
-} from 'redux-storage-middleware/actions'
+} from '#actions'
 
-import HardStorage from 'redux-storage-middleware/components/storage/hard-storage'
-import SoftStorage from 'redux-storage-middleware/components/storage/soft-storage'
+import HardStorage from '#components/storage/hard-storage'
+import SoftStorage from '#components/storage/soft-storage'
 
 const hardStorage = HardStorage()
 const softStorage = SoftStorage()

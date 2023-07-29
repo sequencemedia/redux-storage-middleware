@@ -18,4 +18,5 @@
 .npmignore text eol=lf
 .npmrc text eol=lf
 .nvmrc text eol=lf
+.c8rc text eol=lf
 .husky/* text eol=lf

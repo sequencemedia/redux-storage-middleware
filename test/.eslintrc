@@ -5,9 +5,9 @@
   "overrides": [
     {
       "files": [
-        "storage.js",
-        "storage-map.js",
-        "components/index.js"
+        "storage.mjs",
+        "storage-map.mjs",
+        "components/index.mjs"
       ],
       "rules": {
         "no-unused-expressions": "off"

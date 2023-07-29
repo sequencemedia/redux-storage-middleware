@@ -1,7 +1,10 @@
-import { expect } from 'chai'
+import { use, expect } from 'chai'
 import sinon from 'sinon'
+import sinonChai from 'sinon-chai'
 
-import Storage from 'redux-storage-middleware/components/storage'
+import Storage from '#components/storage'
+
+use(sinonChai)
 
 describe('Redux Storage Middleware - Components - Storage', () => {
   describe('Always', () => {

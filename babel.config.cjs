@@ -1,6 +1,4 @@
 module.exports = {
-  compact: true,
-  comments: false,
   presets: [
     [
       '@babel/env', {
@@ -12,16 +10,6 @@ module.exports = {
         },
         useBuiltIns: 'usage',
         corejs: '3'
-      }
-    ]
-  ],
-  plugins: [
-    '@babel/proposal-export-default-from',
-    [
-      'module-resolver', {
-        alias: {
-          'redux-storage-middleware': './src'
-        }
       }
     ]
   ]

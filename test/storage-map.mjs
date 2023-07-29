@@ -1,14 +1,15 @@
-import { expect } from 'chai'
+import { use, expect } from 'chai'
 import sinon from 'sinon'
+import sinonChai from 'sinon-chai'
 
-import configureStore from 'redux-mock-store'
+import Store from 'redux-mock-store'
 
 import {
   STORAGE_FETCH,
   STORAGE_STORE,
   STORAGE_WRITE,
   STORAGE_CLEAR
-} from 'redux-storage-middleware/actions'
+} from '#actions'
 
 import storageMap, {
   initialise,
@@ -84,7 +85,13 @@ import storageMap, {
   reduceFetchMetaArray,
   reduceStoreArray,
   reduceStoreMetaArray
-} from 'redux-storage-middleware/storage-map'
+} from '#storage-map'
+
+use(sinonChai)
+
+const {
+  default: configureStore
+} = Store
 
 function log (configuration = [], {
   fetchMap = new Map(),
@@ -132,6 +139,15 @@ function log (configuration = [], {
     .forEach((key) => {
       console.group(key)
       console.table(storeMetaMap.get(key))
+      console.groupEnd()
+    })
+  console.groupEnd()
+
+  console.group('clearMap (Map)')
+  Array.from(clearMap.keys())
+    .forEach((key) => {
+      console.group(key)
+      console.table(clearMap.get(key))
       console.groupEnd()
     })
   console.groupEnd()

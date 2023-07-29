@@ -1,20 +1,24 @@
-import chai, { expect } from 'chai'
+import { use, expect } from 'chai'
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
 
-import configureStore from 'redux-mock-store'
+import Store from 'redux-mock-store'
 
-import Storage from 'redux-storage-middleware/components/storage'
+import Storage from '#components/storage'
 
 import {
   STORAGE_FETCH,
   STORAGE_STORE,
   STORAGE_CLEAR
-} from 'redux-storage-middleware/actions'
+} from '#actions'
 
-import storage from 'redux-storage-middleware/storage'
+import storage from '#storage'
 
-chai.use(sinonChai)
+use(sinonChai)
+
+const {
+  default: configureStore
+} = Store
 
 describe('Redux Storage Middleware - Storage', () => {
   const ONE_SECOND = 1000

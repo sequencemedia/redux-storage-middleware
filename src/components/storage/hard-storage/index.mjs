@@ -1,4 +1,4 @@
-import Storage from 'redux-storage-middleware/components/storage'
+import Storage from '#components/storage'
 
 export default () => ('localStorage' in global)
   ? localStorage

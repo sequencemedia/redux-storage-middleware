@@ -1,5 +1,5 @@
-import HardStorage from 'redux-storage-middleware/components/storage/hard-storage'
-import SoftStorage from 'redux-storage-middleware/components/storage/soft-storage'
+import HardStorage from '#components/storage/hard-storage'
+import SoftStorage from '#components/storage/soft-storage'
 
 function initialHardStorageState (state = {}) {
   const hardStorage = HardStorage()

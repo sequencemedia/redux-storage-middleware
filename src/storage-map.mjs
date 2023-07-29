@@ -3,7 +3,7 @@ import {
   storageStoreAction,
   storageWriteAction,
   storageClearAction
-} from 'redux-storage-middleware/actions'
+} from '#actions'
 
 export const min = (values = []) => Math.min(...values)
 export const max = (values = []) => Math.max(...values)
