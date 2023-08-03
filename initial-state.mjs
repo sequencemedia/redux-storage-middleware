@@ -1,2 +1,1 @@
-//
-export default './src/reducer/initial-state/index.mjs'
+export { default } from './src/reducer/initial-state/index.mjs'
