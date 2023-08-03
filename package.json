@@ -46,7 +46,8 @@
     "#reducer/initial-state": "./src/reducer/initial-state/index.mjs",
     "#reducer": "./src/reducer/index.mjs",
     "#storage": "./src/storage.mjs",
-    "#storage-map": "./src/storage-map.mjs"
+    "#storage-map": "./src/storage-map.mjs",
+    "#initial-state": "./initial-state.mjs"
   },
   "exports": {
     ".": "./src/index.mjs",
@@ -57,6 +58,7 @@
     "./reducer/initial-state": "./src/reducer/initial-state/index.mjs",
     "./reducer": "./src/reducer/index.mjs",
     "./storage": "./src/storage.mjs",
-    "./storage-map": "./src/storage-map.mjs"
+    "./storage-map": "./src/storage-map.mjs",
+    "./initial-state": "./initial-state.mjs"
   }
 }
