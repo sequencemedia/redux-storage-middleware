@@ -24,11 +24,11 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/eslint-parser": "^7.22.15",
-    "@babel/preset-env": "^7.23.2",
+    "@babel/core": "^7.23.3",
+    "@babel/eslint-parser": "^7.23.3",
+    "@babel/preset-env": "^7.23.3",
     "@babel/register": "^7.22.15",
-    "@sequencemedia/hooks": "^1.0.461",
+    "@sequencemedia/hooks": "^1.0.462",
     "c8": "^8.0.1",
     "chai": "^4.3.10",
     "core-js": "^3.33.2",
