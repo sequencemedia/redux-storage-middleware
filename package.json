@@ -29,6 +29,7 @@
     "@babel/preset-env": "^7.23.7",
     "@babel/register": "^7.23.7",
     "@sequencemedia/hooks": "^1.0.471",
+    "@sequencemedia/sinon-chai": "^0.0.5",
     "c8": "^9.0.0",
     "chai": "^5.0.0",
     "core-js": "^3.35.0",
@@ -39,8 +40,7 @@
     "mocha": "^10.2.0",
     "redux": "^5.0.1",
     "redux-mock-store": "^1.5.4",
-    "sinon": "^17.0.1",
-    "sinon-chai": "^3.7.0"
+    "sinon": "^17.0.1"
   },
   "imports": {
     "#components/storage/hard-storage": "./src/components/storage/hard-storage/index.mjs",
