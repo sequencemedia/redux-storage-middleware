@@ -20,8 +20,8 @@
   "scripts": {
     "lint": "eslint . --ext .mjs,.cjs",
     "lint:fix": "npm run lint -- --fix",
-    "test": "cross-env NODE_ENV=test c8 mocha test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "cross-env NODE_ENV=test c8 mocha test"
   },
   "devDependencies": {
     "@babel/core": "^7.24.6",
@@ -43,26 +43,26 @@
     "sinon": "^18.0.0"
   },
   "imports": {
+    "#actions": "./src/actions/index.mjs",
+    "#components/storage": "./src/components/storage/index.mjs",
     "#components/storage/hard-storage": "./src/components/storage/hard-storage/index.mjs",
     "#components/storage/soft-storage": "./src/components/storage/soft-storage/index.mjs",
-    "#components/storage": "./src/components/storage/index.mjs",
-    "#actions": "./src/actions/index.mjs",
-    "#reducer/initial-state": "./src/reducer/initial-state/index.mjs",
+    "#initial-state": "./initial-state.mjs",
     "#reducer": "./src/reducer/index.mjs",
+    "#reducer/initial-state": "./src/reducer/initial-state/index.mjs",
     "#storage": "./src/storage.mjs",
-    "#storage-map": "./src/storage-map.mjs",
-    "#initial-state": "./initial-state.mjs"
+    "#storage-map": "./src/storage-map.mjs"
   },
   "exports": {
     ".": "./src/index.mjs",
+    "./actions": "./src/actions/index.mjs",
+    "./components/storage": "./src/components/storage/index.mjs",
     "./components/storage/hard-storage": "./src/components/storage/hard-storage/index.mjs",
     "./components/storage/soft-storage": "./src/components/storage/soft-storage/index.mjs",
-    "./components/storage": "./src/components/storage/index.mjs",
-    "./actions": "./src/actions/index.mjs",
-    "./reducer/initial-state": "./src/reducer/initial-state/index.mjs",
+    "./initial-state": "./initial-state.mjs",
     "./reducer": "./src/reducer/index.mjs",
+    "./reducer/initial-state": "./src/reducer/initial-state/index.mjs",
     "./storage": "./src/storage.mjs",
-    "./storage-map": "./src/storage-map.mjs",
-    "./initial-state": "./initial-state.mjs"
+    "./storage-map": "./src/storage-map.mjs"
   }
 }
