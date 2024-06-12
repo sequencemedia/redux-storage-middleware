@@ -30,7 +30,7 @@
     "@babel/register": "^7.24.6",
     "@sequencemedia/hooks": "^1.0.495",
     "@sequencemedia/sinon-chai": "^0.0.6",
-    "c8": "^9.1.0",
+    "c8": "^10.1.1",
     "chai": "^5.1.1",
     "core-js": "^3.37.1",
     "cross-env": "^7.0.3",
