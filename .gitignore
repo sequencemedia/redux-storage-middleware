@@ -52,3 +52,6 @@ npm-debug.log*
 
 # Deps
 .depsrc
+
+# Hooks
+.husky/hooks
