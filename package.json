@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/sequencemedia/redux-storage-middleware.git"
+    "url": "git+https://github.com/sequencemedia/redux-storage-middleware.git"
   },
   "scripts": {
     "lint": "eslint . --ext .mjs,.cjs",
@@ -28,7 +28,7 @@
     "@babel/eslint-parser": "^7.27.1",
     "@babel/preset-env": "^7.27.1",
     "@babel/register": "^7.27.1",
-    "@sequencemedia/sinon-chai": "^0.0.147",
+    "@sequencemedia/sinon-chai": "^0.0.148",
     "c8": "^10.1.3",
     "chai": "^5.2.0",
     "core-js": "^3.42.0",
