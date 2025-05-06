@@ -26,9 +26,9 @@
   "devDependencies": {
     "@babel/core": "^7.27.1",
     "@babel/eslint-parser": "^7.27.1",
-    "@babel/preset-env": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
     "@babel/register": "^7.27.1",
-    "@sequencemedia/sinon-chai": "^0.0.148",
+    "@sequencemedia/sinon-chai": "^0.0.149",
     "c8": "^10.1.3",
     "chai": "^5.2.0",
     "core-js": "^3.42.0",
