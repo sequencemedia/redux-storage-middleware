@@ -28,7 +28,7 @@
     "@babel/eslint-parser": "^7.28.0",
     "@babel/preset-env": "^7.28.0",
     "@babel/register": "^7.27.1",
-    "@sequencemedia/sinon-chai": "^0.0.176",
+    "@sequencemedia/sinon-chai": "^0.0.177",
     "c8": "^10.1.3",
     "chai": "^5.2.1",
     "core-js": "^3.44.0",
