@@ -5,11 +5,8 @@ import {
   STORAGE_CLEAR
 } from '#actions'
 
-import HardStorage from '#components/storage/hard-storage'
-import SoftStorage from '#components/storage/soft-storage'
-
-const hardStorage = HardStorage()
-const softStorage = SoftStorage()
+import hardStorage from '#components/storage/hard-storage'
+import softStorage from '#components/storage/soft-storage'
 
 export const fromObjectToString = (object) => JSON.stringify(object)
 export const fromStringToObject = (string) => JSON.parse(string)

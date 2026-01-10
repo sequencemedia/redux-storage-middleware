@@ -1,13 +1,11 @@
 import Storage from '#components/storage'
 
-export default () => {
-  try {
-    return ('localStorage' in window)
-      ? localStorage
-      : new Storage()
-  } catch {
-    return ('localStorage' in global)
-      ? localStorage
-      : new Storage()
-  }
+let HARD_STORAGE // = new Storage()
+
+try {
+  HARD_STORAGE = window.localStorage ?? (window.localStorage = new Storage())
+} catch {
+  HARD_STORAGE = new Storage() // HARD_STORAGE = (globalThis.localStorage instanceof Storage) ? globalThis.localStorage : (globalThis.localStorage = new Storage())
 }
+
+export default HARD_STORAGE

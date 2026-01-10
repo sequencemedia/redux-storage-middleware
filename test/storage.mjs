@@ -42,18 +42,6 @@ describe('Redux Storage Middleware - Storage', () => {
   const STATE_STORE = 'STATE_STORE'
   const STATE_CLEAR = 'STATE_CLEAR'
 
-  beforeEach(() => {
-    sinon.stub(Storage.prototype, 'getItem').returns(null)
-    sinon.stub(Storage.prototype, 'setItem')
-    sinon.stub(Storage.prototype, 'removeItem')
-  })
-
-  afterEach(() => {
-    Storage.prototype.getItem.restore()
-    Storage.prototype.setItem.restore()
-    Storage.prototype.removeItem.restore()
-  })
-
   describe('Always', () => {
     it('is the middleware', () => {
       expect(storage).to.be.a('function')
@@ -61,6 +49,25 @@ describe('Redux Storage Middleware - Storage', () => {
   })
 
   describe('Hard storage', () => {
+    let HARD_STORAGE
+    try {
+      HARD_STORAGE = window.localStorage ?? (window.localStorage = new Storage())
+    } catch {
+      HARD_STORAGE = new Storage()
+    }
+
+    beforeEach(() => {
+      sinon.stub(HARD_STORAGE.constructor.prototype, 'getItem').returns(null)
+      sinon.stub(HARD_STORAGE.constructor.prototype, 'setItem')
+      sinon.stub(HARD_STORAGE.constructor.prototype, 'removeItem')
+    })
+
+    afterEach(() => {
+      HARD_STORAGE.constructor.prototype.getItem.restore()
+      HARD_STORAGE.constructor.prototype.setItem.restore()
+      HARD_STORAGE.constructor.prototype.removeItem.restore()
+    })
+
     describe('Fetch', () => {
       const isHardStorage = true
       const cachedAt = Date.now()
@@ -71,7 +78,7 @@ describe('Redux Storage Middleware - Storage', () => {
         let actions
 
         beforeEach(() => {
-          Storage.prototype.getItem.returns(`{"meta":{"cacheFor":${HARD_CACHE_FOR},"cachedAt":${cachedAt - ONE_DAY}},"data":{"type":"HARD_FETCH"}}`)
+          HARD_STORAGE.getItem.returns(`{"meta":{"cacheFor":${HARD_CACHE_FOR},"cachedAt":${cachedAt - ONE_DAY}},"data":{"type":"HARD_FETCH"}}`)
 
           store = configureStore([storage])({})
 
@@ -83,7 +90,7 @@ describe('Redux Storage Middleware - Storage', () => {
         })
 
         it('sets the meta property type into storage', () => {
-          expect(Storage.prototype.setItem)
+          expect(HARD_STORAGE.setItem)
             .to.have.been.calledWith(HARD_FETCH, `{"meta":{"cacheFor":${HARD_CACHE_FOR},"cachedAt":${cachedAt}},"data":{"type":"HARD_FETCH","data":{}}}`)
         })
 
@@ -101,7 +108,7 @@ describe('Redux Storage Middleware - Storage', () => {
         let actions
 
         beforeEach(() => {
-          Storage.prototype.getItem.returns(null)
+          HARD_STORAGE.getItem.returns(null)
 
           store = configureStore([storage])({})
 
@@ -113,7 +120,7 @@ describe('Redux Storage Middleware - Storage', () => {
         })
 
         it('sets the meta property type into storage', () => {
-          expect(Storage.prototype.setItem)
+          expect(HARD_STORAGE.setItem)
             .to.have.been.calledWith(HARD_FETCH, `{"meta":{"cacheFor":${HARD_CACHE_FOR},"cachedAt":${cachedAt}},"data":{"type":"HARD_FETCH","data":{}}}`)
         })
 
@@ -136,7 +143,7 @@ describe('Redux Storage Middleware - Storage', () => {
         let actions
 
         beforeEach(() => {
-          Storage.prototype.getItem.returns(`{"meta":{"cacheFor":${HARD_CACHE_FOR},"cachedAt":${cachedAt - ONE_DAY}},"data":{"type":"HARD_STORE"}}`)
+          HARD_STORAGE.getItem.returns(`{"meta":{"cacheFor":${HARD_CACHE_FOR},"cachedAt":${cachedAt - ONE_DAY}},"data":{"type":"HARD_STORE"}}`)
 
           store = configureStore([storage])({})
 
@@ -148,7 +155,7 @@ describe('Redux Storage Middleware - Storage', () => {
         })
 
         it('sets the meta property type into storage', () => {
-          expect(Storage.prototype.setItem)
+          expect(HARD_STORAGE.setItem)
             .to.have.been.calledWith(HARD_STORE, `{"meta":{"cacheFor":${HARD_CACHE_FOR},"cachedAt":${cachedAt}},"data":{"type":"HARD_STORE","data":{}}}`)
         })
 
@@ -166,7 +173,7 @@ describe('Redux Storage Middleware - Storage', () => {
         let actions
 
         beforeEach(() => {
-          Storage.prototype.getItem.returns(null)
+          HARD_STORAGE.getItem.returns(null)
 
           store = configureStore([storage])({})
 
@@ -178,7 +185,7 @@ describe('Redux Storage Middleware - Storage', () => {
         })
 
         it('sets the meta property type into storage', () => {
-          expect(Storage.prototype.setItem)
+          expect(HARD_STORAGE.setItem)
             .to.have.been.calledWith(HARD_STORE, `{"meta":{"cacheFor":${HARD_CACHE_FOR},"cachedAt":${cachedAt}},"data":{"type":"HARD_STORE","data":{}}}`)
         })
 
@@ -218,6 +225,25 @@ describe('Redux Storage Middleware - Storage', () => {
   })
 
   describe('Soft storage', () => {
+    let SOFT_STORAGE
+    try {
+      SOFT_STORAGE = window.sessionStorage ?? (window.sessionStorage = new Storage())
+    } catch {
+      SOFT_STORAGE = new Storage()
+    }
+
+    beforeEach(() => {
+      sinon.stub(SOFT_STORAGE.constructor.prototype, 'getItem').returns(null)
+      sinon.stub(SOFT_STORAGE.constructor.prototype, 'setItem')
+      sinon.stub(SOFT_STORAGE.constructor.prototype, 'removeItem')
+    })
+
+    afterEach(() => {
+      SOFT_STORAGE.constructor.prototype.getItem.restore()
+      SOFT_STORAGE.constructor.prototype.setItem.restore()
+      SOFT_STORAGE.constructor.prototype.removeItem.restore()
+    })
+
     describe('Fetch', () => {
       const isSoftStorage = true
       const cachedAt = Date.now()
@@ -228,7 +254,7 @@ describe('Redux Storage Middleware - Storage', () => {
         let actions
 
         beforeEach(() => {
-          Storage.prototype.getItem.returns(`{"meta":{"cacheFor":${SOFT_CACHE_FOR},"cachedAt":${cachedAt - ONE_DAY}},"data":{"type":"SOFT_FETCH"}}`)
+          SOFT_STORAGE.getItem.returns(`{"meta":{"cacheFor":${SOFT_CACHE_FOR},"cachedAt":${cachedAt - ONE_DAY}},"data":{"type":"SOFT_FETCH"}}`)
 
           store = configureStore([storage])({})
 
@@ -240,7 +266,7 @@ describe('Redux Storage Middleware - Storage', () => {
         })
 
         it('sets the meta property type into storage', () => {
-          expect(Storage.prototype.setItem)
+          expect(SOFT_STORAGE.setItem)
             .to.have.been.calledWith(SOFT_FETCH, `{"meta":{"cacheFor":${SOFT_CACHE_FOR},"cachedAt":${cachedAt}},"data":{"type":"SOFT_FETCH","data":{}}}`)
         })
 
@@ -258,7 +284,7 @@ describe('Redux Storage Middleware - Storage', () => {
         let actions
 
         beforeEach(() => {
-          Storage.prototype.getItem.returns(null)
+          SOFT_STORAGE.getItem.returns(null)
 
           store = configureStore([storage])({})
 
@@ -270,7 +296,7 @@ describe('Redux Storage Middleware - Storage', () => {
         })
 
         it('sets the meta property type into storage', () => {
-          expect(Storage.prototype.setItem)
+          expect(SOFT_STORAGE.setItem)
             .to.have.been.calledWith(SOFT_FETCH, `{"meta":{"cacheFor":${SOFT_CACHE_FOR},"cachedAt":${cachedAt}},"data":{"type":"SOFT_FETCH","data":{}}}`)
         })
 
@@ -293,7 +319,7 @@ describe('Redux Storage Middleware - Storage', () => {
         let actions
 
         beforeEach(() => {
-          Storage.prototype.getItem.returns(`{"meta":{"cacheFor":${SOFT_CACHE_FOR},"cachedAt":${cachedAt - ONE_DAY}},"data":{"type":"SOFT_STORE"}}`)
+          SOFT_STORAGE.getItem.returns(`{"meta":{"cacheFor":${SOFT_CACHE_FOR},"cachedAt":${cachedAt - ONE_DAY}},"data":{"type":"SOFT_STORE"}}`)
 
           store = configureStore([storage])({})
 
@@ -305,7 +331,7 @@ describe('Redux Storage Middleware - Storage', () => {
         })
 
         it('sets the meta property type into storage', () => {
-          expect(Storage.prototype.setItem)
+          expect(SOFT_STORAGE.setItem)
             .to.have.been.calledWith(SOFT_STORE, `{"meta":{"cacheFor":${SOFT_CACHE_FOR},"cachedAt":${cachedAt}},"data":{"type":"SOFT_STORE","data":{}}}`)
         })
 
@@ -323,7 +349,7 @@ describe('Redux Storage Middleware - Storage', () => {
         let actions
 
         beforeEach(() => {
-          Storage.prototype.getItem.returns(null)
+          SOFT_STORAGE.getItem.returns(null)
 
           store = configureStore([storage])({})
 
@@ -335,7 +361,7 @@ describe('Redux Storage Middleware - Storage', () => {
         })
 
         it('sets the meta property type into storage', () => {
-          expect(Storage.prototype.setItem)
+          expect(SOFT_STORAGE.setItem)
             .to.have.been.calledWith(SOFT_STORE, `{"meta":{"cacheFor":${SOFT_CACHE_FOR},"cachedAt":${cachedAt}},"data":{"type":"SOFT_STORE","data":{}}}`)
         })
 
@@ -366,7 +392,7 @@ describe('Redux Storage Middleware - Storage', () => {
       })
 
       it('removes the meta property type from storage', () => {
-        expect(Storage.prototype.removeItem)
+        expect(SOFT_STORAGE.removeItem)
           .to.have.been.calledWith(SOFT_CLEAR)
       })
 
@@ -380,6 +406,20 @@ describe('Redux Storage Middleware - Storage', () => {
   })
 
   describe('State storage', () => {
+    const STORAGE = new Storage()
+
+    beforeEach(() => {
+      sinon.stub(Storage.prototype, 'getItem').returns(null)
+      sinon.stub(Storage.prototype, 'setItem')
+      sinon.stub(Storage.prototype, 'removeItem')
+    })
+
+    afterEach(() => {
+      Storage.prototype.getItem.restore()
+      Storage.prototype.setItem.restore()
+      Storage.prototype.removeItem.restore()
+    })
+
     describe('Fetch', () => {
       const cachedAt = Date.now()
 
@@ -399,7 +439,7 @@ describe('Redux Storage Middleware - Storage', () => {
         })
 
         it('does not set the meta property type into storage', () => {
-          expect(Storage.prototype.setItem)
+          expect(STORAGE.setItem)
             .not.to.have.been.called
         })
 
@@ -427,7 +467,7 @@ describe('Redux Storage Middleware - Storage', () => {
         })
 
         it('does not set the meta property type into storage', () => {
-          expect(Storage.prototype.setItem)
+          expect(STORAGE.setItem)
             .not.to.have.been.called
         })
 
@@ -459,7 +499,7 @@ describe('Redux Storage Middleware - Storage', () => {
         })
 
         it('does not set the meta property type into storage', () => {
-          expect(Storage.prototype.setItem)
+          expect(STORAGE.setItem)
             .not.to.have.been.called
         })
 
@@ -487,7 +527,7 @@ describe('Redux Storage Middleware - Storage', () => {
         })
 
         it('does not set the meta property type into storage', () => {
-          expect(Storage.prototype.setItem)
+          expect(STORAGE.setItem)
             .not.to.have.been.called
         })
 
@@ -516,7 +556,7 @@ describe('Redux Storage Middleware - Storage', () => {
       })
 
       it('does not remove the meta property type from storage', () => {
-        expect(Storage.prototype.removeItem)
+        expect(STORAGE.removeItem)
           .not.to.have.been.called
       })
 
