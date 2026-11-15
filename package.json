@@ -63,5 +63,8 @@
     "./reducer/initial-state": "./src/reducer/initial-state/index.mjs",
     "./storage": "./src/storage.mjs",
     "./storage-map": "./src/storage-map.mjs"
+  },
+  "allowScripts": {
+    "core-js@3.51.0": true
   }
 }
